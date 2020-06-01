@@ -77,7 +77,7 @@ public class MatrixX {
         this.offsetY2 = this.offsetnH + this.size*2;//new offset to check out of map block.
 
     }
-
+    //git
     // GENERAR MATRIXX INICIAL ##################################################################
 
     public ArrayList<ArrayList<Block>> generateNewMatrix() {
