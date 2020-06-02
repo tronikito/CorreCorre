@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         //myCanvas = new MyCanvas(this);
         canvas = new LCanvas(this);
         //myCanvas.setBackgroundColor(Color.RED);//test
-        canvas.setBackgroundColor(Color.RED);//test
+        canvas.setBackgroundColor(Color.BLACK);//test
         setContentView(canvas);
         //myCanvas.invalidate();
         //RelativeLayout main = findViewById(R.id.main);

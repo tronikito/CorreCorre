@@ -3,29 +3,29 @@ package correcorre.graficos;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import correcorre.R;
 
-public class EmptyBlock extends Block {
+public class GrassBlock extends Block {
 
     protected Rect finalSize;
     private Drawable drawable;
 
-    public EmptyBlock(Context c) {
+    public GrassBlock(Context c) {
         super(c);
         //this.finalSize = new Rect(x, y, x + width, y + height);// TAMAÑO FINAL (POSICION ABSOLUTA)
-            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty,null);
-    }
-    /*
-            int random = (int) Math.floor(Math.random() * Math.floor(2));
+        //this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);
+        int random = (int) Math.floor(Math.random() * Math.floor(2));
         if (random == 0) {
-            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty,null);
+            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass, null);
         } else if (random == 1) {
-            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass1,null);
+            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass1, null);
         } else if (random == 2) {
-            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass2,null);
+            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass2, null);
         }
-     */
+    }
 
     public Rect getRect() {
         return this.finalSize;
@@ -47,9 +47,6 @@ public class EmptyBlock extends Block {
     public void moveY(float speed) {
         this.finalSize.top -= speed;
         this.finalSize.bottom -= speed;
-    }
-    public void setEmpty() {
-        throw new java.lang.RuntimeException("Already is empty block");
     }
     /*public void isEmpty(Context c) {
         this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_azul, null);

@@ -39,7 +39,7 @@ public class MyCanvas extends View {
         this.speed = main.getSpeed();
 //        this.bUp = controls.bUp;
 //        this.bDown = controls.bDown;
-        setBackgroundColor(Color.RED);//test
+        setBackgroundColor(Color.BLACK);//test
     }
 
     @Override
@@ -63,10 +63,10 @@ public class MyCanvas extends View {
         this.rtouch.top = Math.round(y);
         this.rtouch.bottom = rtouch.top + 50;
 
-            System.out.println("izquierda");
+            //System.out.println("izquierda");
 
 
-            System.out.println("derecha");
+            //System.out.println("derecha");
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (Rect.intersects(this.rtouch,this.bLeft) && !matrixX.working) {

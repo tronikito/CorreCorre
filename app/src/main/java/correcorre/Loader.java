@@ -61,7 +61,7 @@ public class Loader extends SurfaceView implements Runnable {
         if (!loading) {
             controls = new Controls(canvas, main);
             controls.generateControls();
-            scenario = new Scenario(main, "Scenario5.json");
+            scenario = new Scenario(main, "ScenarioNuevo.json");
             try {
                 scenario.createScenario();
             } catch (JSONException e) {

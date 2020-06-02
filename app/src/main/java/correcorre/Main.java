@@ -10,7 +10,7 @@ import correcorre.scenario.Scenario;
 
 public class Main extends SurfaceView implements Runnable {
 
-    private volatile int[] speed = new int[] {9,9};
+    private volatile int[] speed = new int[] {2,0};
     private static boolean working = false;
     private volatile boolean firstTime = true;
     private Thread start;

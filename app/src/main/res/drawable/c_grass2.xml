@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="150dp"
+    android:height="150dp"
+    android:viewportWidth="39.6875"
+    android:viewportHeight="39.6875">
+  <path
+      android:pathData="M-0.141,0.1105 L-0.1444,39.5428l39.8499,0.1713 -0.2893,-39.6514 -39.5572,0.0478"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="0.01917453"
+      android:fillColor="#00000000"
+      android:strokeColor="#000000"
+      android:strokeLineCap="butt"/>
+  <path
+      android:pathData="m-0.1909,6.6889 l0.0465,32.8539 39.8499,0.1713 -0.2893,-39.6514 -39.5569,-0.0478z"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="0"
+      android:fillColor="#c87137"
+      android:strokeColor="#000000"
+      android:strokeLineCap="butt"/>
+  <path
+      android:pathData="m39.5225,9.0248c0,0 -1.586,0.3943 -1.6652,1.4182 -0.2621,3.3851 -2.1194,5.7563 -2.1194,5.7563L31.5496,19.286C32.5084,16.0325 35.1403,14.7233 33.7659,11.8869L32.4074,7.4397 29.8339,14.6142 28.0173,7.69 23.829,5.938 23.8793,15.5319 20.3974,3.1016 17.8239,5.6043 18.1771,12.612 14.0897,5.2706 11.3648,12.1949 10.5574,3.5187 6.0158,6.522 8.9426,16.533 3.5432,8.7745 4.0478,5.1038 1.9285,5.6878L1.9285,14.6142L-0.1909,6.6889l0.0503,-6.674 39.5569,0.0478z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="0.012346"
+      android:fillColor="#ffcc00"
+      android:strokeLineCap="butt">
+  </path>
+  <path
+      android:pathData="m-0.2774,4.0273c0,0 2.0835,2.2565 2.9008,2.6152 2,0.8778 2.0217,3.3365 2.0217,3.3365L6.7214,11.6959C5.3131,7.8192 4.4571,9.0278 6.0536,6.1395L8.7702,3.0273 9.6616,9.9724 12.2474,5.1188 12.3797,7.8459 11.8957,15.483 15.6148,6.3617 18.2036,4.0603 17.6316,11.6796 21.4904,3.757 24.4121,6.6908 27.3911,3.0017 31.6345,2.1598C30.7271,7.0978 31.2242,5.3655 34.7935,12.107L34.3384,6.5174 35.2031,5.3688 37.3351,5.9777 37.949,10.5974 39.4309,2.5123l-0.0147,-2.4497 -39.7913,0.0498z"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="0.0126132"
+      android:fillColor="#006300"
+      android:strokeColor="#000000"
+      android:strokeLineCap="butt"/>
+</vector>

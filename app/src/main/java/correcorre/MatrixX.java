@@ -31,7 +31,7 @@ public class MatrixX {
     final private int offsetnH;
     final private int offsetY;
     final private int offsetY2;
-    private int relativeOffsetX = 0;
+    private int relativeOffsetX = -7;
     private int relativeOffsetY = 0;
     public boolean working = false;
     int foundL = -1;
@@ -77,7 +77,6 @@ public class MatrixX {
         this.offsetY2 = this.offsetnH + this.size*2;//new offset to check out of map block.
 
     }
-    //git
     // GENERAR MATRIXX INICIAL ##################################################################
 
     public ArrayList<ArrayList<Block>> generateNewMatrix() {
@@ -121,7 +120,13 @@ public class MatrixX {
     private Block createNewTypeBlock(String type) {
         Block newB = null;
         if (type.equals("dirt")) {
-            newB = new RedBlock(main.getContext());
+            newB = new DirtBlock(main.getContext());
+        }
+        if (type.equals("grass")) {
+            newB = new GrassBlock(main.getContext());
+        }
+        if (type.equals("empty")) {
+            newB = new EmptyBlock(main.getContext());
         }
         return newB;
     }
@@ -216,13 +221,34 @@ public class MatrixX {
         if (top) this.relativeOffsetY += 1;
         if (right) this.relativeOffsetX -= 1;
         if (bottom) this.relativeOffsetY -= 1;
+        //System.out.println(foundL);
 
-        if (left) {
 
+        if (top && main.getSpeed()[1] > 0) {
+            int calcX = foundL;
+            if (right || left) calcX = foundL+1;
+            if (calcX == blocksWidth) calcX = 0;
+            int contador = 0;
+            while (contador < blocksWidth) {
+
+            //for (int x = foundL; x == foundL-1; x++) {
+                old = this.matrix.get(calcX).get(foundT);
+                int padding = (old.getRect().top + offsetY2);
+                //int calcX = calcRelativePosition(old.getRect().left,1,paddingL);
+                b = generateFromScenario(relativeOffsetX+contador,relativeOffsetY+blocksHeight-1);//
+                b.setRect(newRect(old,padding,1));
+                this.matrix.get(calcX).set(foundT,b);
+                calcX++;
+                contador++;
+                if (calcX >= blocksWidth) calcX = 0;
+            };
+        }
+
+        if (left && main.getSpeed()[0] > 0) {
             int calcY = foundT;
             int contador = 0;
             while (contador < blocksHeight) {
-            //for (int y = foundT; y == foundT-1; y++) {
+                //for (int y = foundT; y == foundT-1; y++) {
                 old = this.matrix.get(foundL).get(calcY);
 
                 int padding = old.getRect().left + this.offsetX2;
@@ -236,29 +262,7 @@ public class MatrixX {
                 //System.out.println(calcY);
             }
         }
-
-        if (top) {
-            int calcX = foundL;
-            if (right || left) calcX = foundL+1;
-            //if (calcX == blocksWidth) calcX = 0;
-
-            int contador = 0;
-            while (contador < blocksWidth) {
-
-            //for (int x = foundL; x == foundL-1; x++) {
-                old = this.matrix.get(calcX).get(foundT);
-                int padding = (old.getRect().top + offsetY2);
-                //int calcX = calcRelativePosition(old.getRect().left,1,paddingL);
-                b = generateFromScenario(relativeOffsetX+contador,relativeOffsetY+blocksHeight-1);//
-                b.setRect(newRect(old,padding,1));
-                this.matrix.get(calcX).set(foundT,b);
-                calcX++;
-                contador++;
-                if (calcX == blocksWidth) calcX = 0;
-            };
-        }
-
-        if (right) {
+        if (right && main.getSpeed()[0] < 0) {
             int calcY = foundT;
             int contador = 0;
             //for (int y = foundT; y == foundT-1; y++) {
@@ -274,12 +278,13 @@ public class MatrixX {
                 if (calcY == blocksHeight) calcY = 0;
             }
         }
+        if (bottom && main.getSpeed()[1] < 0) {
+            int calcX = foundL;
+            if (right || left) {
+                calcX = foundL+1;
+                if (calcX >= blocksWidth) calcX = 0;
+            }
 
-        if (bottom) {
-            int calcX = 0;
-            if (right || left) calcX = foundL+1;
-            //if (calcX == blocksWidth) calcX = 0;
-            //if (left) calcX = foundL+1;
             int contador = 0;
             //for (int x = foundL; x == foundL-1; x++) {
             while (contador < blocksWidth) {
@@ -292,9 +297,10 @@ public class MatrixX {
                 this.matrix.get(calcX).set(foundB,b);
                 calcX++;
                 contador++;
-                if (calcX == blocksWidth) calcX = 0;
+                if (calcX >= blocksWidth) calcX = 0;
             }
         }
+
         if (this.canvas != null) main.setSpeed(this.canvas.getSpeed());
     }
 
