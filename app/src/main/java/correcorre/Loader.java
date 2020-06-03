@@ -5,6 +5,7 @@ import android.view.SurfaceView;
 import org.json.JSONException;
 
 import correcorre.graficos.LCanvas;
+import correcorre.graficos.MatrixX;
 import correcorre.scenario.Scenario;
 
 public class Loader extends SurfaceView implements Runnable {

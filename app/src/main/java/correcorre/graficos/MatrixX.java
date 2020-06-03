@@ -1,20 +1,19 @@
-package correcorre;
+package correcorre.graficos;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
-
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import correcorre.graficos.*;
+import correcorre.Main;
+import correcorre.blocks.Block;
+import correcorre.blocks.DirtBlock;
+import correcorre.blocks.EmptyBlock;
+import correcorre.blocks.GrassBlock;
 import correcorre.scenario.Scenario;
 
 public class MatrixX {
 
     //throw new java.lang.RuntimeException("error block"); <<usar para casting blocks
-    // eliminar newblock y añadirlo a extension blocks
 
     public volatile ArrayList<ArrayList<Block>> matrix = null;
     public volatile ArrayList<ArrayList<String>> matrixScenario = null;
@@ -77,6 +76,14 @@ public class MatrixX {
         this.offsetY2 = this.offsetnH + this.size*2;//new offset to check out of map block.
 
     }
+
+    public int getWidth() {
+        return this.cW;
+    }
+    public int getHeight() {
+        return this.cH;
+    }
+    
     // GENERAR MATRIXX INICIAL ##################################################################
 
     public ArrayList<ArrayList<Block>> generateNewMatrix() {
@@ -117,6 +124,7 @@ public class MatrixX {
         if (newB == null) newB = new EmptyBlock(main.getContext());
         return newB;
     }
+
     private Block createNewTypeBlock(String type) {
         Block newB = null;
         if (type.equals("dirt")) {

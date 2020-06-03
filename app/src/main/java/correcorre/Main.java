@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
 
+import correcorre.graficos.MatrixX;
 import correcorre.graficos.MyCanvas;
 import correcorre.scenario.Scenario;
 

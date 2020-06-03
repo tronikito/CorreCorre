@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-
 public class LCanvas extends View {
 
     public int width = -1;

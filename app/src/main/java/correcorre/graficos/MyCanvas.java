@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 
 import correcorre.Controls;
 import correcorre.Main;
-import correcorre.MatrixX;
 
 public class MyCanvas extends View {
 
@@ -63,10 +62,6 @@ public class MyCanvas extends View {
         this.rtouch.top = Math.round(y);
         this.rtouch.bottom = rtouch.top + 50;
 
-            //System.out.println("izquierda");
-
-
-            //System.out.println("derecha");
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (Rect.intersects(this.rtouch,this.bLeft) && !matrixX.working) {

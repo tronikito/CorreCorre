@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import correcorre.Main;
-import correcorre.graficos.NewBlock;
 
 public class Scenario {
 
@@ -41,7 +40,6 @@ public class Scenario {
                 for (int u = 0; u < columnsJSON.length(); u++) {
                     blockJSON = columnsJSON.getJSONObject(u);
                     type = blockJSON.getString("type");
-                    //new1 = new NewBlock(main.getContext(), main.getResources().getIdentifier(type, "drawable", main.getContext().getPackageName()));
                     column.add(type);
                 }
                 columns.add(column);
