@@ -15,9 +15,9 @@ public class Scenario {
 
     private static Main main;
     private String path;
-    public volatile ArrayList scenario = new ArrayList();
+    public volatile ArrayList<ArrayList<String>> scenario = new ArrayList<>();
     public volatile int[] start = {0,0};
-    private volatile String json;
+
     public Scenario(Main m,String path) {
         this.path = path;
         main = m;
@@ -29,14 +29,14 @@ public class Scenario {
         JSONObject obj;
         JSONArray columnsJSON;
         JSONObject blockJSON;
-        ArrayList column;
+        ArrayList<String> column;
         String type;
         obj = new JSONObject(in);
-        ArrayList<ArrayList<String>> columns = new ArrayList();
+        ArrayList<ArrayList<String>> columns = new ArrayList<>();
 
         for (int i = 0; i < obj.length(); i++) {//columnas
                 columnsJSON = obj.getJSONArray("" + i);
-                column = new ArrayList();
+                column = new ArrayList<>();
                 for (int u = 0; u < columnsJSON.length(); u++) {
                     blockJSON = columnsJSON.getJSONObject(u);
                     type = blockJSON.getString("type");
@@ -55,7 +55,7 @@ public class Scenario {
     private synchronized String importJSON() {
 
         String line;
-        json = "";
+        String json = "";
         AssetManager manager = main.getContext().getAssets();
         try {
             InputStream open = manager.open(this.path);

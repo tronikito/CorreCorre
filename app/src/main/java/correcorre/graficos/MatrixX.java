@@ -6,9 +6,11 @@ import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
 import correcorre.Main;
 import correcorre.blocks.Block;
+import correcorre.blocks.BlueBlock;
 import correcorre.blocks.DirtBlock;
 import correcorre.blocks.EmptyBlock;
 import correcorre.blocks.GrassBlock;
+import correcorre.blocks.RedBlock;
 import correcorre.scenario.Scenario;
 
 public class MatrixX {
@@ -33,15 +35,9 @@ public class MatrixX {
     private int relativeOffsetX = -7;
     private int relativeOffsetY = 0;
     public boolean working = false;
-    int foundL = -1;
-    int foundT = -1;
-    int foundR = -1;
-    int foundB = -1;
-
     private static Main main;
     private static Scenario scenario;
-    private int[] scenarioStart;
-    private Drawable renderBlock;
+    private int[] scenarioStart;//debe ser el offset
 
     public MatrixX(LCanvas c, Main m,Scenario s) {
 
@@ -83,15 +79,16 @@ public class MatrixX {
     public int getHeight() {
         return this.cH;
     }
-    
+
     // GENERAR MATRIXX INICIAL ##################################################################
 
-    public ArrayList<ArrayList<Block>> generateNewMatrix() {
-        this.matrix = new ArrayList();
-        ArrayList column;
+    public void generateNewMatrix() {
+
+        this.matrix = new ArrayList<ArrayList<Block>>();
+        ArrayList<Block> column;
 
         for (int x = 0; x < blocksWidth; x++) {
-            column = new ArrayList();
+            column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
                 Block newB = generateFromScenario(x+relativeOffsetX,y+relativeOffsetY);
                 Rect newR = new Rect();
@@ -108,15 +105,13 @@ public class MatrixX {
             }
             matrix.add(column);
         }
-        return matrix;
+        //return matrix;
     }
 
     private Block generateFromScenario(int x, int y) {
         Block newB = null;
-        //Check ArraySize init
         if (x < this.matrixScenario.size() && x >= 0) {
             if (y < this.matrixScenario.get(x).size() && y >= 0) {
-        //Check ArraySize end
                 String type = this.matrixScenario.get(x).get(y);
                 newB = createNewTypeBlock(type);
             }
@@ -133,6 +128,12 @@ public class MatrixX {
         if (type.equals("grass")) {
             newB = new GrassBlock(main.getContext());
         }
+        if (type.equals("red")) {
+            newB = new RedBlock(main.getContext());
+        }
+        if (type.equals("blue")) {
+            newB = new BlueBlock(main.getContext());
+        }
         if (type.equals("empty")) {
             newB = new EmptyBlock(main.getContext());
         }
@@ -141,7 +142,7 @@ public class MatrixX {
 
     // ##########################################################################################
 
-    // MOVER MATRIXX ############################################################################
+    // MOVE MATRIXX ############################################################################
 
     public synchronized void moveMatrix(int[] speed) {
         working = true;
@@ -150,7 +151,6 @@ public class MatrixX {
                 Block b = this.matrix.get(x).get(y);
                 b.moveX(speed[0]);
                 b.moveY(speed[1]);
-                //checkOffset();
             }
         }
         working = false;
@@ -160,12 +160,11 @@ public class MatrixX {
 
         Block old;
         Block b;
-        Rect r;
 
-        foundL = -1;
-        foundT = -1;
-        foundR = -1;
-        foundB = -1;
+        int foundL = -1;
+        int foundT = -1;
+        int foundR = -1;
+        int foundB = -1;
 
         boolean left = false;
         boolean top = false;
@@ -220,17 +219,10 @@ public class MatrixX {
             }
         }
 
-        //int paddingL = this.matrix.get(foundL).get(foundT).getRect().left + offsetX2;
-        //int paddingT = this.matrix.get(foundL).get(foundT).getRect().top + offsetY2;
-        //int paddingB = ((this.cH + offsetY2) - this.matrix.get(foundR).get(foundB).getRect().bottom);
-        //int paddingR = ((this.cW + offsetX) - this.matrix.get(foundR).get(foundB).getRect().right);
-
         if (left) this.relativeOffsetX += 1;
         if (top) this.relativeOffsetY += 1;
         if (right) this.relativeOffsetX -= 1;
         if (bottom) this.relativeOffsetY -= 1;
-        //System.out.println(foundL);
-
 
         if (top && main.getSpeed()[1] > 0) {
             int calcX = foundL;
@@ -238,11 +230,8 @@ public class MatrixX {
             if (calcX == blocksWidth) calcX = 0;
             int contador = 0;
             while (contador < blocksWidth) {
-
-            //for (int x = foundL; x == foundL-1; x++) {
                 old = this.matrix.get(calcX).get(foundT);
                 int padding = (old.getRect().top + offsetY2);
-                //int calcX = calcRelativePosition(old.getRect().left,1,paddingL);
                 b = generateFromScenario(relativeOffsetX+contador,relativeOffsetY+blocksHeight-1);//
                 b.setRect(newRect(old,padding,1));
                 this.matrix.get(calcX).set(foundT,b);
@@ -256,28 +245,23 @@ public class MatrixX {
             int calcY = foundT;
             int contador = 0;
             while (contador < blocksHeight) {
-                //for (int y = foundT; y == foundT-1; y++) {
                 old = this.matrix.get(foundL).get(calcY);
-
                 int padding = old.getRect().left + this.offsetX2;
-                //int calcY = calcRelativePosition(old.getRect().top, 0, paddingT);
                 b = generateFromScenario(relativeOffsetX+blocksWidth-1, relativeOffsetY+contador);
                 b.setRect(newRect(old,padding,0));
                 this.matrix.get(foundL).set(calcY, b);
                 calcY++;
                 contador++;
                 if (calcY == blocksHeight) calcY = 0;
-                //System.out.println(calcY);
             }
         }
+
         if (right && main.getSpeed()[0] < 0) {
             int calcY = foundT;
             int contador = 0;
-            //for (int y = foundT; y == foundT-1; y++) {
             while (contador < blocksHeight) {
                 old = this.matrix.get(foundR).get(calcY);
                 int padding = ((this.cW + offsetX) - old.getRect().right);
-                //int calcY = calcRelativePosition(old.getRect().top,2,paddingB);
                 b = generateFromScenario(relativeOffsetX,relativeOffsetY+contador);
                 b.setRect(newRect(old,padding,2));
                 this.matrix.get(foundR).set(calcY,b);
@@ -286,20 +270,17 @@ public class MatrixX {
                 if (calcY == blocksHeight) calcY = 0;
             }
         }
+
         if (bottom && main.getSpeed()[1] < 0) {
             int calcX = foundL;
             if (right || left) {
                 calcX = foundL+1;
                 if (calcX >= blocksWidth) calcX = 0;
             }
-
             int contador = 0;
-            //for (int x = foundL; x == foundL-1; x++) {
             while (contador < blocksWidth) {
-
                 old = this.matrix.get(calcX).get(foundB);
                 int padding = ((this.cH + offsetY2) - old.getRect().bottom);
-                //int calcX = calcRelativePosition(old.getRect().left,3,paddingR);
                 b = generateFromScenario(relativeOffsetX+contador,relativeOffsetY);
                 b.setRect(newRect(old,padding,3));
                 this.matrix.get(calcX).set(foundB,b);
@@ -308,8 +289,7 @@ public class MatrixX {
                 if (calcX >= blocksWidth) calcX = 0;
             }
         }
-
-        if (this.canvas != null) main.setSpeed(this.canvas.getSpeed());
+        if (this.canvas != null) main.setSpeed(this.canvas.getSpeed());//evitar desfase;
     }
 
     private Rect newRect(Block old, int padding, int pos) {
@@ -377,90 +357,16 @@ public class MatrixX {
     }
     public void setCanvas(MyCanvas c) {
         this.canvas = c;
-    }
+    }//?????????
 }
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
 
-    /**
-    public synchronized void sdfsdfmoveMatrix(float speed) {//SINCRO CON PRINTMATRIX
+//########## CALCULAR POR POSICION, DEPRECATED
 
-        boolean firstCheckTop = true;
-        boolean firstCheckBottom = true;
-        for (int x = 0; x < this.matrix.size(); x++) {
-            boolean firstCheckLeft = true;
-            boolean firstCheckRight = true;
+//int paddingL = this.matrix.get(foundL).get(foundT).getRect().left + offsetX2;
+//int paddingT = this.matrix.get(foundL).get(foundT).getRect().top + offsetY2;
+//int paddingB = ((this.cH + offsetY2) - this.matrix.get(foundR).get(foundB).getRect().bottom);
+//int paddingR = ((this.cW + offsetX) - this.matrix.get(foundR).get(foundB).getRect().right);
 
-            for (int y = 0; y < this.matrix.get(x).size(); y++) {
-
-                b = this.matrix.get(x).get(y);
-
-                //horizontal
-                if (b.getRect().left < 0 - (size + (size / 2))) {
-                    if (firstCheckLeft) {
-                        firstCheckLeft = false;
-                        offsetX += 1;
-                        //offsetY += 1;
-                    }
-                    b.setDrawable(renderBlock);
-                    b.moveX(-this.cW);
-                    b.setDrawable(generateFromScenario(howManyW - 1, howManyH -1).getDrawable());
-                }
-                if (b.getRect().right > this.cW - (size + (size / 2))) {
-                    if (firstCheckRight) {
-                        firstCheckRight = false;
-                        offsetX -= 1;
-                        //offsetY -= 1;
-                    }
-                    b.moveX(+this.cW);
-                    //b.setDrawable(generateFromScenario(0,y).getDrawable());//funciona sin vertical
-                    b.setDrawable(generateFromScenario(0, y).getDrawable());
-                }
-                if  (b.getRect().top < 0 - (size + (size / 2))) {
-                    if (firstCheckTop) {
-                        firstCheckTop = false;
-                        offsetY += 1;
-                    }
-                    b.moveY(-this.cH);
-                    b.setDrawable(generateFromScenario(howManyW -1, howManyH - 1).getDrawable());
-                }
-                //vertial
-
-                if (b.getRect().bottom > this.cH - (size - (size / 2))) {
-                    if (firstCheckBottom) {
-                        firstCheckBottom = false;
-                        offsetY -= 1;
-                    }
-                    b.moveY(+this.cH);
-                    b.setDrawable(generateFromScenario(x, 0).getDrawable());
-                }
-
-
-                System.out.println(offsetX + " " + offsetY);
-                b.moveX(speed);
-                b.moveY(speed);
-            }
-        }
-    }
-    public synchronized boolean csdfsdfheckScenario(int x, int y) {
-        if (x < this.matrixScenario.size() && x >= 0) {
-            if (y < this.matrixScenario.get(x).size() && y >= 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-**/
 /* calcular por posicion absoluta
     public int calcRelativePosition(int pos,int layer,int padding) {
 
