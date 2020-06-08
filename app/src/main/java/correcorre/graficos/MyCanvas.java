@@ -25,7 +25,6 @@ public class MyCanvas extends View {
     private static Controls controls;
     private static Background background;
     private static Penguin penguin;
-    private Drawable background1;
     public int width = -1;
     public int height = -1;
     private Rect bLeft;
@@ -53,9 +52,9 @@ public class MyCanvas extends View {
 
         background.printBackground(c);
         matrixX.printMatrixBack(c);
-        controls.printControls(c);
         penguin.printPenguin(c);
         matrixX.printMatrixFront(c);
+        controls.printControls(c);
 
         if (point != null) {
             c.drawCircle(point.x, point.y, 100, paint);

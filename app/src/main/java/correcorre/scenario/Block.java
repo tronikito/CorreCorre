@@ -20,6 +20,8 @@ public class Block {
     private Drawable sprite3;
     private String type;
     private int sprite;
+    private int tempo = 180;
+    private int toTempo = 0;
 
     public Block(Context c, Main m, String t, int s) {
         this.context = c;
@@ -29,6 +31,9 @@ public class Block {
         this.finalSize = new Rect();
     }
 
+    public int getSprite() {
+        return this.sprite;
+    }
     public Rect getRect() {
         return this.finalSize;
     }
@@ -51,11 +56,18 @@ public class Block {
         this.finalSize.bottom -= speed;
     }
 
-    //private void setSprite() {
-        //if (main.fps < 20) this.drawable = sprite1;
-        //else if (main.fps >= 20 && main.fps < 40) if (sprite2 != null) this.drawable = sprite2;
+    public void animatedSprite() {//every how many fps
+        this.toTempo++;
+        if (type.equals("grass")) {
+            if (toTempo < 90) this.drawable = sprite1;
+            else if (toTempo > 90) if (sprite2 != null) this.drawable = sprite2;
+        }
+        else {
+            this.drawable = sprite1;
+        }
         //else if (main.fps >= 40) if (sprite3 != null) this.drawable = sprite3;
-    //}
+        if (toTempo >= tempo) toTempo = 0;
+    }
 
     public String getType() {
         return this.type;
@@ -72,7 +84,7 @@ public class Block {
 
             sprite1 = VectorDrawableCompat.create(context.getResources(), R.drawable.c_newgrass2, null);
             sprite2 = VectorDrawableCompat.create(context.getResources(), R.drawable.c_newgrass3, null);
-            sprite3 = null;
+            sprite3 = VectorDrawableCompat.create(context.getResources(), R.drawable.c_grass1, null);
         }
         if (type.equals("red")) {
             sprite1 = VectorDrawableCompat.create(context.getResources(), R.drawable.c_red, null);;
@@ -91,6 +103,7 @@ public class Block {
             sprite3 = null;
             this.drawable = sprite1;
         }
+        if (sprite == 0) animatedSprite();
         if (sprite == 1) this.drawable = sprite1;
         if (sprite == 2) this.drawable = sprite2;
         if (sprite == 3) this.drawable = sprite3;

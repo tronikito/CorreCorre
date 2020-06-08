@@ -87,7 +87,7 @@ public class MatrixX {
         for (int x = 0; x < blocksWidth; x++) {
             column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
-                Block newB = new Block(this.context,main,"empty",1);
+                Block newB = new Block(this.context,main,"empty",0);
                 generateFromScenario(newB,x+relativeOffsetX,y+relativeOffsetY);
 
                 Rect r = newB.getRect();
@@ -107,11 +107,11 @@ public class MatrixX {
         if (x < this.matrixScenario.size() && x >= 0) {
             if (y < this.matrixScenario.get(x).size() && y >= 0) {
                 String type = this.matrixScenario.get(x).get(y);
-                old.setType(type,1);
+                old.setType(type,0);
                 newType = true;
             }
         }
-        if (!newType) old.setType("empty",1);
+        if (!newType) old.setType("empty",0);
     }
 
     // MOVE MATRIXX ############################################################################
@@ -289,7 +289,12 @@ public class MatrixX {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
                     if (b.getType().equals("grass"));
-                    else b.getDrawable().draw(canvas);
+                    else {
+                        if (b.getSprite() == 0) {
+                            b.animatedSprite();
+                        }
+                        b.getDrawable().draw(canvas);
+                    }
 
                     /*
                     //Prueba texto casillas DEBUGG
@@ -317,7 +322,12 @@ public class MatrixX {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
-                    if (b.getType().equals("grass")) b.getDrawable().draw(canvas);
+                    if (b.getType().equals("grass")) {
+                        if (b.getSprite() == 0) {
+                            b.animatedSprite();
+                        }
+                        b.getDrawable().draw(canvas);
+                    }
                 }
             }
         }
