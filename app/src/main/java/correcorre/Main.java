@@ -13,7 +13,7 @@ import correcorre.scenario.Scenario;
 
 public class Main extends SurfaceView implements Runnable {
 
-    private int[] speed = new int[] {1500,1500};
+    private int[] speed = new int[] {150,0};
     private static boolean working = false;
     private volatile boolean firstTime = true;
     private Thread start;
@@ -109,8 +109,6 @@ public class Main extends SurfaceView implements Runnable {
             this.firstTime = false;
         } else {
             matrixX.moveMatrix(speed);
-            //matrixX.checkOffset();
-            //matrixX.recalculateDrawable();
             background.moveBackground(speed);
             penguin.moveX(speed);
         }

@@ -7,33 +7,31 @@ import android.graphics.drawable.Drawable;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
+import correcorre.Main;
 import correcorre.R;
 
 public class GrassBlock extends Block {
 
     int frame = 0;
-    public GrassBlock(Context c) {
+    private static Main main;
+    public GrassBlock(Context c, Main main) {
         super(c);
-
-        //int random = (int) Math.floor(Math.random() * Math.floor(2));
-        //if (random == 0) {
-            this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass1, null);
-        //} else if (random == 1) {
-           // this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass2, null);
-        //} else if (random == 2) {
-          //  this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass3, null);
-        //}
+        generateDrawable();
+        //this.drawable = VectorDrawableCompat.create(c.getResources(), R.drawable.c_grass1, null);
     }
 
-    @Override
-    public synchronized Drawable getDrawable(int fps) {
-        if (fps == 0) {
+    private void generateDrawable() {
+        if (main.fps < 30) {
             this.drawable = VectorDrawableCompat.create(this.context.getResources(), R.drawable.c_grass1, null);
-        } else if (fps == 30) {
+        } else if (main.fps >= 30) {
             this.drawable = VectorDrawableCompat.create(this.context.getResources(), R.drawable.c_grass2, null);
-        } else if (fps == 99) {
+        } else if (main.fps == 99) {
             this.drawable = VectorDrawableCompat.create(this.context.getResources(), R.drawable.c_grass3, null);
         }
+    }
+    @Override
+    public synchronized Drawable getDrawable() {
+        generateDrawable();
         this.drawable.setBounds(finalSize);
         return drawable;
     }

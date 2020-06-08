@@ -123,7 +123,7 @@ public class MatrixX {
             newB = new DirtBlock(main.getContext());
         }
         if (type.equals("grass")) {
-            newB = new GrassBlock(main.getContext());
+            newB = new GrassBlock(main.getContext(),main);
         }
         if (type.equals("red")) {
             newB = new RedBlock(main.getContext());
@@ -157,62 +157,53 @@ public class MatrixX {
 
         Block b;
 
-        int foundL = -1;
-        int foundT = -1;
-        int foundR = -1;
-        int foundB = -1;
+        int foundL = 0;
+        int foundT = 0;
+        int foundR;
+        int foundB;
 
         boolean left = false;
         boolean top = false;
         boolean right = false;
         boolean bottom = false;
 
-        int menor;
-        int mayor;
+        int lower;
 
-        menor = this.cW + this.offsetX2*10;
+        lower = this.cW + this.offsetX2*10;
         for (int x = 0; x < this.matrix.size(); x++) {
             b = this.matrix.get(x).get(0);
-            if (b.getRect().left < menor) {
+            if (b.getRect().left < lower) {
                 foundL = x;
-                menor = b.getRect().left;
+                lower = b.getRect().left;
             }
             if (b.getRect().left < 0 - this.offsetX2) {
                 left = true;
             }
         }
-        menor = this.cH + this.offsetY2*10;
+        lower = this.cH + this.offsetY2*10;
         for (int y = 0; y < this.matrix.get(0).size(); y++) {
             b = this.matrix.get(0).get(y);
-            if (b.getRect().top < menor) {
+            if (b.getRect().top < lower) {
                 foundT = y;
-                menor = b.getRect().top;
+                lower = b.getRect().top;
             }
             if(b.getRect().top < (0 - this.offsetY2)) {
                 top = true;
             }
         }
-        mayor = -this.offsetX2*10;
-        for (int x = 0; x < this.matrix.size(); x++) {
-            b = this.matrix.get(x).get(0);
-            if (b.getRect().right > mayor) {
-                foundR = x;
-                mayor = b.getRect().right;
-            }
-            if (b.getRect().right > this.cW + this.offsetX2) {
-                right = true;
-            }
+
+        foundR = foundL-1;
+        if (foundR == -1) foundR = blocksWidth-1;
+        b = this.matrix.get(foundR).get(0);
+        if (b.getRect().right > this.cW + this.offsetX2) {
+            right = true;
         }
-        mayor = -this.offsetY2*10;
-        for (int y = 0; y < this.matrix.get(0).size(); y++) {
-            b = this.matrix.get(0).get(y);
-            if (b.getRect().bottom > mayor) {
-                foundB = y;
-                mayor = b.getRect().bottom;
-            }
-            if(b.getRect().bottom > this.cH + this.offsetY2) {
-                bottom = true;
-            }
+
+        foundB = foundT-1;
+        if (foundB == -1) foundB = blocksHeight-1;
+        b = this.matrix.get(foundL).get(foundB);
+        if(b.getRect().bottom > this.cH + this.offsetY2) {
+            bottom = true;
         }
 
         if (left) this.relativeOffsetX += 1;
@@ -225,7 +216,7 @@ public class MatrixX {
             for (int y = 0; y < blocksHeight; y++) {
                 b = this.matrix.get(foundL).get(calcY);
                 int padding = b.getRect().left + this.offsetX2;
-                b.setRect(newRect(b,padding,0));
+                newRect(b,padding,0);
                 calcY++;
                 if (calcY == blocksHeight) calcY = 0;
             }
@@ -238,7 +229,7 @@ public class MatrixX {
             for (int y = 0; y < blocksHeight; y++) {
                 b = this.matrix.get(foundR).get(calcY);
                 int padding = ((this.cW + offsetX) - b.getRect().right);
-                b.setRect(newRect(b,padding,2));
+                newRect(b,padding,2);
                 calcY++;
                 if (calcY == blocksHeight) calcY = 0;
             }
@@ -251,7 +242,7 @@ public class MatrixX {
             for(int x = 0; x < blocksWidth; x++) {
                 b = this.matrix.get(calcX).get(foundT);
                 int padding = (b.getRect().top + offsetY2);
-                b.setRect(newRect(b,padding,1));
+                newRect(b,padding,1);
                 calcX++;
                 if (calcX >= blocksWidth) calcX = 0;
             }
@@ -265,7 +256,7 @@ public class MatrixX {
             for(int x = 0; x < blocksWidth; x++) {
                 b = this.matrix.get(calcX).get(foundB);
                 int padding = ((this.cH + offsetY2) - b.getRect().bottom);
-                b.setRect(newRect(b,padding,3));
+                newRect(b,padding,3);
                 calcX++;
                 if (calcX >= blocksWidth) calcX = 0;
             }
@@ -299,38 +290,24 @@ public class MatrixX {
         //se cambia la velocidad para evitar desfases;
     }
 
-    private synchronized Rect newRect(Block old, int padding, int pos) {
+    private synchronized void newRect(Block b, int padding, int pos) {
 
-        Rect r = new Rect();
         if (pos == 0) {
-            r.left = (this.cW + offsetnW) + padding;
-            r.right = (this.cW + offsetX) + padding;
-            r.top = old.getRect().top;
-            r.bottom = old.getRect().bottom;
-            return r;
+            b.getRect().left = (this.cW + offsetnW) + padding;
+            b.getRect().right = (this.cW + offsetX) + padding;
         }
         if (pos == 1) {
-            r.left = old.getRect().left;
-            r.right = old.getRect().right;
-            r.top =  (this.cH + offsetnH) + padding;
-            r.bottom = (this.cH + offsetY) + padding;
-            return r;
+            b.getRect().top =  (this.cH + offsetnH) + padding;
+            b.getRect().bottom = (this.cH + offsetY) + padding;
         }
         if (pos == 2) {
-            r.left = -offsetX2 - padding;
-            r.right = -offsetX - padding;
-            r.top = old.getRect().top;
-            r.bottom = old.getRect().bottom;
-            return r;
+            b.getRect().left = -offsetX2 - padding;
+            b.getRect().right = -offsetX - padding;
         }
         if (pos == 3) {
-            r.left = old.getRect().left;
-            r.right = old.getRect().right;
-            r.top =  -offsetY - padding;
-            r.bottom = -offsetnH - padding;
-            return r;
+            b.getRect().top =  -offsetY - padding;
+            b.getRect().bottom = -offsetnH - padding;
         }
-        return r;
     }
 
     // IMPRIMIR MATRIXX #########################################################################
@@ -340,8 +317,8 @@ public class MatrixX {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
-                    if (b instanceof GrassBlock) b.getDrawable(main.fps).draw(canvas);//Drawable animado
-                    else b.getDrawable().draw(canvas);
+                    //if (b instanceof GrassBlock) b.getDrawable().draw(canvas);//Drawable animado
+                    b.getDrawable().draw(canvas);
 
                     /*
                     //Prueba texto casillas DEBUGG
