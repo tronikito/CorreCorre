@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 public abstract class BackgroundObject {
 
     Drawable d;
-    Rect r;
+    Rect r = new Rect();
 
     public void moveX(int speed) {
         this.r.left = this.r.left+speed;

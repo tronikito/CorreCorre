@@ -2006,16 +2006,7 @@
 	{ "type": "empty"},
 	    { "type": "empty"},
     { "type": "empty"},
-	{ "type": "empty"},
-    { "type": "empty"},
-    { "type": "empty"},
-	{ "type": "empty"}
-    ],
-	"53": [ 
-    { "type": "empty"},
-    { "type": "empty"},
-	{ "type": "empty"},
-    { "type": "empty"},
+	{ "type":"empty"},
     { "type": "empty"},
 	{ "type": "empty"},
 	    { "type": "empty"},
@@ -2027,6 +2018,11 @@
 	    { "type": "empty"},
     { "type": "empty"},
 	{ "type": "empty"},
+    { "type": "empty"},
+    { "type": "empty"},
+	{ "type": "empty"},
+    { "type": "empty"},
+    { "type": "empty"},
     { "type": "empty"},
     { "type": "empty"},
 	{ "type": "grass"},
@@ -2047,6 +2043,8 @@
 	{ "type": "empty"},
     { "type": "empty"},
     { "type": "empty"},
-	{ "type": "empty"}
+    { "type": "empty"},
+    {"type": "empty"},
+    {"type": "empty"}
     ]
 }

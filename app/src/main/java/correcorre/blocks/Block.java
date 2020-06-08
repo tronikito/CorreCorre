@@ -22,6 +22,10 @@ public abstract class Block {
         this.drawable.setBounds(finalSize);
         return drawable;
     }
+    public Drawable getDrawable(int fps) {
+        this.drawable.setBounds(finalSize);
+        return drawable;
+    }
     public void setDrawable(Drawable d) {
         this.drawable = d;
     }
@@ -30,11 +34,11 @@ public abstract class Block {
         this.finalSize = r;
     }
 
-    public void moveX(float speed) {
+    public void moveX(long speed) {
         this.finalSize.left -= speed;
         this.finalSize.right -= speed;
     }
-    public void moveY(float speed) {
+    public void moveY(long speed) {
         this.finalSize.top -= speed;
         this.finalSize.bottom -= speed;
     }

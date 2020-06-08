@@ -1,11 +1,14 @@
 package correcorre;
 
+import android.content.Context;
 import android.view.SurfaceView;
 
 import org.json.JSONException;
 
+import correcorre.background.Background;
 import correcorre.graficos.LCanvas;
 import correcorre.graficos.MatrixX;
+import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
 
 public class Loader extends SurfaceView implements Runnable {
@@ -15,6 +18,8 @@ public class Loader extends SurfaceView implements Runnable {
     private static Controls controls = null;
     private static LCanvas canvas;
     private static Scenario scenario;
+    private static Background background;
+    private static Penguin penguin;
     private boolean loading = false;
     private MainActivity mainActivity;
     private Thread thread;
@@ -62,7 +67,7 @@ public class Loader extends SurfaceView implements Runnable {
         if (!loading) {
             controls = new Controls(canvas, main);
             controls.generateControls();
-            scenario = new Scenario(main, "ScenarioNuevo.json");
+            scenario = new Scenario(main, "Scenario4.json");
             try {
                 scenario.createScenario();
             } catch (JSONException e) {
@@ -73,6 +78,8 @@ public class Loader extends SurfaceView implements Runnable {
 
             matrixX = new MatrixX(canvas, main, scenario);
             matrixX.generateNewMatrix();
+            background = new Background(getContext(),matrixX);
+            penguin = new Penguin(main,matrixX.getWidth()/2-75,matrixX.getHeight()-282,150,182);
 
             if (matrixX != null &&
                     controls.load &&
@@ -81,6 +88,8 @@ public class Loader extends SurfaceView implements Runnable {
                 main.setControls(controls);
                 main.setMatrixX(matrixX);
                 main.setScenario(scenario);
+                main.setBackground(background);
+                main.setPenguin(penguin);
 
                 this.working = false;
                 try {

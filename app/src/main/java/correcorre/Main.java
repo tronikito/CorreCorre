@@ -5,22 +5,27 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
 
+import correcorre.background.Background;
 import correcorre.graficos.MatrixX;
 import correcorre.graficos.MyCanvas;
+import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
 
 public class Main extends SurfaceView implements Runnable {
 
-    private volatile int[] speed = new int[] {2,0};
+    private int[] speed = new int[] {1500,1500};
     private static boolean working = false;
     private volatile boolean firstTime = true;
     private Thread start;
-    private static int fps = 0;
+    public static int fps = 0;
     private static correcorre.graficos.MyCanvas myCanvas;
     private static Controls controls = null;
     private static MatrixX matrixX = null;
     private static Scenario scenario = null;
     private static Main main;
+    private static Background background;
+    private static Penguin penguin;
+    private static int avgFps = 0;
 
     public Main(Context context) {
         super(context);
@@ -37,30 +42,77 @@ public class Main extends SurfaceView implements Runnable {
         double timeTrans;
         double delta = 0;
 
+        int actualFpsRefX = 1;
+        int actualFpsRefY = 1;
+
         while (working) {
             final long initWhile = System.nanoTime();
             timeTrans = initWhile - refFps;
             refFps = initWhile;
             delta += timeTrans / ns_fps;
 
+            int speedX = 0;
+            int speedY = 0;
+
             while (delta >= 1) {
-                update();//every fps
+
+                //####################### CALC SPEED EVERY 60 IS 1+
+                //####################### MOD SPEED ALTERNATE BETWEEN FRAMES
+                double realFps = fps_objective-1/delta;
+
+                speedX = this.speed[0]/(fps_objective-1);
+                int newSpeedXmod = Math.abs(this.speed[0]%fps_objective);
+                float speedFpsRefX = calcSpeedFps(newSpeedXmod,realFps);
+                if (speedFpsRefX * actualFpsRefX <= fps && speedFpsRefX >= 1) {
+                    if (this.speed[0] > 0) speedX += 1;
+                    if (this.speed[0] < 0) speedX += -1;
+                    actualFpsRefX++;
+                }
+
+                speedY = this.speed[1]/(fps_objective-1);
+                int newSpeedYmod = Math.abs(this.speed[1]%fps_objective);
+                float speedFpsRefY = calcSpeedFps(newSpeedYmod,realFps);
+                if (speedFpsRefY * actualFpsRefY <= fps && speedFpsRefY >= 1) {
+                    if (this.speed[1] > 0) speedX += 1;
+                    if (this.speed[1] < 0) speedX += -1;
+                    actualFpsRefY++;
+                }
+
+                //########################
+
+                int[] newSpeed = {speedX,speedY};
+
+                update(newSpeed,realFps);//every fps
                 delta--;
             }
             if (System.nanoTime() - refFpsCount > ns_s) {//every 60fps
-                //System.out.println(this.fps);
+
+                actualFpsRefX = 1;
+                actualFpsRefY = 1;
+                this.avgFps = fps;
                 fps = 0;
                 refFpsCount = System.nanoTime();
             }
         }
     }
 
-    private void update() {//#################### RUN ACTIONS
+    private synchronized float calcSpeedFps(int speed, double realFps) {
+        float speedFpsRef = 0;
+        //double realFps = fps_objective-1/delta;
+        if (speed < realFps) speedFpsRef = (int) Math.round(realFps/speed);
+        if (speed >= realFps) speedFpsRef = (float) realFps/speed;
+        return speedFpsRef;
+    }
+
+    private synchronized void update(int[] speed, double realFps) {//#################### RUN ACTIONS
         if (this.firstTime) {
             this.firstTime = false;
         } else {
-            matrixX.moveMatrix(this.speed);
-            matrixX.checkOffset();
+            matrixX.moveMatrix(speed);
+            //matrixX.checkOffset();
+            //matrixX.recalculateDrawable();
+            background.moveBackground(speed);
+            penguin.moveX(speed);
         }
         myCanvas.invalidate();
         this.fps++;
@@ -68,7 +120,7 @@ public class Main extends SurfaceView implements Runnable {
 
     public void iniciar(MainActivity mainActivity) {
         this.working = true;
-        myCanvas = new MyCanvas(main.getContext(), main, matrixX, controls);
+        myCanvas = new MyCanvas(main.getContext(), main, matrixX, controls, background, penguin);
         Handler mainThread = new Handler(Looper.getMainLooper());
         mainThread.post(new setView(main, mainActivity, myCanvas) {
         });
@@ -93,6 +145,8 @@ public class Main extends SurfaceView implements Runnable {
         matrixX = m;
     }
     public void setScenario(Scenario s) { scenario = s; };
+    public void setBackground(Background b) { background = b; }
+    public void setPenguin(Penguin p) { penguin = p; }
     public void setSpeed(int[] s) {
         this.speed = s;
     }

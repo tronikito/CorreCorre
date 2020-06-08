@@ -1,17 +1,22 @@
 package correcorre.graficos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
 
 import correcorre.Controls;
 import correcorre.Main;
+import correcorre.R;
+import correcorre.background.Background;
+import correcorre.penguin.Penguin;
 
 public class MyCanvas extends View {
 
@@ -21,6 +26,9 @@ public class MyCanvas extends View {
     private static Main main;
     private static MatrixX matrixX;
     private static Controls controls;
+    private static Background background;
+    private static Penguin penguin;
+    private Drawable background1;
     public int width = -1;
     public int height = -1;
     private Rect bLeft;
@@ -28,24 +36,29 @@ public class MyCanvas extends View {
     private Rect rtouch = new Rect();
 
 
-    public MyCanvas(Context c,Main m,MatrixX ma, Controls con) {
+    public MyCanvas(Context c,Main m,MatrixX ma, Controls con, Background b, Penguin p) {
         super(c);
         main = m;
         matrixX = ma;
         controls = con;
+        background = b;
+        penguin = p;
         this.bLeft = controls.bLeft;
         this.bRight = controls.bRight;
         this.speed = main.getSpeed();
 //        this.bUp = controls.bUp;
 //        this.bDown = controls.bDown;
-        setBackgroundColor(Color.BLACK);//test
+        setBackgroundResource(R.drawable.background1);//BACKGROUND!!
     }
 
     @Override
-    protected void onDraw(Canvas c) {
+    protected synchronized void onDraw(Canvas c) {
 
+        background.printBackground(c);
         matrixX.printMatrix(c);
         controls.printControls(c);
+        penguin.printPenguin(c);
+
         if (point != null) {
             c.drawCircle(point.x, point.y, 100, paint);
         }
@@ -53,7 +66,7 @@ public class MyCanvas extends View {
 
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
+    public synchronized boolean onTouchEvent(@NonNull MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
 
