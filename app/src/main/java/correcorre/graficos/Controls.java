@@ -1,9 +1,12 @@
-package correcorre;
+package correcorre.graficos;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
+import correcorre.Main;
+import correcorre.R;
 import correcorre.graficos.LCanvas;
 
 public class Controls {
@@ -34,7 +37,7 @@ public class Controls {
         cRect.top = cHeight/2-50;
         cRect.bottom = cHeight;//height 400px;
         this.bAll = cRect;
-        this.cAll = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cAll = VectorDrawableCompat.create(main.getResources(), R.drawable.ic_007,null);
         //izquierda
         cRect = new Rect();
         cRect.left = 100;

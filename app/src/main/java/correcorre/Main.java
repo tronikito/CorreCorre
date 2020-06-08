@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
-
 import correcorre.background.Background;
+import correcorre.graficos.Controls;
 import correcorre.graficos.MatrixX;
 import correcorre.graficos.MyCanvas;
 import correcorre.penguin.Penguin;

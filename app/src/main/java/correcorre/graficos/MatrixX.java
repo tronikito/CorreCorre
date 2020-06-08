@@ -1,15 +1,11 @@
 package correcorre.graficos;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import java.util.ArrayList;
 import correcorre.Main;
-import correcorre.blocks.Block;
-import correcorre.blocks.BlueBlock;
-import correcorre.blocks.DirtBlock;
-import correcorre.blocks.EmptyBlock;
-import correcorre.blocks.GrassBlock;
-import correcorre.blocks.RedBlock;
+import correcorre.scenario.Block;
 import correcorre.scenario.Scenario;
 
 public class MatrixX {
@@ -20,6 +16,7 @@ public class MatrixX {
     public volatile ArrayList<ArrayList<String>> matrixScenario = null;
     private MyCanvas canvas;
 
+    public boolean generateMatrix = false;
     final private int cW;
     final private int cH;
     private int blocksWidth = 30;
@@ -32,14 +29,15 @@ public class MatrixX {
     final private int offsetY;
     final private int offsetY2;
     private int relativeOffsetX = 0;
-    private int relativeOffsetY = 1;
-    public boolean working = false;
+    private int relativeOffsetY = 2;
     private static Main main;
     private static Scenario scenario;
+    private Context context;
     private int[] scenarioStart;//debe ser el offset
 
-    public MatrixX(LCanvas c, Main m,Scenario s) {
+    public MatrixX(Context context, LCanvas c, Main m, Scenario s) {
 
+        this.context = context;
         main = m;
         scenario = s;
         this.matrixScenario = scenario.scenario;
@@ -89,55 +87,32 @@ public class MatrixX {
         for (int x = 0; x < blocksWidth; x++) {
             column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
-                Block newB = generateFromScenario(x+relativeOffsetX,y+relativeOffsetY);
-                Rect newR = new Rect();
+                Block newB = new Block(this.context,main,"empty",1);
+                generateFromScenario(newB,x+relativeOffsetX,y+relativeOffsetY);
 
-                newR.left = (x * size) - offsetX2;
-                newR.right = (x * size) - offsetX;
-                newR.top = (y * size) - offsetY2;
-                newR.bottom = (y * size) - offsetY;
-
-                newB.setRect(newR);
-
+                Rect r = newB.getRect();
+                r.left = (x * size) - offsetX2;
+                r.right = (x * size) - offsetX;
+                r.top = (y * size) - offsetY2;
+                r.bottom = (y * size) - offsetY;
                 column.add(newB);
             }
             matrix.add(column);
         }
+        generateMatrix = true;
     }
 
-    private synchronized Block generateFromScenario(int x, int y) {
-        Block newB = null;
+    private synchronized void generateFromScenario(Block old, int x, int y) {
+        boolean newType = false;
         if (x < this.matrixScenario.size() && x >= 0) {
             if (y < this.matrixScenario.get(x).size() && y >= 0) {
                 String type = this.matrixScenario.get(x).get(y);
-                newB = createNewTypeBlock(type);
+                old.setType(type,1);
+                newType = true;
             }
         }
-        if (newB == null) newB = new EmptyBlock(main.getContext());
-        return newB;
+        if (!newType) old.setType("empty",1);
     }
-
-    private synchronized Block createNewTypeBlock(String type) {
-        Block newB = null;
-        if (type.equals("dirt")) {
-            newB = new DirtBlock(main.getContext());
-        }
-        if (type.equals("grass")) {
-            newB = new GrassBlock(main.getContext(),main);
-        }
-        if (type.equals("red")) {
-            newB = new RedBlock(main.getContext());
-        }
-        if (type.equals("blue")) {
-            newB = new BlueBlock(main.getContext());
-        }
-        if (type.equals("empty")) {
-            newB = new EmptyBlock(main.getContext());
-        }
-        return newB;
-    }
-
-    // ##########################################################################################
 
     // MOVE MATRIXX ############################################################################
 
@@ -263,21 +238,17 @@ public class MatrixX {
             foundT -= 1;
             if (foundT == -1) foundT = blocksHeight-1;
         }
-
-        recalculateDrawable(foundL,foundT);
+        if (left || right || top || bottom) recalculateDrawable(foundL,foundT);
     }
 
     public synchronized void recalculateDrawable(int foundL,int foundT) {
 
-        Rect r;
         int calcX = foundL;
         int calcY = foundT;
 
         for (int x = 0; x < blocksWidth; x++) {
             for(int y = 0; y < blocksHeight; y++) {
-                r = this.matrix.get(calcX).get(calcY).getRect();
-                this.matrix.get(calcX).set(calcY,generateFromScenario(x+relativeOffsetX,y+relativeOffsetY));
-                this.matrix.get(calcX).get(calcY).setRect(r);
+                generateFromScenario(this.matrix.get(calcX).get(calcY),x+relativeOffsetX,y+relativeOffsetY);
                 calcY++;
                 if (calcY == blocksHeight) calcY = 0;
             }
@@ -312,13 +283,13 @@ public class MatrixX {
 
     // IMPRIMIR MATRIXX #########################################################################
 
-    public synchronized void printMatrix(Canvas canvas) {//SINCRO CON MOVEMATRIX
+    public synchronized void printMatrixBack(Canvas canvas) {//SINCRO CON MOVEMATRIX
         if (this.matrix != null) {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
-                    //if (b instanceof GrassBlock) b.getDrawable().draw(canvas);//Drawable animado
-                    b.getDrawable().draw(canvas);
+                    if (b.getType().equals("grass"));
+                    else b.getDrawable().draw(canvas);
 
                     /*
                     //Prueba texto casillas DEBUGG
@@ -337,6 +308,16 @@ public class MatrixX {
                     textWidth = tempTextPaint.measureText(text);
                     canvas.drawText(text, 0 + r.right -(textWidth), 50 + r.top-(24), tempTextPaint);
 */
+                }
+            }
+        }
+    }
+    public synchronized void printMatrixFront(Canvas canvas) {//SINCRO CON MOVEMATRIX
+        if (this.matrix != null) {
+            for (int x = 0; x < blocksWidth; x++) {
+                for (int y = 0; y < blocksHeight; y++) {
+                    Block b = this.matrix.get(x).get(y);
+                    if (b.getType().equals("grass")) b.getDrawable().draw(canvas);
                 }
             }
         }

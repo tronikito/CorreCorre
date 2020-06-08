@@ -1,11 +1,11 @@
 package correcorre;
 
-import android.content.Context;
 import android.view.SurfaceView;
 
 import org.json.JSONException;
 
 import correcorre.background.Background;
+import correcorre.graficos.Controls;
 import correcorre.graficos.LCanvas;
 import correcorre.graficos.MatrixX;
 import correcorre.penguin.Penguin;
@@ -76,12 +76,12 @@ public class Loader extends SurfaceView implements Runnable {
         }
         if (scenario.scenario != null && scenario.start != null && canvas.width != -1 && canvas.height != -1) {
 
-            matrixX = new MatrixX(canvas, main, scenario);
+            matrixX = new MatrixX(this.getContext(),canvas, main, scenario);
             matrixX.generateNewMatrix();
             background = new Background(getContext(),matrixX);
-            penguin = new Penguin(main,matrixX.getWidth()/2-75,matrixX.getHeight()-282,150,182);
+            penguin = new Penguin(main,matrixX.getWidth()/2-75,matrixX.getHeight()-290,150,182);
 
-            if (matrixX != null &&
+            if (matrixX.generateMatrix &&
                     controls.load &&
                     scenario.scenario != null) {
 

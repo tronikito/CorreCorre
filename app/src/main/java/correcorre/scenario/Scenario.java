@@ -45,11 +45,6 @@ public class Scenario {
                 columns.add(column);
         }
         this.scenario = columns;
-        for (int i = 0; i < columns.size(); i++) {
-            for (int y = 0; y < columns.get(i).size(); y++) {
-                System.out.println(columns.get(i).get(y));
-            }
-        }
     }
 
     private synchronized String importJSON() {

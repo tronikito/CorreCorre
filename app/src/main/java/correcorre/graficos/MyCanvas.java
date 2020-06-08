@@ -1,9 +1,7 @@
 package correcorre.graficos;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -12,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
 
-import correcorre.Controls;
 import correcorre.Main;
 import correcorre.R;
 import correcorre.background.Background;
@@ -55,9 +52,10 @@ public class MyCanvas extends View {
     protected synchronized void onDraw(Canvas c) {
 
         background.printBackground(c);
-        matrixX.printMatrix(c);
+        matrixX.printMatrixBack(c);
         controls.printControls(c);
         penguin.printPenguin(c);
+        matrixX.printMatrixFront(c);
 
         if (point != null) {
             c.drawCircle(point.x, point.y, 100, paint);
@@ -77,13 +75,13 @@ public class MyCanvas extends View {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (Rect.intersects(this.rtouch,this.bLeft) && !matrixX.working) {
+                    if (Rect.intersects(this.rtouch,this.bLeft)) {
                         this.speed[0] = main.getSpeed()[0] *= -1;
                         //this.speed[1] = main.getSpeed()[1] *= -1;
                         //int [] v = {main.getSpeed()[0] *= -1, main.getSpeed()[1] *= -1};
                         //main.setSpeed(v);
                     }
-                    if (Rect.intersects(this.rtouch,this.bRight) && !matrixX.working) {
+                    if (Rect.intersects(this.rtouch,this.bRight)) {
                         //this.speed[0] = main.getSpeed()[0] *= -1;
                         this.speed[1] = main.getSpeed()[1] *= -1;
                         //main.setSpeed(v);
