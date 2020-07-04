@@ -1,11 +1,9 @@
 package correcorre.graficos;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -17,10 +15,8 @@ import correcorre.penguin.Penguin;
 
 public class MyCanvas extends View {
 
-    private int[] speed;
     private PointF point;
     private Paint paint = new Paint();
-    private static Main main;
     private static MatrixX matrixX;
     private static Controls controls;
     private static Background background;
@@ -29,32 +25,36 @@ public class MyCanvas extends View {
     public int height = -1;
     private Rect bLeft;
     private Rect bRight;
+    private Rect bJump;
     private Rect rtouch = new Rect();
 
 
-    public MyCanvas(Context c,Main m,MatrixX ma, Controls con, Background b, Penguin p) {
-        super(c);
-        main = m;
+    public MyCanvas(Main m,MatrixX ma, Controls con, Background b, Penguin p) {
+        super(m.getContext());
+
         matrixX = ma;
         controls = con;
         background = b;
         penguin = p;
+        this.bJump = controls.bAll;
         this.bLeft = controls.bLeft;
-        this.bRight = controls.bRight;
-        this.speed = main.getSpeed();
-//        this.bUp = controls.bUp;
-//        this.bDown = controls.bDown;
+
         setBackgroundResource(R.drawable.background1);//BACKGROUND!!
     }
 
     @Override
     protected synchronized void onDraw(Canvas c) {
 
+
         background.printBackground(c);
         matrixX.printMatrixBack(c);
         penguin.printPenguin(c);
         matrixX.printMatrixFront(c);
         controls.printControls(c);
+        penguin.printPenguinGrid(c);
+
+        matrixX.getEnemys(c);
+
 
         if (point != null) {
             c.drawCircle(point.x, point.y, 100, paint);
@@ -74,36 +74,34 @@ public class MyCanvas extends View {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (Rect.intersects(this.rtouch,this.bLeft)) {
-                        this.speed[0] = main.getSpeed()[0] *= -1;
-                        //this.speed[1] = main.getSpeed()[1] *= -1;
-                        //int [] v = {main.getSpeed()[0] *= -1, main.getSpeed()[1] *= -1};
-                        //main.setSpeed(v);
+                    if (Rect.intersects(this.rtouch,this.bJump)) {
+                        if (!penguin.getJumping() && !penguin.getGravity()) {
+                            penguin.jump();
+                            penguin.setPressJump(true);
+                        }
                     }
-                    if (Rect.intersects(this.rtouch,this.bRight)) {
-                        //this.speed[0] = main.getSpeed()[0] *= -1;
-                        this.speed[1] = main.getSpeed()[1] *= -1;
-                        //main.setSpeed(v);
+                    if (Rect.intersects(this.rtouch,this.bLeft)) {
+                        penguin.setDirection();
                     }
                     point = new PointF(x, y);
                     invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    penguin.setPressJump(false);
                     if (point != null) {
                         point.set(x, y);
                         invalidate();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    penguin.setPressJump(false);
                 case MotionEvent.ACTION_CANCEL:
+                    penguin.setPressJump(false);
                     point = null;
                     invalidate();
                     break;
             }
         return true;
-    }
-    public int[] getSpeed() {
-        return this.speed;
     }
 }
 

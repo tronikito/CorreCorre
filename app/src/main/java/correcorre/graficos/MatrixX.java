@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import java.util.ArrayList;
 import correcorre.Main;
+import correcorre.enemy.Spider;
+import correcorre.penguin.Penguin;
 import correcorre.scenario.Block;
 import correcorre.scenario.Scenario;
 
@@ -13,8 +15,8 @@ public class MatrixX {
     //throw new java.lang.RuntimeException("error block"); <<usar para casting blocks
 
     public volatile ArrayList<ArrayList<Block>> matrix = null;
-    public volatile ArrayList<ArrayList<String>> matrixScenario = null;
-    private MyCanvas canvas;
+    public volatile ArrayList<ArrayList<ArrayList>> matrixScenario = null;
+    public volatile ArrayList<Spider> enemyList = null;
 
     public boolean generateMatrix = false;
     final private int cW;
@@ -28,10 +30,12 @@ public class MatrixX {
     final private int offsetnH;
     final private int offsetY;
     final private int offsetY2;
-    private int relativeOffsetX = 0;
-    private int relativeOffsetY = 2;
+    private int relativeOffsetX = -5;
+    private int relativeOffsetY = -5;//-5
     private static Main main;
     private static Scenario scenario;
+    private static MyCanvas myCanvas;
+    private static Penguin penguin;
     private Context context;
     private int[] scenarioStart;//debe ser el offset
 
@@ -70,6 +74,8 @@ public class MatrixX {
 
     }
 
+    public void setPenguin(Penguin p) { penguin = p; }
+    public int getSize() { return this.size; }
     public int getWidth() {
         return this.cW;
     }
@@ -87,7 +93,7 @@ public class MatrixX {
         for (int x = 0; x < blocksWidth; x++) {
             column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
-                Block newB = new Block(this.context,main,"empty",0);
+                Block newB = new Block(this.context,"empty",1,1);
                 generateFromScenario(newB,x+relativeOffsetX,y+relativeOffsetY);
 
                 Rect r = newB.getRect();
@@ -106,26 +112,77 @@ public class MatrixX {
         boolean newType = false;
         if (x < this.matrixScenario.size() && x >= 0) {
             if (y < this.matrixScenario.get(x).size() && y >= 0) {
-                String type = this.matrixScenario.get(x).get(y);
-                old.setType(type,0);
+
+                String type = (String) this.matrixScenario.get(x).get(y).get(0);
+                int position = (int) this.matrixScenario.get(x).get(y).get(1);
+                int enemyType = (int) this.matrixScenario.get(x).get(y).get(2);
+                int solid = (int) this.matrixScenario.get(x).get(y).get(3);
+                old.setType(type,1);
+                old.setPosition(position);
+                old.setEnemyType(enemyType);
+                old.setSolid(solid);
+                if (type.equals("enemy") && enemyType != 0) {
+                    this.matrixScenario.get(x).get(y).set(2, 0);//reset to not more spawns.
+                   generateEnemy(old);
+                   old.setEnemyType(0);//reset from matrixX for not double spawn.
+                }
                 newType = true;
             }
         }
-        if (!newType) old.setType("empty",0);
+        if (!newType) old.setType("empty",1);
     }
 
+    private synchronized void generateEnemy(Block old) {
+
+        if (this.enemyList == null) {
+            this.enemyList = new ArrayList<Spider>();
+        }
+
+        if (old.getEnemyType() == 1) {//spider
+            //Spider spider = new Spider(main, this, old.getRect().top + (this.size / 2), old.getRect().left - (this.size / 2 + this.size * 2), this.size * 4, this.size * 2);
+            Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
+            this.enemyList.add(spider);
+        }
+    }
+    public synchronized void getEnemys(Canvas c) {
+
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).printEnemy(c);
+            }
+        }
+    }
     // MOVE MATRIXX ############################################################################
 
     public synchronized void moveMatrix(int[] speed) {
 
-        for (int x = 0; x < this.matrix.size(); x++) {
-            for (int y = 0; y < this.matrix.get(x).size(); y++) {
-                Block b = this.matrix.get(x).get(y);
-                b.moveX(speed[0]);
-                b.moveY(speed[1]);
+        if (!main.penguinX || !main.penguinY) {
+            for (int x = 0; x < this.matrix.size(); x++) {
+                for (int y = 0; y < this.matrix.get(x).size(); y++) {
+                    Block b = this.matrix.get(x).get(y);
+
+                    if (!main.penguinX) {
+                        b.moveX(speed[0]);
+                    }
+                    if (!main.penguinY) {
+                        b.moveY(speed[1]);
+                    }
+                }
             }
+            //move enemY
+            if (this.enemyList != null) {
+                for (int x = 0; x < this.enemyList.size(); x++) {
+                    if (!main.penguinX) {
+                        this.enemyList.get(x).moveX(speed[0]);
+                    }
+                    if (!main.penguinY) {
+                        this.enemyList.get(x).moveY(speed[1]);
+                    }
+                }
+            }
+
+            checkOffset();
         }
-        checkOffset();
     }
 
     public synchronized void checkOffset() {
@@ -255,10 +312,6 @@ public class MatrixX {
             calcX++;
             if (calcX == blocksWidth) calcX = 0;
         }
-
-        if (this.canvas != null) main.setSpeed(this.canvas.getSpeed());//evitar desfase;
-        //despues de mover/recalcular offset/recalcularDrawables;
-        //se cambia la velocidad para evitar desfases;
     }
 
     private synchronized void newRect(Block b, int padding, int pos) {
@@ -279,6 +332,9 @@ public class MatrixX {
             b.getRect().top =  -offsetY - padding;
             b.getRect().bottom = -offsetnH - padding;
         }
+        //if (penguin != null) main.setSpeed(penguin.getSpeed());//evitar desfase;
+        //despues de mover/recalcular offset/recalcularDrawables;
+        //se cambia la velocidad para evitar desfases;
     }
 
     // IMPRIMIR MATRIXX #########################################################################
@@ -288,14 +344,13 @@ public class MatrixX {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
-                    if (b.getType().equals("grass"));
-                    else {
+                    if (b.getPosition() == 0) {//BACK
                         if (b.getSprite() == 0) {
                             b.animatedSprite();
                         }
                         b.getDrawable().draw(canvas);
                     }
-
+                }
                     /*
                     //Prueba texto casillas DEBUGG
                     //text variables
@@ -313,7 +368,6 @@ public class MatrixX {
                     textWidth = tempTextPaint.measureText(text);
                     canvas.drawText(text, 0 + r.right -(textWidth), 50 + r.top-(24), tempTextPaint);
 */
-                }
             }
         }
     }
@@ -322,7 +376,7 @@ public class MatrixX {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
-                    if (b.getType().equals("grass")) {
+                    if (b.getPosition() == 1) {// FRONT
                         if (b.getSprite() == 0) {
                             b.animatedSprite();
                         }

@@ -15,7 +15,7 @@ public class Scenario {
 
     private static Main main;
     private String path;
-    public volatile ArrayList<ArrayList<String>> scenario = new ArrayList<>();
+    public volatile ArrayList<ArrayList<ArrayList>> scenario = new ArrayList<>();
     public volatile int[] start = {0,0};
 
     public Scenario(Main m,String path) {
@@ -26,25 +26,33 @@ public class Scenario {
     public synchronized void createScenario() throws JSONException {
 
         String in = importJSON();
-        JSONObject obj;
-        JSONArray columnsJSON;
-        JSONObject blockJSON;
-        ArrayList<String> column;
-        String type;
-        obj = new JSONObject(in);
-        ArrayList<ArrayList<String>> columns = new ArrayList<>();
 
-        for (int i = 0; i < obj.length(); i++) {//columnas
-                columnsJSON = obj.getJSONArray("" + i);
-                column = new ArrayList<>();
-                for (int u = 0; u < columnsJSON.length(); u++) {
-                    blockJSON = columnsJSON.getJSONObject(u);
-                    type = blockJSON.getString("type");
-                    column.add(type);
+        JSONArray matrixXJSON;
+        JSONArray columnJSON;
+        JSONObject blockJSON;
+
+        matrixXJSON = new JSONArray(in);
+        ArrayList<ArrayList<ArrayList>> columns = new ArrayList<>();
+        ArrayList column;
+
+            for (int u = 0; u < matrixXJSON.length(); u++) {
+                columnJSON = matrixXJSON.getJSONArray(u);
+                column = new ArrayList();
+                for (int y = 0; y < columnJSON.length(); y++) {
+                    blockJSON = columnJSON.getJSONObject(y);
+                    ArrayList newBlock = new ArrayList();
+                    newBlock.add(blockJSON.getString("type"));//0
+                    newBlock.add(blockJSON.getInt("position"));//1
+                    newBlock.add(blockJSON.getInt("enemyType"));//2
+                    newBlock.add(blockJSON.getInt("solid"));//3
+
+                    column.add(newBlock);
                 }
                 columns.add(column);
-        }
+            }
         this.scenario = columns;
+
+
     }
 
     private synchronized String importJSON() {

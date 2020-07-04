@@ -65,9 +65,9 @@ public class Loader extends SurfaceView implements Runnable {
 
     private void update() {
         if (!loading) {
-            controls = new Controls(canvas, main);
+            controls = new Controls(main,canvas);
             controls.generateControls();
-            scenario = new Scenario(main, "ScenarioNuevo.json");
+            scenario = new Scenario(main, "ScenarioGenerado.json");
             try {
                 scenario.createScenario();
             } catch (JSONException e) {
@@ -78,13 +78,18 @@ public class Loader extends SurfaceView implements Runnable {
 
             matrixX = new MatrixX(this.getContext(),canvas, main, scenario);
             matrixX.generateNewMatrix();
-            background = new Background(getContext(),matrixX);
-            penguin = new Penguin(main,matrixX.getWidth()/2-75,matrixX.getHeight()-290,150,182);
+            background = new Background(getContext(),main,matrixX);
 
             if (matrixX.generateMatrix &&
                     controls.load &&
                     scenario.scenario != null) {
 
+                int pWidth = matrixX.getSize()*2;
+                int pHeight = (int) Math.round(matrixX.getSize()*2.5);
+                penguin = new Penguin(main,matrixX,matrixX.getWidth()/2-(pWidth/2),(int) Math.round(matrixX.getHeight()/1.2-(pHeight+matrixX.getSize()*1.5)),pWidth, pHeight,matrixX.getSize());
+
+                background.setPenguin(penguin);
+                matrixX.setPenguin(penguin);
                 main.setControls(controls);
                 main.setMatrixX(matrixX);
                 main.setScenario(scenario);
