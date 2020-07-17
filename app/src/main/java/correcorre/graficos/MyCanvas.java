@@ -27,6 +27,7 @@ public class MyCanvas extends View {
     private Rect bRight;
     private Rect bJump;
     private Rect rtouch = new Rect();
+    private boolean shooting = false;
 
 
     public MyCanvas(Main m,MatrixX ma, Controls con, Background b, Penguin p) {
@@ -36,8 +37,9 @@ public class MyCanvas extends View {
         controls = con;
         background = b;
         penguin = p;
-        this.bJump = controls.bAll;
+        this.bJump = controls.bJump;
         this.bLeft = controls.bLeft;
+        this.bRight = controls.bRight;
 
         setBackgroundResource(R.drawable.background1);//BACKGROUND!!
     }
@@ -45,15 +47,17 @@ public class MyCanvas extends View {
     @Override
     protected synchronized void onDraw(Canvas c) {
 
-
         background.printBackground(c);
         matrixX.printMatrixBack(c);
         penguin.printPenguin(c);
+        matrixX.getWeapons(c);
+        matrixX.getEnemys(c);
+        matrixX.getBullets(c);
         matrixX.printMatrixFront(c);
         controls.printControls(c);
-        penguin.printPenguinGrid(c);
 
-        matrixX.getEnemys(c);
+        //penguin.printPenguinGrid(c);
+        //matrixX.printEnemyGrid(c);
 
 
         if (point != null) {
@@ -82,6 +86,14 @@ public class MyCanvas extends View {
                     }
                     if (Rect.intersects(this.rtouch,this.bLeft)) {
                         penguin.setDirection();
+                    }
+                    if (Rect.intersects(this.rtouch,this.bRight)) {
+                        if (shooting == true) {
+                            shooting = false;
+                        } else {
+                            shooting = true;
+                        }
+                        penguin.shoot(shooting);
                     }
                     point = new PointF(x, y);
                     invalidate();

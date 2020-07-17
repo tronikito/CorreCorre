@@ -60,41 +60,32 @@ public class Main extends SurfaceView implements Runnable {
 
             while (delta >= 1) {
 
-
-                penguin.checkLateralColission();
-                penguin.checkBottomColission();
+                penguin.checkColission();
                 penguin.calcAceleration();
+                matrixX.calcEnemyMove();
+                matrixX.calcBulletMove(); //only colision
+                matrixX.randomControlsEnemys();
+
 
                 if (penguin != null) main.setSpeed(penguin.getSpeed());//evitar desfase;
-                //before move/recalc offset/recalcDrawables;
-                //velocity change (evitar desfases);
 
-                //####################### CALC SPEED EVERY 60 IS 1+
-                //####################### MOD SPEED ALTERNATE BETWEEN FRAMES
                 double realFps = fps_objective-1/delta;
 
-                speedX = this.speed[0]/(fps_objective-1);
-                int newSpeedXmod = Math.abs(this.speed[0]%fps_objective);
-                float speedFpsRefX = calcSpeedFps(newSpeedXmod,realFps);
-                if (speedFpsRefX * actualFpsRefX <= fps && speedFpsRefX >= 1) {
-                    if (this.speed[0] > 0) speedX += 1;
-                    if (this.speed[0] < 0) speedX -= 1;
-                    actualFpsRefX++;
+                int[] newSpeed = calcRealSpeed(this.speed, realFps, fps_objective, actualFpsRefX, actualFpsRefY);
+                if (matrixX.enemyList != null) {
+                    for (int x = 0; x < matrixX.enemyList.size(); x++) {
+                        matrixX.enemyList.get(x).setActualSpeed(calcRealSpeed(matrixX.enemyList.get(x).getSpeed(), realFps, fps_objective, actualFpsRefX, actualFpsRefY));
+                    }
                 }
-
-                speedY = this.speed[1]/(fps_objective-1);
-                int newSpeedYmod = Math.abs(this.speed[1]%fps_objective);
-                float speedFpsRefY = calcSpeedFps(newSpeedYmod,realFps);
-                if (speedFpsRefY * actualFpsRefY <= fps && speedFpsRefY >= 1) {
-                    if (this.speed[1] > 0) speedY += 1;
-                    if (this.speed[1] < 0) speedY -= 1;
-                    actualFpsRefY++;
+                if (matrixX.bulletList != null) {
+                    for (int x = 0; x < matrixX.bulletList.size(); x++) {
+                        matrixX.bulletList.get(x).setActualSpeed(calcRealSpeed(matrixX.bulletList.get(x).getSpeed(), realFps, fps_objective, actualFpsRefX, actualFpsRefY));
+                    }
                 }
 
                 //########################
                 //System.out.println(speed[1]);
                 //System.out.println(speedY);
-                int[] newSpeed = {speedX,speedY};
 
                 update(newSpeed,realFps);//every fps
                 delta--;
@@ -109,7 +100,30 @@ public class Main extends SurfaceView implements Runnable {
             }
         }
     }
+    private synchronized int[] calcRealSpeed(int [] speed, double realFps, byte fps_objective, int actualFpsRefX, int actualFpsRefY) {
+        int speedX = 0;
+        int speedY = 0;
 
+        speedX = speed[0]/(fps_objective-1);
+        int newSpeedXmod = Math.abs(this.speed[0]%fps_objective);
+        float speedFpsRefX = calcSpeedFps(newSpeedXmod,realFps);
+        if (speedFpsRefX * actualFpsRefX <= fps && speedFpsRefX >= 1) {
+            if (speed[0] > 0) speedX += 1;
+            if (this.speed[0] < 0) speedX -= 1;
+            actualFpsRefX++;
+        }
+
+        speedY = speed[1]/(fps_objective-1);
+        int newSpeedYmod = Math.abs(speed[1]%fps_objective);
+        float speedFpsRefY = calcSpeedFps(newSpeedYmod,realFps);
+        if (speedFpsRefY * actualFpsRefY <= fps && speedFpsRefY >= 1) {
+            if (speed[1] > 0) speedY += 1;
+            if (speed[1] < 0) speedY -= 1;
+            actualFpsRefY++;
+        }
+        int[] newSpeed = {speedX,speedY};
+        return newSpeed;
+    }
     private synchronized float calcSpeedFps(int speed, double realFps) {
         float speedFpsRef = 0;
         //double realFps = fps_objective-1/delta;
@@ -147,8 +161,28 @@ public class Main extends SurfaceView implements Runnable {
 
             matrixX.moveMatrix(speed);
             penguin.movePenguinPos(speed);
+            if (matrixX.enemyList != null) {
+                for (int x = 0; x < matrixX.enemyList.size(); x++) {
+                    matrixX.enemyList.get(x).moveEnemyActualSpeed();
+                }
+            }
+            if (matrixX.bulletList != null) {
+                for (int x = 0; x < matrixX.bulletList.size(); x++) {
+                    matrixX.bulletList.get(x).moveBulletActualSpeed();
+                }
+            }
 
             penguin.movePenguinSprite(speed);
+            matrixX.moveEnemySprite();
+            if (matrixX.bulletList != null) {
+                for (int x = 0; x < matrixX.bulletList.size(); x++) {
+                    matrixX.bulletList.get(x).moveBulletSprite();
+                }
+            }
+
+            matrixX.checkEnemyColission(); //kill penguin
+            matrixX.checkBulletColission();//kill enemy
+            penguin.shooting();
 
             background.moveBackground(speed);
 
@@ -186,6 +220,9 @@ public class Main extends SurfaceView implements Runnable {
     public void setScenario(Scenario s) { scenario = s; };
     public void setBackground(Background b) { background = b; }
     public void setPenguin(Penguin p) { penguin = p; }
+    public Penguin getPenguin() {
+        return penguin;
+    }
     public void setSpeed(int[] s) {
         this.speed = s;
     }

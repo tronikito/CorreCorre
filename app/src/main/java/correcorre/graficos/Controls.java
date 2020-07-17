@@ -17,8 +17,8 @@ public class Controls {
     public Drawable cRight;
     public Rect bLeft;
     public Rect bRight;
-    public Rect bAll;
-    private Drawable cAll;
+    public Rect bJump;
+    private Drawable cJump;
     private static Main main;
     public volatile boolean load = false;
 
@@ -35,33 +35,33 @@ public class Controls {
         cRect.right = cWidth-50; //width 150px;
         cRect.top = (int) cHeight/2+50;
         cRect.bottom = cHeight-50;//height 400px;
-        this.cAll = VectorDrawableCompat.create(main.getResources(), R.drawable.ic_007,null);
-        this.cAll.setBounds(cRect);
-        this.bAll = cRect;
+        this.cJump = VectorDrawableCompat.create(main.getResources(), R.drawable.b_empty,null);
+        this.cJump.setBounds(cRect);
+        this.bJump = cRect;
         //izquierda
         cRect = new Rect();
         cRect.left = 100;
         cRect.right = 250; //width 150px;
         cRect.top = (int) (cHeight/1.5);
         cRect.bottom = (int) (cHeight/1.5+cHeight/6);//height 400px;
-        this.cLeft = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cLeft = VectorDrawableCompat.create(main.getResources(),R.drawable.b_empty,null);
         this.cLeft.setBounds(cRect);
         this.bLeft = cRect;
         //derecha
-        //cRect = new Rect();
-        //cRect.left = 300;
-        //cRect.right = 450;
-        //cRect.top = (int) (cHeight/1.5);
-        //cRect.bottom = (int) (cHeight/1.5+cHeight/6);
-        //this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
-        //this.cRight.setBounds(cRect);
-        //this.bRight = cRect;
+        cRect = new Rect();
+        cRect.left = 300;
+        cRect.right = 450;
+        cRect.top = (int) (cHeight/1.5);
+        cRect.bottom = (int) (cHeight/1.5+cHeight/6);
+        this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cRight.setBounds(cRect);
+        this.bRight = cRect;
         load = true;
     }
 
     public void printControls(Canvas canvas) {
-        this.cAll.draw(canvas);
+        this.cJump.draw(canvas);
         this.cLeft.draw(canvas);
-        //this.cRight.draw(canvas);
+        this.cRight.draw(canvas);
     }
 }

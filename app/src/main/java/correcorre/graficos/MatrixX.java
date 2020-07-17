@@ -5,10 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import java.util.ArrayList;
 import correcorre.Main;
+import correcorre.enemy.Plant;
 import correcorre.enemy.Spider;
+import correcorre.enemy.Enemy;
 import correcorre.penguin.Penguin;
 import correcorre.scenario.Block;
 import correcorre.scenario.Scenario;
+import correcorre.weapons.Bullet;
+import correcorre.weapons.Metralleta;
+import correcorre.weapons.Weapon;
 
 public class MatrixX {
 
@@ -16,7 +21,9 @@ public class MatrixX {
 
     public volatile ArrayList<ArrayList<Block>> matrix = null;
     public volatile ArrayList<ArrayList<ArrayList>> matrixScenario = null;
-    public volatile ArrayList<Spider> enemyList = null;
+    public volatile ArrayList<Enemy> enemyList = null;
+    public volatile ArrayList<Weapon> weaponList = null;
+    public volatile ArrayList<Bullet> bulletList = null;
 
     public boolean generateMatrix = false;
     final private int cW;
@@ -30,8 +37,8 @@ public class MatrixX {
     final private int offsetnH;
     final private int offsetY;
     final private int offsetY2;
-    private int relativeOffsetX = -5;
-    private int relativeOffsetY = -5;//-5
+    private int relativeOffsetX = 0;
+    private int relativeOffsetY = 0;//-5
     private static Main main;
     private static Scenario scenario;
     private static MyCanvas myCanvas;
@@ -94,13 +101,15 @@ public class MatrixX {
             column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
                 Block newB = new Block(this.context,"empty",1,1);
-                generateFromScenario(newB,x+relativeOffsetX,y+relativeOffsetY);
 
                 Rect r = newB.getRect();
                 r.left = (x * size) - offsetX2;
                 r.right = (x * size) - offsetX;
                 r.top = (y * size) - offsetY2;
                 r.bottom = (y * size) - offsetY;
+
+                generateFromScenario(newB,x+relativeOffsetX,y+relativeOffsetY);
+
                 column.add(newB);
             }
             matrix.add(column);
@@ -117,31 +126,69 @@ public class MatrixX {
                 int position = (int) this.matrixScenario.get(x).get(y).get(1);
                 int enemyType = (int) this.matrixScenario.get(x).get(y).get(2);
                 int solid = (int) this.matrixScenario.get(x).get(y).get(3);
+                int weaponType = (int) this.matrixScenario.get(x).get(y).get(4);
+
                 old.setType(type,1);
                 old.setPosition(position);
                 old.setEnemyType(enemyType);
                 old.setSolid(solid);
+                old.setWeaponType(weaponType);
+
                 if (type.equals("enemy") && enemyType != 0) {
                     this.matrixScenario.get(x).get(y).set(2, 0);//reset to not more spawns.
                    generateEnemy(old);
                    old.setEnemyType(0);//reset from matrixX for not double spawn.
                 }
+                if (type.equals("weapon") && weaponType != 0) {
+                    this.matrixScenario.get(x).get(y).set(4, 0);
+                    generateWeapon(old);
+                    old.setWeaponType(0);
+                }
                 newType = true;
             }
         }
-        if (!newType) old.setType("empty",1);
+        if (!newType) {
+            old.setType("dirt", 1);//if null block
+            old.setSolid(0);
+        }
+    }
+
+    public synchronized void generateBullet(Bullet b) {
+        if (this.bulletList == null) {
+            this.bulletList = new ArrayList<Bullet>();
+        }
+        this.bulletList.add(b);
+    }
+
+    private synchronized void generateWeapon(Block old) {
+        if (this.weaponList == null) {
+            this.weaponList = new ArrayList<Weapon>();
+        }
+        if (old.getEnemyType() == 1) {//metralleta
+            Metralleta metralleta = new Metralleta(main,this,old);
+            System.out.println(old.getRect().top + "top");
+            System.out.println(old.getRect().left + "left");
+            System.out.println(old.getRect().right + "right");
+            System.out.println(old.getRect().bottom + "bottom");
+            this.weaponList.add(metralleta);
+        }
     }
 
     private synchronized void generateEnemy(Block old) {
 
         if (this.enemyList == null) {
-            this.enemyList = new ArrayList<Spider>();
+            this.enemyList = new ArrayList<Enemy>();
         }
 
         if (old.getEnemyType() == 1) {//spider
-            //Spider spider = new Spider(main, this, old.getRect().top + (this.size / 2), old.getRect().left - (this.size / 2 + this.size * 2), this.size * 4, this.size * 2);
-            Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
+            Spider spider = new Spider(main, this, old.getRect().top - (this.size / 2), old.getRect().left - (this.size / 2 + this.size), this.size * 2, this.size);
+            //Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
             this.enemyList.add(spider);
+        }
+        if (old.getEnemyType() == 2) {//spider
+            Plant plant = new Plant(main, this, old.getRect().top - (this.size), old.getRect().left - (this.size / 2 + this.size), this.size * 2, this.size*3);
+            //Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
+            this.enemyList.add(plant);
         }
     }
     public synchronized void getEnemys(Canvas c) {
@@ -149,6 +196,88 @@ public class MatrixX {
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
                 this.enemyList.get(x).printEnemy(c);
+            }
+        }
+    }
+    public synchronized void getBullets(Canvas c) {
+
+        if (this.bulletList != null) {
+            for (int x = 0; x < this.bulletList.size(); x++) {
+                this.bulletList.get(x).printBullet(c);
+            }
+        }
+    }
+    public synchronized void getWeapons(Canvas c) {
+
+        if (this.weaponList != null) {
+            for (int x = 0; x < this.weaponList.size(); x++) {
+                this.weaponList.get(x).printWeapon(c);
+            }
+        }
+    }
+    public synchronized void checkBulletColission() {
+        if (this.bulletList != null) {
+            for (int x = 0; x < this.bulletList.size(); x++) {
+                this.bulletList.get(x).checkColissionBulletEnemy();
+            }
+        }
+    }
+    public synchronized void checkEnemyColission() {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).checkColissionPenguin(penguin.getHitBox());
+            }
+        }
+    }/*
+    public synchronized void moveEnemys(int[] speed) {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                int[] actualSpeed = this.enemyList.get(x).getActualSpeed();
+                this.enemyList.get(x).moveEnemyPos(actualSpeed);
+            }
+        }
+    }
+
+    public synchronized void setEnemyActualSpeed(int[] speed) {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).setActualSpeed(speed);
+            }
+        }
+    }*/
+    public synchronized void calcEnemyMove() {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).checkColissionEnemy();
+                this.enemyList.get(x).calcAcelerationEnemy();
+            }
+        }
+    }
+    public synchronized void calcBulletMove() {
+        if (this.bulletList != null) {
+            for (int x = 0; x < this.bulletList.size(); x++) {
+                this.bulletList.get(x).checkColissionBullet();
+            }
+        }
+    }
+    public synchronized void randomControlsEnemys() {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).randomControls();
+            }
+        }
+    }
+    public synchronized void moveEnemySprite() {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).moveSprite();
+            }
+        }
+    }
+    public synchronized void printEnemyGrid(Canvas c) {
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).printEnemyGrid(c);
             }
         }
     }
@@ -177,6 +306,28 @@ public class MatrixX {
                     }
                     if (!main.penguinY) {
                         this.enemyList.get(x).moveY(speed[1]);
+                    }
+                }
+            }
+            if (this.weaponList != null) {
+                for (int x = 0; x < this.weaponList.size(); x++) {
+                    if (!this.weaponList.get(x).getPenguin() && !this.weaponList.get(x).getEnemy()) {
+                        if (!main.penguinX) {
+                            this.weaponList.get(x).moveX(speed[0]);
+                        }
+                        if (!main.penguinY) {
+                            this.weaponList.get(x).moveY(speed[1]);
+                        }
+                    }
+                }
+            }
+            if (this.bulletList != null) {
+                for (int x = 0; x < this.bulletList.size(); x++) {
+                    if (!main.penguinX) {
+                        this.bulletList.get(x).moveX(speed[0]);
+                    }
+                    if (!main.penguinY) {
+                        this.bulletList.get(x).moveY(speed[1]);
                     }
                 }
             }
@@ -367,7 +518,7 @@ public class MatrixX {
                     // text drawable
                     textWidth = tempTextPaint.measureText(text);
                     canvas.drawText(text, 0 + r.right -(textWidth), 50 + r.top-(24), tempTextPaint);
-*/
+                    */
             }
         }
     }

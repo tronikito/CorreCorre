@@ -10,6 +10,7 @@ import correcorre.graficos.LCanvas;
 import correcorre.graficos.MatrixX;
 import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
+import correcorre.weapons.Metralleta;
 
 public class Loader extends SurfaceView implements Runnable {
 

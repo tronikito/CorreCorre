@@ -9,7 +9,7 @@ import correcorre.Main;
 import correcorre.R;
 import correcorre.graficos.MatrixX;
 
-public class Spider extends SpiderPhysics implements Enemy {
+public class Plant extends PlantPhysics implements Enemy {
     private Drawable d;
     private Drawable pos1;
     private Drawable pos2;
@@ -17,13 +17,13 @@ public class Spider extends SpiderPhysics implements Enemy {
     private Drawable pos4;
     private int actualPos = 0;
 
-    public Spider( Main m, MatrixX ma, int x, int y, int w, int h) {
+    public Plant(Main m, MatrixX ma, int x, int y, int w, int h) {
         super(m,ma,x,y,w,h);
-        this.d = VectorDrawableCompat.create(m.getResources(), R.drawable.e_spider1left,null);
-        pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_spider1left,null);
-        pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_spider2left,null);
-        pos3 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_spider1right,null);
-        pos4 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_spider2right,null);
+        this.d = VectorDrawableCompat.create(m.getResources(), R.drawable.e_plant1left,null);
+        pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_plant1left,null);
+        pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_plant1left,null);
+        pos3 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_plant1left,null);
+        pos4 = VectorDrawableCompat.create(m.getResources(), R.drawable.e_plant1left,null);
     }
 
     private Drawable getDrawable() {

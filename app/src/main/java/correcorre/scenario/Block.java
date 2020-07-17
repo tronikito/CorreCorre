@@ -27,6 +27,7 @@ public class Block {
     private int position;
     private int solid;
     private int enemyType = 0;
+    private int weaponType = 0;
 
     public Block(Context c, String t, int s, int p) {
         this.c = c;
@@ -35,7 +36,12 @@ public class Block {
         this.position = p;
         this.finalSize = new Rect();
     }
-
+    public int getWeaponType() {
+        return this.weaponType;
+    }
+    public void setWeaponType(int e) {
+        this.weaponType = e;
+    }
     public int getEnemyType() {
         return this.enemyType;
     }
@@ -159,6 +165,12 @@ public class Block {
             this.drawable = sprite1;
         }
         if (type.equals("enemy")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
+            sprite2 = null;
+            sprite3 = null;
+            this.drawable = sprite1;
+        }
+        if (type.equals("weapon")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
             sprite2 = null;
             sprite3 = null;
