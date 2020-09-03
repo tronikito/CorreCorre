@@ -174,11 +174,8 @@ public class Main extends SurfaceView implements Runnable {
 
             penguin.movePenguinSprite(speed);
             matrixX.moveEnemySprite();
-            if (matrixX.bulletList != null) {
-                for (int x = 0; x < matrixX.bulletList.size(); x++) {
-                    matrixX.bulletList.get(x).moveBulletSprite();
-                }
-            }
+            matrixX.moveBulletSprite();
+            matrixX.moveExplosionSprite();
 
             matrixX.checkEnemyColission(); //kill penguin
             matrixX.checkBulletColission();//kill enemy

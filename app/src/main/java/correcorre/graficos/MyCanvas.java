@@ -50,19 +50,20 @@ public class MyCanvas extends View {
         background.printBackground(c);
         matrixX.printMatrixBack(c);
         penguin.printPenguin(c);
-        matrixX.getWeapons(c);
-        matrixX.getEnemys(c);
-        matrixX.getBullets(c);
+        matrixX.printWeapons(c);
+        matrixX.printEnemys(c);
+        matrixX.printBullets(c);
         matrixX.printMatrixFront(c);
+        matrixX.printExplosions(c);
         controls.printControls(c);
 
         //penguin.printPenguinGrid(c);
         //matrixX.printEnemyGrid(c);
 
 
-        if (point != null) {
-            c.drawCircle(point.x, point.y, 100, paint);
-        }
+        //if (point != null) {
+            //c.drawCircle(point.x, point.y, 100, paint);
+        //}
     }
 
 

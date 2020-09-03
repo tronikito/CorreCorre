@@ -12,7 +12,7 @@ import correcorre.enemy.Enemy;
 import correcorre.graficos.MatrixX;
 import correcorre.scenario.Block;
 
-public class Metralleta implements Weapon {
+public class Ferret implements Weapon {
 
     private static MatrixX matrixX;
     Drawable d;
@@ -24,20 +24,20 @@ public class Metralleta implements Weapon {
     private String type;
     private int typeWeapon;
 
-    public Metralleta(Main main, MatrixX ma, Block old) {
+    public Ferret(Main main, MatrixX ma, Block old) {
             matrixX = ma;
             //this.r.top = old.getRect().top;
             this.r.top = old.getRect().top + matrixX.getSize()/10;//gallina
             this.r.left = old.getRect().left ;
             this.r.right = this.r.left + matrixX.getSize()*2;
-            this.r.bottom = this.r.top + matrixX.getSize()*2 + matrixX.getSize()/10;//gallina
+            this.r.bottom = this.r.top + matrixX.getSize()*2  + matrixX.getSize()/10;//gallina
             //this.r.bottom = this.r.top + matrixX.getSize()/2 +  matrixX.getSize()/3;
-            this.type = old.getType();
+            this.type = "weapon";
             this.typeWeapon = old.getWeaponType();
 
-        this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallinaleft,null);
-        this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallinaright,null);
-        this.d = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallina,null);
+        this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretleft,null);
+        this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretright,null);
+        this.d = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferret,null);
     }
     public void setSprite(String orientation) {
         if (orientation.equals("left")) {
@@ -47,13 +47,11 @@ public class Metralleta implements Weapon {
             this.d = pos2;
         }
     }
-
-    public int getWeaponType() {
-        return this.typeWeapon;
-    }
-
     public String getType() {
         return this.type;
+    }
+    public int getWeaponType() {
+        return this.typeWeapon;
     }
     public boolean getEnemy() {
         return this.enemyON;

@@ -17,4 +17,5 @@ public interface Weapon {
     void setPenguin(Rect pRect,boolean rLeft,boolean rRight);
     String getType();
     void setSprite(String orientation);
+    int getWeaponType();
 }

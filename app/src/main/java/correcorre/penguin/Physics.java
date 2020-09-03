@@ -8,6 +8,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorre.Main;
 import correcorre.R;
 import correcorre.graficos.MatrixX;
+import correcorre.weapons.Bullet;
+import correcorre.weapons.FerretBullet;
 import correcorre.weapons.MetralletaBullet;
 import correcorre.weapons.Weapon;
 
@@ -319,12 +321,19 @@ public abstract class Physics {
 
         if (shooting && shootingCount > shootingRandomCount) {
             if (this.weapon != null) {
-                MetralletaBullet bullet = new MetralletaBullet(main,matrixX,this.r, this.rLeft, this.rRight);
-                bullet.setPenguin();
-                matrixX.generateBullet(bullet);
+                //System.out.println(this.weapon.getType());
+                if (this.weapon.getWeaponType() == 1) {//chicken
+                    MetralletaBullet bullet = new MetralletaBullet(main,matrixX,this.r, this.rLeft, this.rRight);
+                    bullet.setPenguin();
+                    matrixX.generateBullet(bullet);
+                }
+                if (this.weapon.getWeaponType() == 2) {//ferret
+                    FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight);
+                    bullet.setPenguin();
+                    matrixX.generateBullet(bullet);
+                }
                 shootingCount = 0;
                 shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 7);//fireRate
-                System.out.println(shootingRandomCount);
             }
         }
     }

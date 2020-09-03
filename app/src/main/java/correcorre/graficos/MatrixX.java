@@ -2,6 +2,7 @@ package correcorre.graficos;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import java.util.ArrayList;
 import correcorre.Main;
@@ -12,6 +13,8 @@ import correcorre.penguin.Penguin;
 import correcorre.scenario.Block;
 import correcorre.scenario.Scenario;
 import correcorre.weapons.Bullet;
+import correcorre.weapons.Explosion;
+import correcorre.weapons.Ferret;
 import correcorre.weapons.Metralleta;
 import correcorre.weapons.Weapon;
 
@@ -24,6 +27,7 @@ public class MatrixX {
     public volatile ArrayList<Enemy> enemyList = null;
     public volatile ArrayList<Weapon> weaponList = null;
     public volatile ArrayList<Bullet> bulletList = null;
+    public volatile ArrayList<Explosion> explosionList = null;
 
     public boolean generateMatrix = false;
     final private int cW;
@@ -164,13 +168,13 @@ public class MatrixX {
         if (this.weaponList == null) {
             this.weaponList = new ArrayList<Weapon>();
         }
-        if (old.getEnemyType() == 1) {//metralleta
+        if (old.getWeaponType() == 1) {//metralleta
             Metralleta metralleta = new Metralleta(main,this,old);
-            System.out.println(old.getRect().top + "top");
-            System.out.println(old.getRect().left + "left");
-            System.out.println(old.getRect().right + "right");
-            System.out.println(old.getRect().bottom + "bottom");
             this.weaponList.add(metralleta);
+        }
+        if (old.getWeaponType() == 2) {//ferret
+            Ferret ferret = new Ferret(main,this,old);
+            this.weaponList.add(ferret);
         }
     }
 
@@ -191,7 +195,7 @@ public class MatrixX {
             this.enemyList.add(plant);
         }
     }
-    public synchronized void getEnemys(Canvas c) {
+    public synchronized void printEnemys(Canvas c) {
 
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
@@ -199,6 +203,7 @@ public class MatrixX {
             }
         }
     }
+    /*
     public synchronized void getBullets(Canvas c) {
 
         if (this.bulletList != null) {
@@ -206,12 +211,21 @@ public class MatrixX {
                 this.bulletList.get(x).printBullet(c);
             }
         }
-    }
-    public synchronized void getWeapons(Canvas c) {
+    }*/
+    public synchronized void printWeapons(Canvas c) {
 
         if (this.weaponList != null) {
+           if (penguin.getWeapon() != null) {
+               penguin.getWeapon().printWeapon(c);//first Print penguin weapon to be back
+            }
             for (int x = 0; x < this.weaponList.size(); x++) {
-                this.weaponList.get(x).printWeapon(c);
+               if (penguin.getWeapon() != null) {
+                    if (this.weaponList.get(x) != penguin.getWeapon()) {
+                        this.weaponList.get(x).printWeapon(c);
+                    }
+                } else {
+                    this.weaponList.get(x).printWeapon(c);
+                }
             }
         }
     }
@@ -228,7 +242,18 @@ public class MatrixX {
                 this.enemyList.get(x).checkColissionPenguin(penguin.getHitBox());
             }
         }
-    }/*
+    }
+    public synchronized void generateExplosion(Rect enemy) {
+
+        Explosion explosion = new Explosion(main,this,enemy);
+        if (this.explosionList == null) {
+            this.explosionList = new ArrayList<Explosion>();
+        }
+        if (this.explosionList != null) {
+            this.explosionList.add(explosion);
+        }
+    }
+    /*
     public synchronized void moveEnemys(int[] speed) {
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
@@ -274,10 +299,38 @@ public class MatrixX {
             }
         }
     }
+    public synchronized void moveBulletSprite() {
+        if (this.bulletList != null) {
+            for (int x = 0; x < this.bulletList.size(); x++) {
+                this.bulletList.get(x).moveBulletSprite();
+            }
+        }
+    }
+    public synchronized void moveExplosionSprite() {
+        if (this.explosionList != null) {
+            for (int x = 0; x < this.explosionList.size(); x++) {
+                this.explosionList.get(x).moveExplosionSprite();
+            }
+        }
+    }
     public synchronized void printEnemyGrid(Canvas c) {
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
                 this.enemyList.get(x).printEnemyGrid(c);
+            }
+        }
+    }
+    public synchronized void printBullets(Canvas c) {
+        if (this.bulletList != null) {
+            for (int x = 0; x < this.bulletList.size(); x++) {
+                this.bulletList.get(x).printBullet(c);
+            }
+        }
+    }
+    public synchronized void printExplosions(Canvas c) {
+        if (this.explosionList != null) {
+            for (int x = 0; x < this.explosionList.size(); x++) {
+                this.explosionList.get(x).printExplosion(c);
             }
         }
     }
@@ -328,6 +381,16 @@ public class MatrixX {
                     }
                     if (!main.penguinY) {
                         this.bulletList.get(x).moveY(speed[1]);
+                    }
+                }
+            }
+            if (this.explosionList != null) {
+                for (int x = 0; x < this.explosionList.size(); x++) {
+                    if (!main.penguinX) {
+                        this.explosionList.get(x).moveX(speed[0]);
+                    }
+                    if (!main.penguinY) {
+                        this.explosionList.get(x).moveY(speed[1]);
                     }
                 }
             }

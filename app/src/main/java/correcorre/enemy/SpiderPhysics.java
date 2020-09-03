@@ -143,6 +143,7 @@ public class SpiderPhysics {
             hitBox.bottom += speed;
 
     }
+
     public Rect getHitBox() {
         return this.hitBox;
     }
