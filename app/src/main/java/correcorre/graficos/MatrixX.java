@@ -47,6 +47,7 @@ public class MatrixX {
     private static Scenario scenario;
     private static MyCanvas myCanvas;
     private static Penguin penguin;
+    private static Scoreboard scoreboard;
     private Context context;
     private int[] scenarioStart;//debe ser el offset
 
@@ -86,6 +87,7 @@ public class MatrixX {
     }
 
     public void setPenguin(Penguin p) { penguin = p; }
+    public void setScoreboard(Scoreboard b) { scoreboard = b; }
     public int getSize() { return this.size; }
     public int getWidth() {
         return this.cW;
@@ -232,7 +234,7 @@ public class MatrixX {
     public synchronized void checkBulletColission() {
         if (this.bulletList != null) {
             for (int x = 0; x < this.bulletList.size(); x++) {
-                this.bulletList.get(x).checkColissionBulletEnemy();
+                if (this.bulletList.get(x).checkColissionBulletEnemy()) scoreboard.scoreAdd(50);
             }
         }
     }

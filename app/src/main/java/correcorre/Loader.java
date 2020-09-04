@@ -8,6 +8,7 @@ import correcorre.background.Background;
 import correcorre.graficos.Controls;
 import correcorre.graficos.LCanvas;
 import correcorre.graficos.MatrixX;
+import correcorre.graficos.Scoreboard;
 import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
 import correcorre.weapons.Metralleta;
@@ -21,6 +22,7 @@ public class Loader extends SurfaceView implements Runnable {
     private static Scenario scenario;
     private static Background background;
     private static Penguin penguin;
+    private static Scoreboard scoreboard;
     private boolean loading = false;
     private MainActivity mainActivity;
     private Thread thread;
@@ -66,6 +68,7 @@ public class Loader extends SurfaceView implements Runnable {
 
     private void update() {
         if (!loading) {
+
             controls = new Controls(main,canvas);
             controls.generateControls();
             scenario = new Scenario(main, "ScenarioGenerado.json");
@@ -88,14 +91,18 @@ public class Loader extends SurfaceView implements Runnable {
                 int pWidth = matrixX.getSize()*2;
                 int pHeight = (int) Math.round(matrixX.getSize()*2.5);
                 penguin = new Penguin(main,matrixX,matrixX.getWidth()/2-(pWidth/2),(int) Math.round(matrixX.getHeight()/1.2-(pHeight+matrixX.getSize()*1.5)),pWidth, pHeight,matrixX.getSize());
+                scoreboard = new Scoreboard(main,matrixX);
 
                 background.setPenguin(penguin);
                 matrixX.setPenguin(penguin);
+                matrixX.setScoreboard(scoreboard);
+
                 main.setControls(controls);
                 main.setMatrixX(matrixX);
                 main.setScenario(scenario);
                 main.setBackground(background);
                 main.setPenguin(penguin);
+                main.setScoreboard(scoreboard);
 
                 this.working = false;
                 try {

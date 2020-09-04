@@ -21,25 +21,30 @@ public class MyCanvas extends View {
     private static Controls controls;
     private static Background background;
     private static Penguin penguin;
+    private static Scoreboard scoreboard;
     public int width = -1;
     public int height = -1;
     private Rect bLeft;
     private Rect bRight;
+    private Rect bRight2;
     private Rect bJump;
     private Rect rtouch = new Rect();
     private boolean shooting = false;
 
 
-    public MyCanvas(Main m,MatrixX ma, Controls con, Background b, Penguin p) {
+    public MyCanvas(Main m,MatrixX ma, Controls con, Background b, Penguin p, Scoreboard s) {
         super(m.getContext());
 
         matrixX = ma;
         controls = con;
         background = b;
         penguin = p;
+        scoreboard = s;
+
         this.bJump = controls.bJump;
         this.bLeft = controls.bLeft;
         this.bRight = controls.bRight;
+        this.bRight2 = controls.bRight2;
 
         setBackgroundResource(R.drawable.background1);//BACKGROUND!!
     }
@@ -56,6 +61,7 @@ public class MyCanvas extends View {
         matrixX.printMatrixFront(c);
         matrixX.printExplosions(c);
         controls.printControls(c);
+        scoreboard.printScoreBoard(c);
 
         //penguin.printPenguinGrid(c);
         //matrixX.printEnemyGrid(c);
@@ -89,29 +95,39 @@ public class MyCanvas extends View {
                         penguin.setDirection();
                     }
                     if (Rect.intersects(this.rtouch,this.bRight)) {
-                        if (shooting == true) {
+                        if (shooting == true && penguin.getOrientation() == 1) {
                             shooting = false;
                         } else {
                             shooting = true;
                         }
+                        penguin.setOrientation(1);
                         penguin.shoot(shooting);
                     }
-                    point = new PointF(x, y);
-                    invalidate();
+                    if (Rect.intersects(this.rtouch,this.bRight2)) {
+                        if (shooting == true && penguin.getOrientation() == 2) {
+                            shooting = false;
+                        } else {
+                            shooting = true;
+                        }
+                        penguin.setOrientation(2);
+                        penguin.shoot(shooting);
+                    }
+                    //point = new PointF(x, y);
+                    //invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     penguin.setPressJump(false);
-                    if (point != null) {
-                        point.set(x, y);
-                        invalidate();
-                    }
+                    //if (point != null) {
+                        //point.set(x, y);
+                        //invalidate();
+                    //}
                     break;
                 case MotionEvent.ACTION_UP:
                     penguin.setPressJump(false);
                 case MotionEvent.ACTION_CANCEL:
                     penguin.setPressJump(false);
-                    point = null;
-                    invalidate();
+                    //point = null;
+                    //invalidate();
                     break;
             }
         return true;

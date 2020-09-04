@@ -109,22 +109,24 @@ public class MetralletaBullet implements Bullet {
             }
         }
     }
-    public synchronized void checkColissionBulletEnemy() {
+    public synchronized boolean checkColissionBulletEnemy() {
         if (penguin) {
             if (matrixX.enemyList != null) {
                 for (int x = 0; x < matrixX.enemyList.size(); x++) {
                     if (Rect.intersects(this.r,matrixX.enemyList.get(x).getHitBox())) {
                         matrixX.enemyList.remove(matrixX.enemyList.get(x));// SUSTITUIR POR MORIRRRRRRRRRRRRRRRRRRRRRRRR
                         matrixX.bulletList.remove(this);
+                        return true;
                     }
                 }
             }
-        }
+        }/*
         if (enemy) {
             if (Rect.intersects(this.r,penguinHitBox)) {
                 System.out.println("tocado"); //("lo mismo que si es tocado"); //matrixX checkEnemyColission():
             }
-        }
+        }*/
+        return false;
     }
     public synchronized void setActualSpeed(int[] speed) {
         this.actualSpeed = speed;

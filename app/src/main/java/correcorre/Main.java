@@ -8,6 +8,7 @@ import correcorre.background.Background;
 import correcorre.graficos.Controls;
 import correcorre.graficos.MatrixX;
 import correcorre.graficos.MyCanvas;
+import correcorre.graficos.Scoreboard;
 import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
 
@@ -25,6 +26,7 @@ public class Main extends SurfaceView implements Runnable {
     private static Main main;
     private static Background background;
     private static Penguin penguin;
+    private static Scoreboard scoreboard;
     public boolean penguinX;
     public boolean penguinY;
     public boolean outRangeTop;
@@ -190,7 +192,7 @@ public class Main extends SurfaceView implements Runnable {
 
     public void iniciar(MainActivity mainActivity) {
         this.working = true;
-        myCanvas = new MyCanvas(main, matrixX, controls, background, penguin);
+        myCanvas = new MyCanvas(main, matrixX, controls, background, penguin, scoreboard);
         Handler mainThread = new Handler(Looper.getMainLooper());
         mainThread.post(new setView(main, mainActivity, myCanvas) {
         });
@@ -208,6 +210,7 @@ public class Main extends SurfaceView implements Runnable {
     }
     /** GETTERS Y SETTERS */
 
+    public void setScoreboard(Scoreboard s) { scoreboard = s; }
     public void setControls(Controls c) {
         controls = c;
     }

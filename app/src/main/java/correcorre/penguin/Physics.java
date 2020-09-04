@@ -50,6 +50,7 @@ public abstract class Physics {
     private boolean shooting;
     private int shootingCount = 0;
     private int shootingRandomCount = 10;
+    private int orientation = 2;
 
     public Physics(Main m, MatrixX ma, int xPos, int yPos, int w, int h, int s) {
 
@@ -198,7 +199,12 @@ public abstract class Physics {
     public void setPressJump(boolean j) {
         this.pressJump = j;
     }
-
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+    public int getOrientation() {
+        return this.orientation;
+    }
     public void jump() {
         if (!jumping && !paddingSpeedAplication) {
             this.speed[1] = -500;
@@ -328,12 +334,12 @@ public abstract class Physics {
                     matrixX.generateBullet(bullet);
                 }
                 if (this.weapon.getWeaponType() == 2) {//ferret
-                    FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight);
+                    FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                 }
                 shootingCount = 0;
-                shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 7);//fireRate
+                shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 15);//fireRate
             }
         }
     }

@@ -15,8 +15,10 @@ public class Controls {
     private int cHeight;
     public Drawable cLeft;
     public Drawable cRight;
+    public Drawable cRight2;
     public Rect bLeft;
     public Rect bRight;
+    public Rect bRight2;
     public Rect bJump;
     private Drawable cJump;
     private static Main main;
@@ -56,12 +58,23 @@ public class Controls {
         this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
         this.cRight.setBounds(cRect);
         this.bRight = cRect;
+        //derechaArriba
+        cRect = new Rect();
+        cRect.left = 300;
+        cRect.right = 450;
+        cRect.top = (int) (cHeight/1.5) - 200;
+        cRect.bottom = (int) (cHeight/1.5+cHeight/6) - 200;
+        this.cRight2 = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cRight2.setBounds(cRect);
+        this.bRight2 = cRect;
         load = true;
+
     }
 
     public void printControls(Canvas canvas) {
         this.cJump.draw(canvas);
         this.cLeft.draw(canvas);
         this.cRight.draw(canvas);
+        this.cRight2.draw(canvas);
     }
 }

@@ -10,6 +10,6 @@ public interface Bullet {
     int[] getSpeed();
     void setActualSpeed(int[] speed);
     void moveBulletActualSpeed();
-    void checkColissionBulletEnemy();
+    boolean checkColissionBulletEnemy();
     void moveBulletSprite();
 }
