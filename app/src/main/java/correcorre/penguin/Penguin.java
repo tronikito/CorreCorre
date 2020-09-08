@@ -12,6 +12,7 @@ public class Penguin extends Physics {
 
     private Context c;
 
+    private Drawable empty;
     private Drawable lPos0;
     private Drawable lPos0weapon;
     private Drawable rPos0;
@@ -40,6 +41,10 @@ public class Penguin extends Physics {
 
     private int speedCount = 0;
     private int actualPos;
+    private Boolean immunity = false;
+    private int immunityCount = 0;
+    private boolean immunitySpriteShow = false;
+    private int sparkCount = 0;
 
     public Penguin(Main m, MatrixX ma, int x, int y, int w, int h, int s) {//150,182
 
@@ -48,6 +53,7 @@ public class Penguin extends Physics {
         this.c = m.getContext();
         this.main = m;
 
+        empty = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty,null);
         lPos0 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin0,null);
         lPos0weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin0weapon,null);
         rPos0 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin0,null);
@@ -76,166 +82,207 @@ public class Penguin extends Physics {
 
     }
 
-    public Drawable getDrawable() {
+    public synchronized Drawable getDrawable() {
         this.d.setBounds(this.r);
         return this.d;
     }
 
-    public void movePenguinSprite(int[] speed) {//recibe real fps
+    public synchronized void movePenguinSprite(int[] speed) {//recibe real fps
 
-        if (!rLeft && !rRight && !jumping && !gravityAceleration) {
-
-            if (this.weapon != null) {
-                this.d = lPos0weapon;
-                this.weapon.setSprite("right");
-            }
-            else {
-                this.d = lPos0;
-            }
-
-        }
-        if (rLeft && gravityAceleration) {
-            if (this.speed[1] > 0) {
-                if (this.weapon != null) {
-                    this.d = lPos4weapon;
-                    this.weapon.setSprite("right");
-                } else {
-                    this.d = lPos4;
-                }
-            }
-            if (this.speed[1] < 0) {
-
-                if (this.weapon != null) {
-                    this.d = lPos5weapon;
-                    this.weapon.setSprite("right");
-                } else {
-                    this.d = lPos5;
-                }
-            }
-        }
-        if (rRight && gravityAceleration) {
-            if (this.speed[1] > 0) {
-
-                if (this.weapon != null) {
-                    this.d = rPos4weapon;
-                    this.weapon.setSprite("left");
-                } else {
-                    this.d = rPos4;
-                }
-            }
-            if (this.speed[1] < 0) {
-
-                if (this.weapon != null) {
-                    this.d = rPos5weapon;
-                    this.weapon.setSprite("left");
-                } else {
-                    this.d = rPos5;
-                }
-            }
-        }
-        if (rLeft && paddingSpeedAplication) {
-
+        if (sparkCount > 50) {//random counter for timer
+            immunity = false;
+            sparkCount = 0;
+            immunitySpriteShow = false;
+            immunityCount = 0;
             if (weapon != null) {
-                this.weapon.setSprite("right");
-                this.d = lPos0weapon;
-            } else {
-                this.d = lPos0;
+                if (rRight) this.weapon.setSprite("left");
+                if (rLeft) this.weapon.setSprite("right");
             }
         }
-        if (rRight && paddingSpeedAplication) {
 
+        if (immunity) immunityCount++;
+        if (immunity && immunityCount > 7) {//random counter spark
+            immunityCount = 0;
+            if (immunitySpriteShow) immunitySpriteShow = false;
+            else immunitySpriteShow = true;
+        }
+        if (immunity && !immunitySpriteShow) {
+            sparkCount++;
+            this.d = empty;
             if (weapon != null) {
-                this.weapon.setSprite("left");
-                this.d = rPos0weapon;
-            } else {
-                this.d = rPos0;
+                this.weapon.setSprite("empty");
             }
         }
 
+        if (!immunity || immunitySpriteShow) {
 
-        if (rLeft && !jumping && !gravityAceleration) {
-            if (this.speed[0] >= -150) {
-                speedCount += Math.abs(speed[0]);
-                if (speedCount >= 30) {
-                    if (this.weapon == null) {
-                        if (actualPos == 0) this.d = lPos0;
-                        if (actualPos == 1) this.d = lPos1;
-                        if (actualPos == 2) this.d = lPos2;
-                    } else {
-                        if (actualPos == 0) this.d = lPos0weapon;
-                        if (actualPos == 1) this.d = lPos1weapon;
-                        if (actualPos == 2) this.d = lPos2weapon;
-                    }
-                    actualPos++;
-                    if (actualPos > 2) actualPos = 0;
-                    speedCount = 0;
-                } else if(this.d != lPos3 && this.d != lPos2 && this.d != lPos0 && this.d != lPos1 && this.weapon == null) {
-                    this.d = lPos0;
-                } else if (this.d != lPos0weapon && this.d != lPos1weapon && this.d != lPos2weapon && this.weapon != null) {
+            //weapon sprite
+
+            if (immunity && immunitySpriteShow && weapon != null) {
+                if (rRight) this.weapon.setSprite("left");
+                if (rLeft) this.weapon.setSprite("right");
+            }
+
+            if (!rLeft && !rRight && !jumping && !gravityAceleration) {
+
+                if (this.weapon != null) {
                     this.d = lPos0weapon;
-                }
-            }
-            if (this.speed[0] < -150) {//DERRAPAR SPRITE
-                if (this.weapon != null) {
-                    speedCount += Math.abs(speed[0]);
-                    if (speedCount >= 30) {
-                        if (actualPos == 0) this.d = lPos0weapon;
-                        if (actualPos == 1) this.d = lPos1weapon;
-                        if (actualPos == 2) this.d = lPos2weapon;
-                        actualPos++;
-                        if (actualPos > 2) actualPos = 0;
-                        speedCount = 0;
-                    }
+                    this.weapon.setSprite("right");
                 } else {
-                    this.d = lPos3;
+                    this.d = lPos0;
                 }
-            }
-        }
 
-        if (rRight && !jumping && !gravityAceleration) {
-            if (this.speed[0] <= 150) {
-                speedCount += Math.abs(speed[0]);
-                if (speedCount >= 30) {
-                    if (this.weapon == null) {
-                        if (actualPos == 0) this.d = rPos0;
-                        if (actualPos == 1) this.d = rPos1;
-                        if (actualPos == 2) this.d = rPos2;
+            }
+            if (rLeft && gravityAceleration) {
+                if (this.speed[1] > 0) {
+                    if (this.weapon != null) {
+                        this.d = lPos4weapon;
+                        this.weapon.setSprite("right");
                     } else {
-                        if (actualPos == 0) this.d = rPos0weapon;
-                        if (actualPos == 1) this.d = rPos1weapon;
-                        if (actualPos == 2) this.d = rPos2weapon;
+                        this.d = lPos4;
                     }
-                    actualPos++;
-                    if (actualPos > 2) actualPos = 0;
-                    speedCount = 0;
-                } else if(this.d != rPos3 && this.d != rPos2 && this.d != rPos0 && this.d != rPos1 && this.weapon == null) {
-                    this.d = rPos0;
-                } else if (this.d != rPos0weapon && this.d != rPos1weapon && this.d != rPos2weapon && this.weapon != null) {
-                 this.d = rPos0weapon;
+                }
+                if (this.speed[1] < 0) {
+
+                    if (this.weapon != null) {
+                        this.d = lPos5weapon;
+                        this.weapon.setSprite("right");
+                    } else {
+                        this.d = lPos5;
+                    }
                 }
             }
-            if (this.speed[0] > 150) {//DERRAPAR SPRITE
+            if (rRight && gravityAceleration) {
+                if (this.speed[1] > 0) {
 
-                if (this.weapon != null) {
+                    if (this.weapon != null) {
+                        this.d = rPos4weapon;
+                        this.weapon.setSprite("left");
+                    } else {
+                        this.d = rPos4;
+                    }
+                }
+                if (this.speed[1] < 0) {
+
+                    if (this.weapon != null) {
+                        this.d = rPos5weapon;
+                        this.weapon.setSprite("left");
+                    } else {
+                        this.d = rPos5;
+                    }
+                }
+            }
+            if (rLeft && paddingSpeedAplication) {
+
+                if (weapon != null) {
+                    this.weapon.setSprite("right");
+                    this.d = lPos0weapon;
+                } else {
+                    this.d = lPos0;
+                }
+            }
+            if (rRight && paddingSpeedAplication) {
+
+                if (weapon != null) {
+                    this.weapon.setSprite("left");
+                    this.d = rPos0weapon;
+                } else {
+                    this.d = rPos0;
+                }
+            }
+
+            //penguin sprite
+
+            if (rLeft && !jumping && !gravityAceleration) {
+                if (this.speed[0] >= -150) {
                     speedCount += Math.abs(speed[0]);
                     if (speedCount >= 30) {
-                        if (actualPos == 0) this.d = rPos0weapon;
-                        if (actualPos == 1) this.d = rPos1weapon;
-                        if (actualPos == 2) this.d = rPos2weapon;
+                        if (this.weapon == null) {
+                            if (actualPos == 0) this.d = lPos0;
+                            if (actualPos == 1) this.d = lPos1;
+                            if (actualPos == 2) this.d = lPos2;
+                        } else {
+                            if (actualPos == 0) this.d = lPos0weapon;
+                            if (actualPos == 1) this.d = lPos1weapon;
+                            if (actualPos == 2) this.d = lPos2weapon;
+                        }
                         actualPos++;
                         if (actualPos > 2) actualPos = 0;
                         speedCount = 0;
-                    } //else if(this.d != rPos1weapon && this.d != rPos2weapon) {
-                       // this.d = rPos0weapon;
-                    //}
-                } else {
-                    this.d = rPos3;
+                    } else if (this.d != lPos3 && this.d != lPos2 && this.d != lPos0 && this.d != lPos1 && this.weapon == null) {
+                        this.d = lPos0;
+                    } else if (this.d != lPos0weapon && this.d != lPos1weapon && this.d != lPos2weapon && this.weapon != null) {
+                        this.d = lPos0weapon;
+                    }
+                }
+                if (this.speed[0] < -150) {//DERRAPAR SPRITE
+                    if (this.weapon != null) {
+                        speedCount += Math.abs(speed[0]);
+                        if (speedCount >= 30) {
+                            if (actualPos == 0) this.d = lPos0weapon;
+                            if (actualPos == 1) this.d = lPos1weapon;
+                            if (actualPos == 2) this.d = lPos2weapon;
+                            actualPos++;
+                            if (actualPos > 2) actualPos = 0;
+                            speedCount = 0;
+                        } else {
+                            this.d = lPos0weapon;
+                        }
+                    } else {
+                        this.d = lPos3;
+                    }
+                }
+            }
+            if (rRight && !jumping && !gravityAceleration) {
+                if (this.speed[0] <= 150) {
+                    speedCount += Math.abs(speed[0]);
+                    if (speedCount >= 30) {
+                        if (this.weapon == null) {
+                            if (actualPos == 0) this.d = rPos0;
+                            if (actualPos == 1) this.d = rPos1;
+                            if (actualPos == 2) this.d = rPos2;
+                        } else {
+                            if (actualPos == 0) this.d = rPos0weapon;
+                            if (actualPos == 1) this.d = rPos1weapon;
+                            if (actualPos == 2) this.d = rPos2weapon;
+                        }
+                        actualPos++;
+                        if (actualPos > 2) actualPos = 0;
+                        speedCount = 0;
+                    } else if (this.d != rPos3 && this.d != rPos2 && this.d != rPos0 && this.d != rPos1 && this.weapon == null) {
+                        this.d = rPos0;
+                    } else if (this.d != rPos0weapon && this.d != rPos1weapon && this.d != rPos2weapon && this.weapon != null) {
+                        this.d = rPos0weapon;
+                    }
+                }
+                if (this.speed[0] > 150) {//DERRAPAR SPRITE
+
+                    if (this.weapon != null) {
+                        speedCount += Math.abs(speed[0]);
+                        if (speedCount >= 30) {
+                            if (actualPos == 0) this.d = rPos0weapon;
+                            if (actualPos == 1) this.d = rPos1weapon;
+                            if (actualPos == 2) this.d = rPos2weapon;
+                            actualPos++;
+                            if (actualPos > 2) actualPos = 0;
+                            speedCount = 0;
+                        } else {
+                            this.d = rPos0weapon;
+                        } //else if(this.d != rPos1weapon && this.d != rPos2weapon) {
+                        // this.d = rPos0weapon;
+                        //}
+                    } else {
+                        this.d = rPos3;
+                    }
                 }
             }
         }
     }
 
-    public void printPenguin(Canvas c) {
+    public synchronized Boolean getImmunity() { return this.immunity; }
+    public synchronized  void setImmunity(Boolean i) { this.immunity = i; }
+
+    public synchronized void printPenguin(Canvas c) {
         this.getDrawable().draw(c);
     }
 

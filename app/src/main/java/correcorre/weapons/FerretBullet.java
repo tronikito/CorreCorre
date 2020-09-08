@@ -52,7 +52,40 @@ public class FerretBullet implements Bullet {
         this.pos7 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_caca7,null);
         this.pos8 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_caca8,null);
 
-        this.d = pos1;
+        int random = (int) Math.round(Math.random()*7+1);
+        if (random == 1) {
+            this.d = pos1;
+            actualPos = 1;
+        }
+        if (random == 2) {
+            this.d = pos2;
+            actualPos = 2;
+        }
+        if (random == 3) {
+            this.d = pos3;
+            actualPos = 3;
+        }
+        if (random == 4) {
+            this.d = pos4;
+            actualPos = 4;
+        }
+        if (random == 5) {
+            this.d = pos5;
+            actualPos = 5;
+        }
+        if (random == 6) {
+            this.d = pos6;
+            actualPos = 6;
+        }
+        if (random == 7) {
+            this.d = pos7;
+            actualPos = 7;
+        }
+        if (random == 8) {
+            this.d = pos8;
+            actualPos = 8;
+        }
+        //this.d = pos1;
 
         this.orientation = orientation;
 
@@ -119,7 +152,12 @@ public class FerretBullet implements Bullet {
             if (matrixX.enemyList != null) {
                 for (int x = 0; x < matrixX.enemyList.size(); x++) {
                     if (Rect.intersects(this.r,matrixX.enemyList.get(x).getRect())) {//getHitBox()
-                        matrixX.generateExplosion(matrixX.enemyList.get(x).getRect());
+                        Rect rExplosion = new Rect();
+                        rExplosion.top = this.r.top -25;
+                        rExplosion.bottom = this.r.bottom + 25;
+                        rExplosion.left = this.r.left - 25;
+                        rExplosion.right = this.r.right + 25;
+                        matrixX.generateExplosion(rExplosion);//matrixX.enemyList.get(x).getRect()
                         matrixX.enemyList.remove(matrixX.enemyList.get(x));// SUSTITUIR POR MORIRRRRRRRRRRRRRRRRRRRRRRRR
                         matrixX.bulletList.remove(this);
                         return true;

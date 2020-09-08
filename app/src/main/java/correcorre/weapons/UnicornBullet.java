@@ -10,7 +10,7 @@ import correcorre.Main;
 import correcorre.R;
 import correcorre.graficos.MatrixX;
 
-public class MetralletaBullet implements Bullet {
+public class UnicornBullet implements Bullet {
 
     private Drawable pos1;
     private Drawable pos2;
@@ -34,22 +34,23 @@ public class MetralletaBullet implements Bullet {
     protected int[] speed = new int[] {0,0};
     protected int[] actualSpeed = new int[] {0,0};
     private static MatrixX matrixX;
+    private int orientation;
 
-    public MetralletaBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight) {
+    public UnicornBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation) {
 
         matrixX = ma;
 
         this.width = ma.getSize();
         this.height = ma.getSize()/2;
 
-        this.pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg1,null);
-        this.pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg2,null);
-        this.pos3 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg3,null);
-        this.pos4 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg4,null);
-        this.pos5 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg5,null);
-        this.pos6 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg6,null);
-        this.pos7 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg7,null);
-        this.pos8 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_egg8,null);
+        this.pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow1,null);
+        this.pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow2,null);
+        this.pos3 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow3,null);
+        this.pos4 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow4,null);
+        this.pos5 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow5,null);
+        this.pos6 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow6,null);
+        this.pos7 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow7,null);
+        this.pos8 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow8,null);
 
         int random = (int) Math.round(Math.random()*7+1);
         if (random == 1) {
@@ -84,21 +85,30 @@ public class MetralletaBullet implements Bullet {
             this.d = pos8;
             actualPos = 8;
         }
+
         //this.d = pos1;
+
+        this.orientation = orientation;
 
         if (rRight) {
             this.r.right = pen.left;
             this.r.left = this.r.right - width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = 750;
+            this.speed[0] = 1200;
+            if (orientation == 2) {
+                this.speed[1] = 400;
+            }
         }
         if (rLeft) {
             this.r.left = pen.right;
             this.r.right = this.r.left + width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = -750;
+            this.speed[0] = -1200;
+            if (orientation == 2) {
+                this.speed[1] = 400;
+            }
         }
     }
 
@@ -122,7 +132,7 @@ public class MetralletaBullet implements Bullet {
         this.getDrawable().draw(c);
     }
 
-    public synchronized void checkColissionBullet() {// BALAS CHOCAN CON SOLIDOSSSSSSSSSS
+    public synchronized void checkColissionBullet() {// colission with scenario
         for (int xM = 0; xM < matrixX.matrix.size(); xM++) {
             for (int yM = 0; yM < matrixX.matrix.get(xM).size(); yM++) {
                 if (matrixX.matrix.get(xM).get(yM).getSolid() == 1) {
@@ -131,13 +141,18 @@ public class MetralletaBullet implements Bullet {
                     }
                 }
             }
+        }//CHECK OUT OF SCREEN
+        if (this.r.left < -matrixX.getSize()*2 || this.r.right > matrixX.getWidth() + matrixX.getSize()*2 ||
+            this.r.top < - matrixX.getSize()*2 || this.r.bottom > matrixX.getHeight() + matrixX.getSize()*2) {
+            System.out.println(-matrixX.getSize()*2);
+            matrixX.bulletList.remove(this);
         }
     }
-    public synchronized boolean checkColissionBulletEnemy() {
+    public synchronized boolean checkColissionBulletEnemy() { //colission with enemys
         if (penguin) {
             if (matrixX.enemyList != null) {
                 for (int x = 0; x < matrixX.enemyList.size(); x++) {
-                    if (Rect.intersects(this.r,matrixX.enemyList.get(x).getHitBox())) {
+                    if (Rect.intersects(this.r,matrixX.enemyList.get(x).getRect())) {//getHitBox()
                         Rect rExplosion = new Rect();
                         rExplosion.top = this.r.top -25;
                         rExplosion.bottom = this.r.bottom + 25;
@@ -150,12 +165,12 @@ public class MetralletaBullet implements Bullet {
                     }
                 }
             }
-        }/*
-        if (enemy) {
-            if (Rect.intersects(this.r,penguinHitBox)) {
-                System.out.println("tocado"); //("lo mismo que si es tocado"); //matrixX checkEnemyColission():
-            }
-        }*/
+        }
+        //if (enemy) {
+            //if (Rect.intersects(this.r,penguinHitBox)) {
+                //System.out.println("tocado"); //("lo mismo que si es tocado"); //matrixX checkEnemyColission():
+            //}
+        //}
         return false;
     }
     public synchronized void setActualSpeed(int[] speed) {
@@ -185,6 +200,7 @@ public class MetralletaBullet implements Bullet {
     }
     public synchronized void moveBulletPos(int[] speed) {
         moveX(speed[0]);
+        moveY(speed[1]);
     }
     public synchronized void setPenguin() {
         this.penguin = true;

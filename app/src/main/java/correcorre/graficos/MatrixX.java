@@ -16,6 +16,7 @@ import correcorre.weapons.Bullet;
 import correcorre.weapons.Explosion;
 import correcorre.weapons.Ferret;
 import correcorre.weapons.Metralleta;
+import correcorre.weapons.Unicorn;
 import correcorre.weapons.Weapon;
 
 public class MatrixX {
@@ -139,6 +140,7 @@ public class MatrixX {
                 old.setEnemyType(enemyType);
                 old.setSolid(solid);
                 old.setWeaponType(weaponType);
+                old.setSprite(0); //everyone is animated;
 
                 if (type.equals("enemy") && enemyType != 0) {
                     this.matrixScenario.get(x).get(y).set(2, 0);//reset to not more spawns.
@@ -177,6 +179,10 @@ public class MatrixX {
         if (old.getWeaponType() == 2) {//ferret
             Ferret ferret = new Ferret(main,this,old);
             this.weaponList.add(ferret);
+        }
+        if (old.getWeaponType() == 3) {//ferret
+            Unicorn unicorn = new Unicorn(main,this,old);
+            this.weaponList.add(unicorn);
         }
     }
 
@@ -241,10 +247,18 @@ public class MatrixX {
     public synchronized void checkEnemyColission() {
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).checkColissionPenguin(penguin.getHitBox());
+                if (!penguin.getImmunity()) {
+                    this.enemyList.get(x).checkColissionPenguin(penguin.getHitBox());
+                }
+
             }
         }
     }
+
+    public synchronized void setPenguinImmunity(Boolean i) { penguin.setImmunity(i); }
+    public synchronized int getPenguinLife() { return scoreboard.getLife(); }//because the life is in scoreboard
+    public synchronized void setPenguinLife(int l) { scoreboard.setLife(l); }//because the life is in scoreboard
+
     public synchronized void generateExplosion(Rect enemy) {
 
         Explosion explosion = new Explosion(main,this,enemy);

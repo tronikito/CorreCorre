@@ -11,6 +11,8 @@ import correcorre.graficos.MatrixX;
 import correcorre.weapons.Bullet;
 import correcorre.weapons.FerretBullet;
 import correcorre.weapons.MetralletaBullet;
+import correcorre.weapons.Unicorn;
+import correcorre.weapons.UnicornBullet;
 import correcorre.weapons.Weapon;
 
 public abstract class Physics {
@@ -46,7 +48,7 @@ public abstract class Physics {
     protected Boolean paddingSpeedXLeftAplication = false;
     protected Boolean paddingSpeedAplicationTop = false;
     protected boolean foundX = false;
-    private String typeWeapon;
+    private int typeWeapon;
     private boolean shooting;
     private int shootingCount = 0;
     private int shootingRandomCount = 10;
@@ -306,6 +308,7 @@ public abstract class Physics {
                     if (Rect.intersects(matrixX.weaponList.get(l).getRect(), this.r)) {
                         if (!matrixX.weaponList.get(l).getType().equals(this.typeWeapon)) {
                             this.setWeapon(matrixX.weaponList.get(l));
+
                             this.weapon.setPenguin(this.r, this.rLeft, this.rRight);
                             if (rLeft) {
                                 this.weapon.setSprite("right");
@@ -313,7 +316,10 @@ public abstract class Physics {
                             if (rRight) {
                                 this.weapon.setSprite("left");
                             }
-                            this.typeWeapon = matrixX.weaponList.get(l).getType();
+                            this.typeWeapon = matrixX.weaponList.get(l).getWeaponType();
+                            for (int x = 0; x < matrixX.weaponList.size(); x++) {
+                                if (matrixX.weaponList.get(x).equals(this.weapon)) matrixX.weaponList.remove(matrixX.weaponList.get(x));
+                            }
                         }
                     }
                 }
@@ -332,14 +338,22 @@ public abstract class Physics {
                     MetralletaBullet bullet = new MetralletaBullet(main,matrixX,this.r, this.rLeft, this.rRight);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
+                    shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 15);//fireRate
                 }
                 if (this.weapon.getWeaponType() == 2) {//ferret
                     FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
+                    shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 50);//fireRate
+                }
+                if (this.weapon.getWeaponType() == 3) {//unicorn
+                    UnicornBullet bullet = new UnicornBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
+                    bullet.setPenguin();
+                    matrixX.generateBullet(bullet);
+                    shootingRandomCount = 1;//fireRate
                 }
                 shootingCount = 0;
-                shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 15);//fireRate
+
             }
         }
     }

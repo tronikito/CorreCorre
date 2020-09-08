@@ -18,6 +18,7 @@ public class Ferret implements Weapon {
     Drawable d;
     Drawable pos1;
     Drawable pos2;
+    Drawable empty;
     Rect r = new Rect();
     private boolean penguinON = false;
     private boolean enemyON = false;
@@ -33,10 +34,11 @@ public class Ferret implements Weapon {
             this.r.bottom = this.r.top + matrixX.getSize()*2  + matrixX.getSize()/10;//gallina
             //this.r.bottom = this.r.top + matrixX.getSize()/2 +  matrixX.getSize()/3;
             this.type = "weapon";
-            this.typeWeapon = old.getWeaponType();
+            this.typeWeapon = 2;
 
         this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretleft,null);
         this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretright,null);
+        this.empty = VectorDrawableCompat.create(main.getResources(), R.drawable.c_empty,null);
         this.d = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferret,null);
     }
     public void setSprite(String orientation) {
@@ -45,6 +47,9 @@ public class Ferret implements Weapon {
         }
         if (orientation.equals("right")) {
             this.d = pos2;
+        }
+        if (orientation.equals("empty")) {
+            this.d = empty;
         }
     }
     public String getType() {

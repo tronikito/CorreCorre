@@ -353,6 +353,8 @@ public class PlantPhysics {
 
     public synchronized void checkColissionPenguin(Rect pen) {
         if (Rect.intersects(this.hitBox,pen)) {
+            matrixX.setPenguinLife(matrixX.getPenguinLife()-1);
+            matrixX.setPenguinImmunity(true);
             //main.detener();
         }
     }

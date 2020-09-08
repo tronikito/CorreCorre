@@ -12,7 +12,7 @@ import correcorre.enemy.Enemy;
 import correcorre.graficos.MatrixX;
 import correcorre.scenario.Block;
 
-public class Metralleta implements Weapon {
+public class Unicorn implements Weapon {
 
     private static MatrixX matrixX;
     Drawable d;
@@ -25,21 +25,21 @@ public class Metralleta implements Weapon {
     private String type;
     private int typeWeapon;
 
-    public Metralleta(Main main, MatrixX ma, Block old) {
+    public Unicorn(Main main, MatrixX ma, Block old) {
             matrixX = ma;
             //this.r.top = old.getRect().top;
-            this.r.top = old.getRect().top + matrixX.getSize()/10;//gallina
+            this.r.top = old.getRect().top + (matrixX.getSize()/6)*2 + matrixX.getSize()/2 ;//gallina
             this.r.left = old.getRect().left ;
             this.r.right = this.r.left + matrixX.getSize()*2;
-            this.r.bottom = this.r.top + matrixX.getSize()*2 + matrixX.getSize()/10;//gallina
+            this.r.bottom = this.r.top + matrixX.getSize()*2  + matrixX.getSize()/10;//gallina
             //this.r.bottom = this.r.top + matrixX.getSize()/2 +  matrixX.getSize()/3;
-            this.type = old.getType();
-            this.typeWeapon = 1;
+            this.type = "weapon";
+            this.typeWeapon = 3;
 
-        this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallinaleft,null);
-        this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallinaright,null);
+        this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_unicornleft,null);
+        this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_unicornright,null);
         this.empty = VectorDrawableCompat.create(main.getResources(), R.drawable.c_empty,null);
-        this.d = VectorDrawableCompat.create(main.getResources(), R.drawable.w_metralletagallina,null);
+        this.d = VectorDrawableCompat.create(main.getResources(), R.drawable.w_unicorn,null);
     }
     public void setSprite(String orientation) {
         if (orientation.equals("left")) {
@@ -52,13 +52,11 @@ public class Metralleta implements Weapon {
             this.d = empty;
         }
     }
-
-    public int getWeaponType() {
-        return this.typeWeapon;
-    }
-
     public String getType() {
         return this.type;
+    }
+    public int getWeaponType() {
+        return this.typeWeapon;
     }
     public boolean getEnemy() {
         return this.enemyON;
@@ -72,7 +70,7 @@ public class Metralleta implements Weapon {
     public void setPenguin(Rect pRect,boolean rLeft,boolean rRight) {
 
         //this.r.top = pRect.top+matrixX.getSize()+matrixX.getSize()/4;
-        this.r.top = pRect.top+matrixX.getSize()/4;//gallina
+        this.r.top = pRect.top+matrixX.getSize()/5 + matrixX.getSize()/2 ;//gallina
         if (rLeft) {
             this.r.left = pRect.left+matrixX.getSize()/3;
             this.r.right = pRect.right+matrixX.getSize()/3;
@@ -81,7 +79,7 @@ public class Metralleta implements Weapon {
             this.r.left = pRect.left-matrixX.getSize()/3;
             this.r.right = pRect.right-matrixX.getSize()/3;
         }
-        this.r.bottom = pRect.bottom-matrixX.getSize()/2+matrixX.getSize()/4;//gallina
+        this.r.bottom = pRect.top + matrixX.getSize()*2 + matrixX.getSize();//gallina
         //this.r.bottom = pRect.bottom-matrixX.getSize()/2;
         this.penguinON = true;
 
