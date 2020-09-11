@@ -34,7 +34,6 @@ public class FerretBullet implements Bullet {
     protected int[] speed = new int[] {0,0};
     protected int[] actualSpeed = new int[] {0,0};
     private static MatrixX matrixX;
-    private int orientation;
 
     public FerretBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation) {
 
@@ -87,8 +86,6 @@ public class FerretBullet implements Bullet {
         }
         //this.d = pos1;
 
-        this.orientation = orientation;
-
         if (rRight) {
             this.r.right = pen.left;
             this.r.left = this.r.right - width;
@@ -131,21 +128,23 @@ public class FerretBullet implements Bullet {
         this.getDrawable().draw(c);
     }
 
-    public synchronized void checkColissionBullet() {// colission with scenario
+    public synchronized boolean checkColissionBullet() {// colission with scenario
         for (int xM = 0; xM < matrixX.matrix.size(); xM++) {
             for (int yM = 0; yM < matrixX.matrix.get(xM).size(); yM++) {
                 if (matrixX.matrix.get(xM).get(yM).getSolid() == 1) {
                     if (Rect.intersects(this.r,matrixX.matrix.get(xM).get(yM).getRect())) {
                         matrixX.bulletList.remove(this);
+                        return true;
                     }
                 }
             }
         }//CHECK OUT OF SCREEN
         if (this.r.left < -matrixX.getSize()*2 || this.r.right > matrixX.getWidth() + matrixX.getSize()*2 ||
             this.r.top < - matrixX.getSize()*2 || this.r.bottom > matrixX.getHeight() + matrixX.getSize()*2) {
-            System.out.println(-matrixX.getSize()*2);
             matrixX.bulletList.remove(this);
+            return true;
         }
+        return false;
     }
     public synchronized boolean checkColissionBulletEnemy() { //colission with enemys
         if (penguin) {

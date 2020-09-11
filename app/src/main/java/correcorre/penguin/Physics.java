@@ -10,7 +10,7 @@ import correcorre.R;
 import correcorre.graficos.MatrixX;
 import correcorre.weapons.Bullet;
 import correcorre.weapons.FerretBullet;
-import correcorre.weapons.MetralletaBullet;
+import correcorre.weapons.ChickenBullet;
 import correcorre.weapons.Unicorn;
 import correcorre.weapons.UnicornBullet;
 import correcorre.weapons.Weapon;
@@ -48,7 +48,7 @@ public abstract class Physics {
     protected Boolean paddingSpeedXLeftAplication = false;
     protected Boolean paddingSpeedAplicationTop = false;
     protected boolean foundX = false;
-    private int typeWeapon;
+    private String weaponType;
     private boolean shooting;
     private int shootingCount = 0;
     private int shootingRandomCount = 10;
@@ -306,7 +306,7 @@ public abstract class Physics {
             for (int l = 0; l < matrixX.weaponList.size(); l++) {
                 if (!matrixX.weaponList.get(l).getEnemy() && !matrixX.weaponList.get(l).getPenguin()) {
                     if (Rect.intersects(matrixX.weaponList.get(l).getRect(), this.r)) {
-                        if (!matrixX.weaponList.get(l).getType().equals(this.typeWeapon)) {
+                        if (!matrixX.weaponList.get(l).getType().equals(this.weaponType)) {
                             this.setWeapon(matrixX.weaponList.get(l));
 
                             this.weapon.setPenguin(this.r, this.rLeft, this.rRight);
@@ -316,10 +316,11 @@ public abstract class Physics {
                             if (rRight) {
                                 this.weapon.setSprite("left");
                             }
-                            this.typeWeapon = matrixX.weaponList.get(l).getWeaponType();
-                            for (int x = 0; x < matrixX.weaponList.size(); x++) {
-                                if (matrixX.weaponList.get(x).equals(this.weapon)) matrixX.weaponList.remove(matrixX.weaponList.get(x));
-                            }
+                            this.weaponType = matrixX.weaponList.get(l).getWeaponType();
+                            matrixX.weaponList.remove(this.weapon);//delete from weapon list in matrixX
+                            //for (int x = 0; x < matrixX.weaponList.size(); x++) {
+                                //if (matrixX.weaponList.get(x).equals(this.weapon)) matrixX.weaponList.remove(matrixX.weaponList.get(x));
+                            //}
                         }
                     }
                 }
@@ -334,19 +335,19 @@ public abstract class Physics {
         if (shooting && shootingCount > shootingRandomCount) {
             if (this.weapon != null) {
                 //System.out.println(this.weapon.getType());
-                if (this.weapon.getWeaponType() == 1) {//chicken
-                    MetralletaBullet bullet = new MetralletaBullet(main,matrixX,this.r, this.rLeft, this.rRight);
+                if (this.weapon.getWeaponType().equals("chicken")) {//chicken
+                    ChickenBullet bullet = new ChickenBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                     shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 15);//fireRate
                 }
-                if (this.weapon.getWeaponType() == 2) {//ferret
+                if (this.weapon.getWeaponType().equals("ferret")) {//ferret
                     FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                     shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 50);//fireRate
                 }
-                if (this.weapon.getWeaponType() == 3) {//unicorn
+                if (this.weapon.getWeaponType().equals("unicorn")) {//unicorn
                     UnicornBullet bullet = new UnicornBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);

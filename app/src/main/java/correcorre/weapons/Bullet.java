@@ -6,7 +6,7 @@ public interface Bullet {
     void moveX(long speed);
     void moveY(long speed);
     void printBullet(Canvas c);
-    void checkColissionBullet();
+    boolean checkColissionBullet();
     int[] getSpeed();
     void setActualSpeed(int[] speed);
     void moveBulletActualSpeed();

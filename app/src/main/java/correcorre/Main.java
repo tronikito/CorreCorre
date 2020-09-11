@@ -62,11 +62,13 @@ public class Main extends SurfaceView implements Runnable {
 
             while (delta >= 1) {
 
+                /*
                 penguin.checkColission();
                 penguin.calcAceleration();
                 matrixX.calcEnemyMove();
                 matrixX.calcBulletMove(); //only colision
                 matrixX.randomControlsEnemys();
+                */
 
 
                 if (penguin != null) main.setSpeed(penguin.getSpeed());//evitar desfase;
@@ -85,10 +87,6 @@ public class Main extends SurfaceView implements Runnable {
                     }
                 }
 
-                //########################
-                //System.out.println(speed[1]);
-                //System.out.println(speedY);
-
                 update(newSpeed,realFps);//every fps
                 delta--;
             }
@@ -98,7 +96,6 @@ public class Main extends SurfaceView implements Runnable {
                 actualFpsRefY = 1;
                 fps = 0;
                 refFpsCount = System.nanoTime();
-                //penguin.calcAceleration(); //recalc desacelerations
             }
         }
     }
@@ -126,9 +123,9 @@ public class Main extends SurfaceView implements Runnable {
         int[] newSpeed = {speedX,speedY};
         return newSpeed;
     }
+
     private synchronized float calcSpeedFps(int speed, double realFps) {
         float speedFpsRef = 0;
-        //double realFps = fps_objective-1/delta;
         if (speed < realFps) speedFpsRef = (int) Math.round(realFps/speed);
         if (speed >= realFps) speedFpsRef = (float) realFps/speed; // WHY????????????????????????????????????????????????????????????????????????
         return speedFpsRef;
@@ -146,7 +143,6 @@ public class Main extends SurfaceView implements Runnable {
                 penguinX = false;
             }
 
-            //if (penguin.getPosY() > matrixX.getHeight()*0.2 && penguin.getPosY()+matrixX.getSize()*1.5 < matrixX.getHeight()*0.8) {
             penguinY = true;
             if (penguin.getPosY() < matrixX.getHeight() * 0.2) outRangeTop = true;
             else outRangeTop = false;
@@ -154,34 +150,24 @@ public class Main extends SurfaceView implements Runnable {
                 outRangeBottom = true;
             else outRangeBottom = false;
 
-            if (outRangeBottom && speed[1] > 0) {//&& outRangeBottom
+            if (outRangeBottom && speed[1] > 0) {
                 penguinY = false;
             }
-            if (outRangeTop && speed[1] < 0) {//
+            if (outRangeTop && speed[1] < 0) {
                 penguinY = false;
             }
+
+            penguin.checkColission();
+            penguin.calcAceleration();
+            penguin.movePenguinSprite(speed);
+            penguin.movePenguinPos(speed);
+            penguin.shooting();
+
+            matrixX.calcBulletMove();
+            matrixX.calcEnemyMove();
+            matrixX.calcExplosionSprite();
 
             matrixX.moveMatrix(speed);
-            penguin.movePenguinPos(speed);
-            if (matrixX.enemyList != null) {
-                for (int x = 0; x < matrixX.enemyList.size(); x++) {
-                    matrixX.enemyList.get(x).moveEnemyActualSpeed();
-                }
-            }
-            if (matrixX.bulletList != null) {
-                for (int x = 0; x < matrixX.bulletList.size(); x++) {
-                    matrixX.bulletList.get(x).moveBulletActualSpeed();
-                }
-            }
-
-            penguin.movePenguinSprite(speed);
-            matrixX.moveEnemySprite();
-            matrixX.moveBulletSprite();
-            matrixX.moveExplosionSprite();
-
-            matrixX.checkEnemyColission(); //kill penguin
-            matrixX.checkBulletColission();//kill enemy
-            penguin.shooting();
 
             background.moveBackground(speed);
 

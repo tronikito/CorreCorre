@@ -253,7 +253,7 @@ public class SpiderPhysics {
         }
     }
 
-    public synchronized void checkColissionEnemy() {
+    public synchronized boolean checkCollisionEnemy() {
 
         boolean foundX = false;
         boolean found = false;
@@ -349,11 +349,20 @@ public class SpiderPhysics {
             if (speed[0] < 0) {
                 speed[0] = 0;
             }
+        }//CHECK OUT OF SCREEN
+        if (this.r.left < -matrixX.getSize()*2 || this.r.right > matrixX.getWidth() + matrixX.getSize()*2 ||
+                this.r.top < - matrixX.getSize()*2 || this.r.bottom > matrixX.getHeight() + matrixX.getSize()*2) {
+            matrixX.enemyList.remove(this);
+            return true;
         }
+        return false;
     }
-    public synchronized void checkColissionPenguin(Rect pen) {
-        if (Rect.intersects(this.hitBox,pen)) {
-            //main.detener();
+    public synchronized void checkCollisionPenguin(Rect pen) {
+        if (!matrixX.getPenguinImmunity()) {
+            if (Rect.intersects(this.hitBox, pen)) {
+                matrixX.setPenguinLife(matrixX.getPenguinLife() - 1);//how many DAMAGE
+                matrixX.setPenguinImmunity(true);
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import android.graphics.Rect;
 public interface Enemy {
     int[] getActualSpeed();
     void setActualSpeed(int[] speed);
-    void checkColissionEnemy();
+    boolean checkCollisionEnemy();
     void calcAcelerationEnemy();
     void randomControls();
     void moveSprite();
@@ -22,5 +22,5 @@ public interface Enemy {
     int getHeight();
     void setDirection();
     Rect getHitBox();
-    void checkColissionPenguin(Rect pen);
+    void checkCollisionPenguin(Rect pen);
 }

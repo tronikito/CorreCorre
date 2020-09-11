@@ -11,7 +11,7 @@ import correcorre.graficos.MatrixX;
 import correcorre.graficos.Scoreboard;
 import correcorre.penguin.Penguin;
 import correcorre.scenario.Scenario;
-import correcorre.weapons.Metralleta;
+import correcorre.weapons.Chicken;
 
 public class Loader extends SurfaceView implements Runnable {
 

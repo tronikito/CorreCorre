@@ -2,8 +2,8 @@ package correcorre.graficos;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.Rect;
+
 import java.util.ArrayList;
 import correcorre.Main;
 import correcorre.enemy.Plant;
@@ -15,7 +15,7 @@ import correcorre.scenario.Scenario;
 import correcorre.weapons.Bullet;
 import correcorre.weapons.Explosion;
 import correcorre.weapons.Ferret;
-import correcorre.weapons.Metralleta;
+import correcorre.weapons.Chicken;
 import correcorre.weapons.Unicorn;
 import correcorre.weapons.Weapon;
 
@@ -51,6 +51,7 @@ public class MatrixX {
     private static Scoreboard scoreboard;
     private Context context;
     private int[] scenarioStart;//debe ser el offset
+    private int tempo;
 
     public MatrixX(Context context, LCanvas c, Main m, Scenario s) {
 
@@ -107,7 +108,7 @@ public class MatrixX {
         for (int x = 0; x < blocksWidth; x++) {
             column = new ArrayList<>();
             for (int y = 0; y < blocksHeight; y++) {
-                Block newB = new Block(this.context,"empty",1,1);
+                Block newB = new Block(this.context,"block",1,1,"empty");
 
                 Rect r = newB.getRect();
                 r.left = (x * size) - offsetX2;
@@ -131,33 +132,50 @@ public class MatrixX {
 
                 String type = (String) this.matrixScenario.get(x).get(y).get(0);
                 int position = (int) this.matrixScenario.get(x).get(y).get(1);
-                int enemyType = (int) this.matrixScenario.get(x).get(y).get(2);
+                String enemyType = (String) this.matrixScenario.get(x).get(y).get(2);
                 int solid = (int) this.matrixScenario.get(x).get(y).get(3);
-                int weaponType = (int) this.matrixScenario.get(x).get(y).get(4);
+                String weaponType = (String) this.matrixScenario.get(x).get(y).get(4);
+                int sprite = (int) this.matrixScenario.get(x).get(y).get(5);
+                String blockType = (String) this.matrixScenario.get(x).get(y).get(6);
 
-                old.setType(type,1);
+                if (enemyType != null) old.setType(type,enemyType);
+                if (weaponType != null) old.setType(type,weaponType);
+                if (blockType != null) old.setType(type,blockType);
                 old.setPosition(position);
-                old.setEnemyType(enemyType);
                 old.setSolid(solid);
-                old.setWeaponType(weaponType);
-                old.setSprite(0); //everyone is animated;
+                old.setSprite(sprite);
 
-                if (type.equals("enemy") && enemyType != 0) {
-                    this.matrixScenario.get(x).get(y).set(2, 0);//reset to not more spawns.
-                   generateEnemy(old);
-                   old.setEnemyType(0);//reset from matrixX for not double spawn.
+
+                if (type.equals("enemy")) {
+
+                    this.matrixScenario.get(x).get(y).set(0, "block");//reset to not more spawns.
+                    this.matrixScenario.get(x).get(y).set(6, "empty");
+                    this.matrixScenario.get(x).get(y).set(2,null);
+                    old.setType(type,enemyType);
+                    generateEnemy(old);
+                    old.setType("block","empty");//reset from matrixX for not double spawn.
+
+
                 }
-                if (type.equals("weapon") && weaponType != 0) {
-                    this.matrixScenario.get(x).get(y).set(4, 0);
+                if (type.equals("weapon")) {
+
+                    this.matrixScenario.get(x).get(y).set(0, "block");//reset to not more spawns.
+                    this.matrixScenario.get(x).get(y).set(6, "empty");
+                    this.matrixScenario.get(x).get(y).set(4,null);
+                    old.setType(type,weaponType);
                     generateWeapon(old);
-                    old.setWeaponType(0);
+                    old.setType("block","empty");//reset from matrixX for not double spawn.
+
+
                 }
                 newType = true;
             }
         }
         if (!newType) {
-            old.setType("dirt", 1);//if null block
+            old.setType("block","dirt");//if null block
+            old.setSprite(1);
             old.setSolid(0);
+            old.setPosition(0);
         }
     }
 
@@ -172,15 +190,15 @@ public class MatrixX {
         if (this.weaponList == null) {
             this.weaponList = new ArrayList<Weapon>();
         }
-        if (old.getWeaponType() == 1) {//metralleta
-            Metralleta metralleta = new Metralleta(main,this,old);
-            this.weaponList.add(metralleta);
+        if (old.getWeaponType().equals("chicken")) {
+            Chicken chicken = new Chicken(main,this,old);
+            this.weaponList.add(chicken);
         }
-        if (old.getWeaponType() == 2) {//ferret
+        if (old.getWeaponType().equals("ferret")) {
             Ferret ferret = new Ferret(main,this,old);
             this.weaponList.add(ferret);
         }
-        if (old.getWeaponType() == 3) {//ferret
+        if (old.getWeaponType().equals("unicorn")) {
             Unicorn unicorn = new Unicorn(main,this,old);
             this.weaponList.add(unicorn);
         }
@@ -192,69 +210,17 @@ public class MatrixX {
             this.enemyList = new ArrayList<Enemy>();
         }
 
-        if (old.getEnemyType() == 1) {//spider
+        if (old.getEnemyType().equals("spider")) {
             Spider spider = new Spider(main, this, old.getRect().top - (this.size / 2), old.getRect().left - (this.size / 2 + this.size), this.size * 2, this.size);
-            //Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
             this.enemyList.add(spider);
         }
-        if (old.getEnemyType() == 2) {//spider
+        if (old.getEnemyType().equals("plant")) {
             Plant plant = new Plant(main, this, old.getRect().top - (this.size), old.getRect().left - (this.size / 2 + this.size), this.size * 2, this.size*3);
-            //Spider spider = new Spider(main, this, 600, 800, this.size * 4, this.size * 2);//just for show
             this.enemyList.add(plant);
         }
     }
-    public synchronized void printEnemys(Canvas c) {
 
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).printEnemy(c);
-            }
-        }
-    }
-    /*
-    public synchronized void getBullets(Canvas c) {
-
-        if (this.bulletList != null) {
-            for (int x = 0; x < this.bulletList.size(); x++) {
-                this.bulletList.get(x).printBullet(c);
-            }
-        }
-    }*/
-    public synchronized void printWeapons(Canvas c) {
-
-        if (this.weaponList != null) {
-           if (penguin.getWeapon() != null) {
-               penguin.getWeapon().printWeapon(c);//first Print penguin weapon to be back
-            }
-            for (int x = 0; x < this.weaponList.size(); x++) {
-               if (penguin.getWeapon() != null) {
-                    if (this.weaponList.get(x) != penguin.getWeapon()) {
-                        this.weaponList.get(x).printWeapon(c);
-                    }
-                } else {
-                    this.weaponList.get(x).printWeapon(c);
-                }
-            }
-        }
-    }
-    public synchronized void checkBulletColission() {
-        if (this.bulletList != null) {
-            for (int x = 0; x < this.bulletList.size(); x++) {
-                if (this.bulletList.get(x).checkColissionBulletEnemy()) scoreboard.scoreAdd(50);
-            }
-        }
-    }
-    public synchronized void checkEnemyColission() {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                if (!penguin.getImmunity()) {
-                    this.enemyList.get(x).checkColissionPenguin(penguin.getHitBox());
-                }
-
-            }
-        }
-    }
-
+    public synchronized boolean getPenguinImmunity() { return penguin.getImmunity(); }
     public synchronized void setPenguinImmunity(Boolean i) { penguin.setImmunity(i); }
     public synchronized int getPenguinLife() { return scoreboard.getLife(); }//because the life is in scoreboard
     public synchronized void setPenguinLife(int l) { scoreboard.setLife(l); }//because the life is in scoreboard
@@ -269,79 +235,75 @@ public class MatrixX {
             this.explosionList.add(explosion);
         }
     }
-    /*
-    public synchronized void moveEnemys(int[] speed) {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                int[] actualSpeed = this.enemyList.get(x).getActualSpeed();
-                this.enemyList.get(x).moveEnemyPos(actualSpeed);
-            }
-        }
-    }
-
-    public synchronized void setEnemyActualSpeed(int[] speed) {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).setActualSpeed(speed);
-            }
-        }
-    }*/
     public synchronized void calcEnemyMove() {
         if (this.enemyList != null) {
             for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).checkColissionEnemy();
-                this.enemyList.get(x).calcAcelerationEnemy();
+                if (!this.enemyList.get(x).checkCollisionEnemy()) {//check Wall collision and out-screen;
+                    this.enemyList.get(x).randomControls();//random Controls;
+                    this.enemyList.get(x).moveSprite();//change sprite
+                    this.enemyList.get(x).calcAcelerationEnemy();//calc Acceleration
+                    this.enemyList.get(x).moveEnemyActualSpeed();//move it
+                    this.enemyList.get(x).checkCollisionPenguin(penguin.getRect());//check if penguin collision
+                }
             }
         }
     }
     public synchronized void calcBulletMove() {
         if (this.bulletList != null) {
             for (int x = 0; x < this.bulletList.size(); x++) {
-                this.bulletList.get(x).checkColissionBullet();
+                this.bulletList.get(x).moveBulletSprite();//first move the sprite
+                this.bulletList.get(x).moveBulletActualSpeed();//move it
+                if (!this.bulletList.get(x).checkColissionBullet()) {//check Wall Collision
+                    if (this.bulletList.get(x).checkColissionBulletEnemy()) scoreboard.scoreAdd(50);//check enemy Collision
+                }
             }
         }
     }
-    public synchronized void randomControlsEnemys() {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).randomControls();
-            }
-        }
-    }
-    public synchronized void moveEnemySprite() {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).moveSprite();
-            }
-        }
-    }
-    public synchronized void moveBulletSprite() {
-        if (this.bulletList != null) {
-            for (int x = 0; x < this.bulletList.size(); x++) {
-                this.bulletList.get(x).moveBulletSprite();
-            }
-        }
-    }
-    public synchronized void moveExplosionSprite() {
+    public synchronized void calcExplosionSprite() {
         if (this.explosionList != null) {
             for (int x = 0; x < this.explosionList.size(); x++) {
                 this.explosionList.get(x).moveExplosionSprite();
             }
         }
     }
-    public synchronized void printEnemyGrid(Canvas c) {
-        if (this.enemyList != null) {
-            for (int x = 0; x < this.enemyList.size(); x++) {
-                this.enemyList.get(x).printEnemyGrid(c);
-            }
-        }
-    }
+
     public synchronized void printBullets(Canvas c) {
         if (this.bulletList != null) {
             for (int x = 0; x < this.bulletList.size(); x++) {
                 this.bulletList.get(x).printBullet(c);
             }
         }
+    }
+    public synchronized void printEnemys(Canvas c) {
+
+        if (this.enemyList != null) {
+            for (int x = 0; x < this.enemyList.size(); x++) {
+                this.enemyList.get(x).printEnemy(c);
+            }
+        }
+    }
+    public synchronized void printWeapons(Canvas c) {
+        if (penguin.getWeapon() != null) penguin.getWeapon().printWeapon(c);
+        if (this.weaponList != null) {
+            for (int x = 0; x < this.weaponList.size(); x++) {
+                this.weaponList.get(x).printWeapon(c);
+            }
+        }
+        //no needed because weapon is deleted from matrixX weapon list.
+        /*if (this.weaponList != null) {
+            if (penguin.getWeapon() != null) {
+                penguin.getWeapon().printWeapon(c);//first Print penguin weapon to be back
+            }
+            for (int x = 0; x < this.weaponList.size(); x++) {
+                if (penguin.getWeapon() != null) {
+                    if (this.weaponList.get(x) != penguin.getWeapon()) {//no print if is weapon of penguin
+                        this.weaponList.get(x).printWeapon(c);
+                    }
+                } else {//print if is in floor
+                    this.weaponList.get(x).printWeapon(c);
+                }
+            }
+        }*/
     }
     public synchronized void printExplosions(Canvas c) {
         if (this.explosionList != null) {
@@ -410,7 +372,6 @@ public class MatrixX {
                     }
                 }
             }
-
             checkOffset();
         }
     }
@@ -532,7 +493,7 @@ public class MatrixX {
 
         int calcX = foundL;
         int calcY = foundT;
-
+        
         for (int x = 0; x < blocksWidth; x++) {
             for(int y = 0; y < blocksHeight; y++) {
                 generateFromScenario(this.matrix.get(calcX).get(calcY),x+relativeOffsetX,y+relativeOffsetY);
@@ -562,42 +523,25 @@ public class MatrixX {
             b.getRect().top =  -offsetY - padding;
             b.getRect().bottom = -offsetnH - padding;
         }
-        //if (penguin != null) main.setSpeed(penguin.getSpeed());//evitar desfase;
-        //despues de mover/recalcular offset/recalcularDrawables;
-        //se cambia la velocidad para evitar desfases;
     }
 
     // IMPRIMIR MATRIXX #########################################################################
 
     public synchronized void printMatrixBack(Canvas canvas) {//SINCRO CON MOVEMATRIX
+        tempo++;//animated sprites
+        if (tempo >= 25) tempo = 0; //animated sprites
+
         if (this.matrix != null) {
             for (int x = 0; x < blocksWidth; x++) {
                 for (int y = 0; y < blocksHeight; y++) {
                     Block b = this.matrix.get(x).get(y);
                     if (b.getPosition() == 0) {//BACK
                         if (b.getSprite() == 0) {
-                            b.animatedSprite();
+                            b.animatedSprite(tempo);
                         }
                         b.getDrawable().draw(canvas);
                     }
                 }
-                    /*
-                    //Prueba texto casillas DEBUGG
-                    //text variables
-                    Rect r;
-                    r = b.getRect();
-                    Paint tempTextPaint = new Paint();
-                    String text = x + " " + y;
-                    float textWidth;
-                    //text constructor
-                    tempTextPaint.setColor(Color.YELLOW);
-                    tempTextPaint.setAntiAlias(true);
-                    tempTextPaint.setStyle(Paint.Style.FILL);
-                    tempTextPaint.setTextSize(24);
-                    // text drawable
-                    textWidth = tempTextPaint.measureText(text);
-                    canvas.drawText(text, 0 + r.right -(textWidth), 50 + r.top-(24), tempTextPaint);
-                    */
             }
         }
     }
@@ -608,7 +552,7 @@ public class MatrixX {
                     Block b = this.matrix.get(x).get(y);
                     if (b.getPosition() == 1) {// FRONT
                         if (b.getSprite() == 0) {
-                            b.animatedSprite();
+                            b.animatedSprite(tempo);
                         }
                         b.getDrawable().draw(canvas);
                     }

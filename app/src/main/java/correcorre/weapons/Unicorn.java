@@ -23,7 +23,7 @@ public class Unicorn implements Weapon {
     private boolean penguinON = false;
     private boolean enemyON = false;
     private String type;
-    private int typeWeapon;
+    private String weaponType;
 
     public Unicorn(Main main, MatrixX ma, Block old) {
             matrixX = ma;
@@ -34,7 +34,7 @@ public class Unicorn implements Weapon {
             this.r.bottom = this.r.top + matrixX.getSize()*2  + matrixX.getSize()/10;//gallina
             //this.r.bottom = this.r.top + matrixX.getSize()/2 +  matrixX.getSize()/3;
             this.type = "weapon";
-            this.typeWeapon = 3;
+            this.weaponType = "unicorn";
 
         this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_unicornleft,null);
         this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_unicornright,null);
@@ -55,8 +55,8 @@ public class Unicorn implements Weapon {
     public String getType() {
         return this.type;
     }
-    public int getWeaponType() {
-        return this.typeWeapon;
+    public String getWeaponType() {
+        return this.weaponType;
     }
     public boolean getEnemy() {
         return this.enemyON;

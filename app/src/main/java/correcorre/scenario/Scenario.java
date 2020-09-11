@@ -43,9 +43,11 @@ public class Scenario {
                     ArrayList newBlock = new ArrayList();
                     newBlock.add(blockJSON.getString("type"));//0
                     newBlock.add(blockJSON.getInt("position"));//1
-                    newBlock.add(blockJSON.getInt("enemyType"));//2
+                    newBlock.add(blockJSON.getString("enemyType"));//2
                     newBlock.add(blockJSON.getInt("solid"));//3
-                    newBlock.add(blockJSON.getInt("weaponType"));//3
+                    newBlock.add(blockJSON.getString("weaponType"));//4
+                    newBlock.add(blockJSON.getInt("sprite"));//5
+                    newBlock.add(blockJSON.getString("blockType"));//5
 
                     column.add(newBlock);
                 }

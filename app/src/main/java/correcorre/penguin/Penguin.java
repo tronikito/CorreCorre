@@ -119,8 +119,12 @@ public class Penguin extends Physics {
             //weapon sprite
 
             if (immunity && immunitySpriteShow && weapon != null) {
-                if (rRight) this.weapon.setSprite("left");
-                if (rLeft) this.weapon.setSprite("right");
+                if (rRight) {
+                    this.weapon.setSprite("left");
+                }
+                if (rLeft) {
+                    this.weapon.setSprite("right");
+                }
             }
 
             if (!rLeft && !rRight && !jumping && !gravityAceleration) {
@@ -268,9 +272,7 @@ public class Penguin extends Physics {
                             speedCount = 0;
                         } else {
                             this.d = rPos0weapon;
-                        } //else if(this.d != rPos1weapon && this.d != rPos2weapon) {
-                        // this.d = rPos0weapon;
-                        //}
+                        }
                     } else {
                         this.d = rPos3;
                     }

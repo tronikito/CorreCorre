@@ -23,7 +23,7 @@ public class Ferret implements Weapon {
     private boolean penguinON = false;
     private boolean enemyON = false;
     private String type;
-    private int typeWeapon;
+    private String weaponType;
 
     public Ferret(Main main, MatrixX ma, Block old) {
             matrixX = ma;
@@ -34,7 +34,7 @@ public class Ferret implements Weapon {
             this.r.bottom = this.r.top + matrixX.getSize()*2  + matrixX.getSize()/10;//gallina
             //this.r.bottom = this.r.top + matrixX.getSize()/2 +  matrixX.getSize()/3;
             this.type = "weapon";
-            this.typeWeapon = 2;
+            this.weaponType = "ferret";
 
         this.pos1 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretleft,null);
         this.pos2 = VectorDrawableCompat.create(main.getResources(), R.drawable.w_ferretright,null);
@@ -55,8 +55,8 @@ public class Ferret implements Weapon {
     public String getType() {
         return this.type;
     }
-    public int getWeaponType() {
-        return this.typeWeapon;
+    public String getWeaponType() {
+        return this.weaponType;
     }
     public boolean getEnemy() {
         return this.enemyON;

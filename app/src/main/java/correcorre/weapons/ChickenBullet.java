@@ -10,7 +10,7 @@ import correcorre.Main;
 import correcorre.R;
 import correcorre.graficos.MatrixX;
 
-public class MetralletaBullet implements Bullet {
+public class ChickenBullet implements Bullet {
 
     private Drawable pos1;
     private Drawable pos2;
@@ -34,8 +34,11 @@ public class MetralletaBullet implements Bullet {
     protected int[] speed = new int[] {0,0};
     protected int[] actualSpeed = new int[] {0,0};
     private static MatrixX matrixX;
+    private int orientation;
+    private boolean rRight;
+    private boolean rLeft;
 
-    public MetralletaBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight) {
+    public ChickenBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation) {
 
         matrixX = ma;
 
@@ -86,12 +89,19 @@ public class MetralletaBullet implements Bullet {
         }
         //this.d = pos1;
 
+        this.rLeft = rLeft;
+        this.rRight = rRight;
+        this.orientation = orientation;
+
         if (rRight) {
             this.r.right = pen.left;
             this.r.left = this.r.right - width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
             this.speed[0] = 750;
+            if (orientation == 2) {
+                this.speed[1] = 250;
+            }
         }
         if (rLeft) {
             this.r.left = pen.right;
@@ -99,6 +109,9 @@ public class MetralletaBullet implements Bullet {
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
             this.speed[0] = -750;
+            if (orientation == 2) {
+                this.speed[1] = 250;
+            }
         }
     }
 
@@ -119,19 +132,41 @@ public class MetralletaBullet implements Bullet {
     }
 
     public synchronized void printBullet(Canvas c) {
-        this.getDrawable().draw(c);
+
+        if (orientation == 2) {
+            if (rRight) {
+                c.rotate(35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+                this.getDrawable().draw(c);
+                c.rotate(-35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+            }
+            if (rLeft) {
+                c.rotate(-35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+                this.getDrawable().draw(c);
+                c.rotate(35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+            }
+        } else {
+            this.getDrawable().draw(c);
+        }
+
     }
 
-    public synchronized void checkColissionBullet() {// BALAS CHOCAN CON SOLIDOSSSSSSSSSS
+    public synchronized boolean checkColissionBullet() {// BALAS CHOCAN CON SOLIDOSSSSSSSSSS
         for (int xM = 0; xM < matrixX.matrix.size(); xM++) {
             for (int yM = 0; yM < matrixX.matrix.get(xM).size(); yM++) {
                 if (matrixX.matrix.get(xM).get(yM).getSolid() == 1) {
                     if (Rect.intersects(this.r,matrixX.matrix.get(xM).get(yM).getRect())) {
                         matrixX.bulletList.remove(this);
+                        return true;
                     }
                 }
             }
+        }//CHECK OUT OF SCREEN
+        if (this.r.left < -matrixX.getSize()*2 || this.r.right > matrixX.getWidth() + matrixX.getSize()*2 ||
+                this.r.top < - matrixX.getSize()*2 || this.r.bottom > matrixX.getHeight() + matrixX.getSize()*2) {
+            matrixX.bulletList.remove(this);
+            return true;
         }
+        return false;
     }
     public synchronized boolean checkColissionBulletEnemy() {
         if (penguin) {
@@ -185,6 +220,7 @@ public class MetralletaBullet implements Bullet {
     }
     public synchronized void moveBulletPos(int[] speed) {
         moveX(speed[0]);
+        moveY(speed[1]);
     }
     public synchronized void setPenguin() {
         this.penguin = true;

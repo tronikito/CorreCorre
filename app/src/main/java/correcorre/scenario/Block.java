@@ -11,7 +11,6 @@ import correcorre.R;
 
 public class Block {
 
-    private static Main main;
     public Context c;
     protected Rect finalSize;
     protected Drawable drawable;
@@ -22,32 +21,23 @@ public class Block {
     private Drawable sprite5;
     private String type;
     private int sprite;
-    private int tempo = 180;
-    private int toTempo = 0;
     private int position;
     private int solid;
-    private int enemyType = 0;
-    private int weaponType = 0;
+    private String enemyType = null;
+    private String weaponType = null;
+    private String blockType = null;
 
-    public Block(Context c, String t, int s, int p) {
+    public Block(Context c, String t, int s, int p, String blockType) {
         this.c = c;
         this.type = t;
         this.sprite = s;
         this.position = p;
+        if (blockType != null) {
+            this.blockType = blockType;
+        }
         this.finalSize = new Rect();
     }
-    public int getWeaponType() {
-        return this.weaponType;
-    }
-    public void setWeaponType(int e) {
-        this.weaponType = e;
-    }
-    public int getEnemyType() {
-        return this.enemyType;
-    }
-    public void setEnemyType(int e) {
-       this.enemyType = e;
-    }
+
     public int getSolid() {
         return this.solid;
     }
@@ -55,6 +45,7 @@ public class Block {
     public void setSolid(int s) {
         this.solid = s;
     }
+
 
     public void setPosition(int p) {
         this.position = p;
@@ -87,36 +78,39 @@ public class Block {
         this.finalSize.bottom -= speed;
     }
 
-    public void animatedSprite() {//every how many fps
+    public synchronized void animatedSprite(int tempo) {//every how many fps
         if (this.drawable == null) this.drawable = sprite1;
-        this.toTempo++;
-        if (type.equals("grass")) {
-
-            //secuencial
-            //if (toTempo < 60) this.drawable = sprite1;
-            //if (toTempo >= 60 && toTempo < 120) if (sprite2 != null) this.drawable = sprite2;
-            //if (toTempo >= 120) if (sprite3 != null) this.drawable = sprite3;
-
-            //random
-            if (toTempo == 1) {
-                int random = (int) Math.floor(Math.random() * Math.round(5));
-                if (random == 0) this.drawable = sprite1;
-                if (random == 1) this.drawable = sprite2;
-                if (random == 2) this.drawable = sprite3;
-                if (random == 3) this.drawable = sprite4;
-                if (random == 4) this.drawable = sprite5;
-                toTempo = 160;
+        if (sprite == 0) {
+            if (tempo == 0) {//every 25
+                if (blockType.equals("grass")) {
+                    int random = (int) Math.floor(Math.random() * Math.round(5));
+                    if (random == 0) this.drawable = sprite1;
+                    if (random == 1) this.drawable = sprite2;
+                    if (random == 2) this.drawable = sprite3;
+                    if (random == 3) this.drawable = sprite4;
+                    if (random == 4) this.drawable = sprite5;
+                }
             }
-        }
-        else {
+            if (tempo%5 == 0) {//every 5
+                if (blockType.equals("void")) {
+                    if (tempo == 5) this.drawable = sprite2;
+                    else if (tempo == 10) this.drawable = sprite3;
+                    else if (tempo == 15) this.drawable = sprite4;
+                    else if (tempo == 20) this.drawable = sprite5;
+                    else if (tempo == 25) this.drawable = sprite1;
+                    else {
+                        this.drawable = sprite1;
+                    }
+                }
+            }
+        } else {
             this.drawable = sprite1;
         }
-        if (toTempo >= tempo) toTempo = 0;
     }
 
     public void setSprite(int s) {
         this.sprite = s;
-        if (sprite == 0) animatedSprite();
+
         if (sprite == 1) this.drawable = sprite1;
         if (sprite == 2) if (sprite2 != null) this.drawable = sprite2;
         if (sprite == 3) if (sprite3 != null) this.drawable = sprite3;
@@ -128,55 +122,66 @@ public class Block {
     public String getType() {
         return this.type;
     }
+    public String getBlockType() { return this.blockType; }
+    public String getWeaponType() { return this.weaponType; }
+    public String getEnemyType() {
+        return this.enemyType;
+    }
 
-    public void setType(String type, int sprite) {
+    public void setType(String type, String typeOf) {
         this.type = type;
-        this.sprite = sprite;
-        if (type.equals("fence")) {
+
+        if (type.equals("enemy")) {
+            this.enemyType = typeOf;
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);
+        }
+        if (type.equals("weapon")) {
+            this.weaponType = typeOf;
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);
+        }
+        if (type.equals("block")) {
+            this.blockType = typeOf;
+            setBlockType(typeOf);
+        }
+    }
+
+    public void setBlockType(String blockType) {
+        this.blockType = blockType;
+
+        if (blockType.equals("fence")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_fence, null);
         }
-        if (type.equals("dirt")) {
+        if (blockType.equals("dirt")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
             sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
         }
-        if (type.equals("grass")) {
+        if (blockType.equals("void")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone1, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone2, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone3, null);
+            sprite4 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone4, null);
+            sprite5 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone5, null);
+        }
+        if (blockType.equals("stone")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone1, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone2, null);
+        }
+        if (blockType.equals("grass")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass1, null);
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass2, null);
             sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass3, null);
             sprite4 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass5, null);
             sprite5 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass6, null);
         }
-        if (type.equals("red")) {
+        if (blockType.equals("red")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_red, null);;
-            sprite2 = null;
-            sprite3 = null;
         }
-        if (type.equals("blue")) {
+        if (blockType.equals("blue")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_blue, null);
-            sprite2 = null;
-            sprite3 = null;
-            this.drawable = sprite1;
         }
-        if (type.equals("empty")) {
+        if (blockType.equals("empty")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
-            sprite2 = null;
-            sprite3 = null;
-            this.drawable = sprite1;
         }
-        if (type.equals("enemy")) {
-            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
-            sprite2 = null;
-            sprite3 = null;
-            this.drawable = sprite1;
-        }
-        if (type.equals("weapon")) {
-            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
-            sprite2 = null;
-            sprite3 = null;
-            this.drawable = sprite1;
-        }
-
-        setSprite(sprite);
     }
 }
