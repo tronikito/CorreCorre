@@ -37,8 +37,9 @@ public class ChickenBullet implements Bullet {
     private int orientation;
     private boolean rRight;
     private boolean rLeft;
+    private boolean firstTime = true;
 
-    public ChickenBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation) {
+    public ChickenBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation, int[] speed) {
 
         matrixX = ma;
 
@@ -98,20 +99,20 @@ public class ChickenBullet implements Bullet {
             this.r.left = this.r.right - width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = 750;
-            if (orientation == 2) {
-                this.speed[1] = 250;
-            }
+            this.speed[0] = speed[0];
+            //if (orientation == 1) {
+                this.speed[1] = speed[1];
+            //}
         }
         if (rLeft) {
             this.r.left = pen.right;
             this.r.right = this.r.left + width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = -750;
-            if (orientation == 2) {
-                this.speed[1] = 250;
-            }
+            this.speed[0] = speed[0]*-1;
+            //if (orientation == 1) {
+                this.speed[1] = speed[1];
+            //}
         }
     }
 
@@ -133,7 +134,14 @@ public class ChickenBullet implements Bullet {
 
     public synchronized void printBullet(Canvas c) {
 
-        if (orientation == 2) {
+        if (orientation == 1) {
+
+            if (firstTime) {
+                this.r.top = this.r.top - matrixX.getSize()/2 - matrixX.getSize()/4;
+                this.r.bottom = this.r.bottom - matrixX.getSize()/2 - matrixX.getSize()/4;
+                firstTime = false;
+            }
+
             if (rRight) {
                 c.rotate(35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
                 this.getDrawable().draw(c);

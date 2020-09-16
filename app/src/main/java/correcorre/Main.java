@@ -1,5 +1,6 @@
 package correcorre;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,7 +15,7 @@ import correcorre.scenario.Scenario;
 
 public class Main extends SurfaceView implements Runnable {
 
-    private int[] speed = new int[] {0,0};
+    private volatile int[] speed = new int[] {0,0};
     private static boolean working = false;
     private volatile boolean firstTime = true;
     private Thread start;
@@ -25,7 +26,8 @@ public class Main extends SurfaceView implements Runnable {
     private static Scenario scenario = null;
     private static Main main;
     private static Background background;
-    private static Penguin penguin;
+    @SuppressLint("StaticFieldLeak")
+    private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
     public boolean penguinX;
     public boolean penguinY;
@@ -57,19 +59,10 @@ public class Main extends SurfaceView implements Runnable {
             refFps = initWhile;
             delta += timeTrans / ns_fps;
 
-            int speedX = 0;
-            int speedY = 0;
+            //int speedX = 0;
+            //int speedY = 0;
 
             while (delta >= 1) {
-
-                /*
-                penguin.checkColission();
-                penguin.calcAceleration();
-                matrixX.calcEnemyMove();
-                matrixX.calcBulletMove(); //only colision
-                matrixX.randomControlsEnemys();
-                */
-
 
                 if (penguin != null) main.setSpeed(penguin.getSpeed());//evitar desfase;
 
@@ -99,6 +92,7 @@ public class Main extends SurfaceView implements Runnable {
             }
         }
     }
+
     private synchronized int[] calcRealSpeed(int [] speed, double realFps, byte fps_objective, int actualFpsRefX, int actualFpsRefY) {
         int speedX = 0;
         int speedY = 0;
@@ -120,8 +114,7 @@ public class Main extends SurfaceView implements Runnable {
             if (speed[1] < 0) speedY -= 1;
             actualFpsRefY++;
         }
-        int[] newSpeed = {speedX,speedY};
-        return newSpeed;
+        return new int[] {speedX,speedY};
     }
 
     private synchronized float calcSpeedFps(int speed, double realFps) {
@@ -170,14 +163,15 @@ public class Main extends SurfaceView implements Runnable {
             matrixX.moveMatrix(speed);
 
             background.moveBackground(speed);
+            myCanvas.checkControls();
 
         }
         myCanvas.invalidate();
-        this.fps++;
+        fps++;
     }
 
     public void iniciar(MainActivity mainActivity) {
-        this.working = true;
+        working = true;
         myCanvas = new MyCanvas(main, matrixX, controls, background, penguin, scoreboard);
         Handler mainThread = new Handler(Looper.getMainLooper());
         mainThread.post(new setView(main, mainActivity, myCanvas) {
@@ -187,7 +181,7 @@ public class Main extends SurfaceView implements Runnable {
     }
 
     public synchronized void detener() {
-        this.working = false;
+        working = false;
         try {
             this.start.join();
         } catch (InterruptedException e) {

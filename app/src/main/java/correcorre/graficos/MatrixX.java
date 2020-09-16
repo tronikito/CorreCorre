@@ -1,5 +1,6 @@
 package correcorre.graficos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -47,7 +48,8 @@ public class MatrixX {
     private static Main main;
     private static Scenario scenario;
     private static MyCanvas myCanvas;
-    private static Penguin penguin;
+    @SuppressLint("StaticFieldLeak")
+    private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
     private Context context;
     private int[] scenarioStart;//debe ser el offset
@@ -155,7 +157,6 @@ public class MatrixX {
                     generateEnemy(old);
                     old.setType("block","empty");//reset from matrixX for not double spawn.
 
-
                 }
                 if (type.equals("weapon")) {
 
@@ -165,7 +166,6 @@ public class MatrixX {
                     old.setType(type,weaponType);
                     generateWeapon(old);
                     old.setType("block","empty");//reset from matrixX for not double spawn.
-
 
                 }
                 newType = true;
@@ -289,21 +289,6 @@ public class MatrixX {
                 this.weaponList.get(x).printWeapon(c);
             }
         }
-        //no needed because weapon is deleted from matrixX weapon list.
-        /*if (this.weaponList != null) {
-            if (penguin.getWeapon() != null) {
-                penguin.getWeapon().printWeapon(c);//first Print penguin weapon to be back
-            }
-            for (int x = 0; x < this.weaponList.size(); x++) {
-                if (penguin.getWeapon() != null) {
-                    if (this.weaponList.get(x) != penguin.getWeapon()) {//no print if is weapon of penguin
-                        this.weaponList.get(x).printWeapon(c);
-                    }
-                } else {//print if is in floor
-                    this.weaponList.get(x).printWeapon(c);
-                }
-            }
-        }*/
     }
     public synchronized void printExplosions(Canvas c) {
         if (this.explosionList != null) {

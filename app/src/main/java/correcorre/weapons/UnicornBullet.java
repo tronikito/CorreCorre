@@ -34,8 +34,12 @@ public class UnicornBullet implements Bullet {
     protected int[] speed = new int[] {0,0};
     protected int[] actualSpeed = new int[] {0,0};
     private static MatrixX matrixX;
+    private int orientation;
+    private boolean rRight;
+    private boolean rLeft;
+    private boolean firstTime = true;
 
-    public UnicornBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation) {
+    public UnicornBullet(Main m, MatrixX ma, Rect pen,boolean rLeft, boolean rRight, int orientation, int[] speed) {
 
         matrixX = ma;
 
@@ -86,26 +90,29 @@ public class UnicornBullet implements Bullet {
         }
 
         //this.d = pos1;
+        this.rLeft = rLeft;
+        this.rRight = rRight;
+        this.orientation = orientation;
 
         if (rRight) {
             this.r.right = pen.left;
             this.r.left = this.r.right - width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = 1200;
-            if (orientation == 2) {
-                this.speed[1] = 400;
-            }
+            this.speed[0] = speed[0];
+            //if (orientation == 1) {
+                this.speed[1] = speed[1];
+            //}
         }
         if (rLeft) {
             this.r.left = pen.right;
             this.r.right = this.r.left + width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
             this.r.bottom = this.r.top + this.height;
-            this.speed[0] = -1200;
-            if (orientation == 2) {
-                this.speed[1] = 400;
-            }
+            this.speed[0] = speed[0]*-1;
+            //if (orientation == 1) {
+                this.speed[1] = speed[1];
+            //}
         }
     }
 
@@ -126,7 +133,29 @@ public class UnicornBullet implements Bullet {
     }
 
     public synchronized void printBullet(Canvas c) {
-        this.getDrawable().draw(c);
+
+        if (orientation == 1) {
+
+            if (firstTime) {
+                this.r.top = this.r.top - matrixX.getSize();
+                this.r.bottom = this.r.bottom - matrixX.getSize();
+                firstTime = false;
+            }
+
+            if (rRight) {
+                c.rotate(35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+                this.getDrawable().draw(c);
+                c.rotate(-35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+            }
+            if (rLeft) {
+                c.rotate(-35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+                this.getDrawable().draw(c);
+                c.rotate(35, this.r.left + ((this.r.right - this.r.left) / 2), this.r.top + ((this.r.bottom - this.r.top) / 2));
+            }
+        } else {
+            this.getDrawable().draw(c);
+        }
+
     }
 
     public synchronized boolean checkColissionBullet() {// colission with scenario

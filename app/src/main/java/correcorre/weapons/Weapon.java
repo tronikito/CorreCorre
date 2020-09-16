@@ -14,8 +14,13 @@ public interface Weapon {
     boolean getEnemy();
     boolean getPenguin();
     void setEnemy(Enemy e);
-    void setPenguin(Rect pRect,boolean rLeft,boolean rRight);
+    void setPenguin(Rect p,boolean rLeft,boolean rRight, int orientation);
     String getType();
-    void setSprite(String orientation);
+    void setSprite(String direction);
     String getWeaponType();
+    void setDirection(String direction);
+    void setOrientation(int o);
+    void setBulletSpeed(int percent);
+    int[] getBulletSpeed();
+    int getOrientation();
 }

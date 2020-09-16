@@ -1,5 +1,6 @@
 package correcorre;
 
+import android.annotation.SuppressLint;
 import android.view.SurfaceView;
 
 import org.json.JSONException;
@@ -21,7 +22,8 @@ public class Loader extends SurfaceView implements Runnable {
     private static LCanvas canvas;
     private static Scenario scenario;
     private static Background background;
-    private static Penguin penguin;
+    @SuppressLint("StaticFieldLeak")
+    private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
     private boolean loading = false;
     private MainActivity mainActivity;

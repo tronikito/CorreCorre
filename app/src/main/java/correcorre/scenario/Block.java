@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import correcorre.Main;
 import correcorre.R;
 
 public class Block {
@@ -65,15 +64,15 @@ public class Block {
         return drawable;
     }
 
-    public void setDrawable(Drawable d) {
+    public synchronized void setDrawable(Drawable d) {
         this.drawable = d;
     }
 
-    public void moveX(long speed) {
+    public synchronized void moveX(long speed) {
         this.finalSize.left -= speed;
         this.finalSize.right -= speed;
     }
-    public void moveY(long speed) {
+    public synchronized void moveY(long speed) {
         this.finalSize.top -= speed;
         this.finalSize.bottom -= speed;
     }
@@ -128,7 +127,7 @@ public class Block {
         return this.enemyType;
     }
 
-    public void setType(String type, String typeOf) {
+    public synchronized void setType(String type, String typeOf) {
         this.type = type;
 
         if (type.equals("enemy")) {
@@ -145,16 +144,21 @@ public class Block {
         }
     }
 
-    public void setBlockType(String blockType) {
+    public synchronized void setBlockType(String blockType) {
         this.blockType = blockType;
 
         if (blockType.equals("fence")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_fence, null);
         }
         if (blockType.equals("dirt")) {
-            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt1, null);
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
-            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt2, null);
+        }
+        if (blockType.equals("dirtup")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirtup1, null);
+        }
+        if (blockType.equals("stoneup")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stoneup1, null);
         }
         if (blockType.equals("void")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_voidstone1, null);
@@ -166,6 +170,7 @@ public class Block {
         if (blockType.equals("stone")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone1, null);
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone2, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone3, null);
         }
         if (blockType.equals("grass")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass1, null);
@@ -175,13 +180,28 @@ public class Block {
             sprite5 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass6, null);
         }
         if (blockType.equals("red")) {
-            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_red, null);;
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_red, null);
         }
         if (blockType.equals("blue")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_blue, null);
         }
+        if (blockType.equals("sapphire")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_sapphire1, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_sapphire2, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_sapphire3, null);;
+        }
+        if (blockType.equals("gold")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_gold1, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_gold2, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_gold3, null);
+        }
+        if (blockType.equals("redstone")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_redstone1, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_redstone2, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_redstone3, null);
+        }
         if (blockType.equals("empty")) {
-            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);;
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);
         }
     }
 }

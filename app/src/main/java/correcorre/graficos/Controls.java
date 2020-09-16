@@ -14,11 +14,13 @@ public class Controls {
     private int cWidth;
     private int cHeight;
     public Drawable cLeft;
+    public Drawable cShoot;
     public Drawable cRight;
-    public Drawable cRight2;
+    public Drawable cBar1;
     public Rect bLeft;
+    public Rect bShoot;
     public Rect bRight;
-    public Rect bRight2;
+    public Rect bBar1;
     public Rect bJump;
     private Drawable cJump;
     private static Main main;
@@ -40,33 +42,42 @@ public class Controls {
         this.cJump = VectorDrawableCompat.create(main.getResources(), R.drawable.b_empty,null);
         this.cJump.setBounds(cRect);
         this.bJump = cRect;
-        //izquierda
+        //left
         cRect = new Rect();
-        cRect.left = 100;
-        cRect.right = 250; //width 150px;
-        cRect.top = (int) (cHeight/1.5);
-        cRect.bottom = (int) (cHeight/1.5+cHeight/6);//height 400px;
-        this.cLeft = VectorDrawableCompat.create(main.getResources(),R.drawable.b_empty,null);
+        cRect.left = 0;
+        cRect.right = cWidth/2; //width 150px;
+        cRect.top = 0;
+        cRect.bottom = cHeight;//height 400px;
+        this.cLeft = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
         this.cLeft.setBounds(cRect);
         this.bLeft = cRect;
-        //derecha
+        //shoot
         cRect = new Rect();
         cRect.left = 300;
         cRect.right = 450;
         cRect.top = (int) (cHeight/1.5);
         cRect.bottom = (int) (cHeight/1.5+cHeight/6);
-        this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cShoot = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        this.cShoot.setBounds(cRect);
+        this.bShoot = cRect;
+        //right
+        cRect = new Rect();
+        cRect.left = cWidth/2;
+        cRect.right = cWidth;
+        cRect.top = 0;
+        cRect.bottom = cHeight;
+        this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
         this.cRight.setBounds(cRect);
         this.bRight = cRect;
-        //derechaArriba
+        //shootDirection
         cRect = new Rect();
-        cRect.left = 300;
-        cRect.right = 450;
-        cRect.top = (int) (cHeight/1.5) - 200;
-        cRect.bottom = (int) (cHeight/1.5+cHeight/6) - 200;
-        this.cRight2 = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
-        this.cRight2.setBounds(cRect);
-        this.bRight2 = cRect;
+        cRect.left = 0;
+        cRect.right = cWidth;
+        cRect.top = 0;
+        cRect.bottom = cHeight;
+        this.cBar1 = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
+        this.cBar1.setBounds(cRect);
+        this.bBar1 = cRect;
         load = true;
 
     }
@@ -74,7 +85,8 @@ public class Controls {
     public void printControls(Canvas canvas) {
         this.cJump.draw(canvas);
         this.cLeft.draw(canvas);
+        this.cShoot.draw(canvas);
         this.cRight.draw(canvas);
-        this.cRight2.draw(canvas);
+        this.cBar1.draw(canvas);
     }
 }

@@ -73,6 +73,7 @@ public class Scoreboard {
         this.rHeart3.bottom = ma.getSize()*2;
 
         this.life = 12;
+
         //scoreboard
         this.dNum0 = VectorDrawableCompat.create(m.getResources(), R.drawable.n_zero,null);
         this.dNum1 = VectorDrawableCompat.create(m.getResources(), R.drawable.n_one,null);

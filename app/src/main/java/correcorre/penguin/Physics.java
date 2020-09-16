@@ -34,7 +34,7 @@ public abstract class Physics {
     protected int[] speed = new int[] {0,0};
     protected Boolean pressJump = false;
     protected int counterPressed = 0;
-    protected Weapon weapon;
+    protected volatile Weapon weapon;
     protected Boolean rLeft = false;
     protected Boolean rRight = false;
     protected Boolean jumping = false;
@@ -52,7 +52,7 @@ public abstract class Physics {
     private boolean shooting;
     private int shootingCount = 0;
     private int shootingRandomCount = 10;
-    private int orientation = 2;
+    private int orientation = 0;
 
     public Physics(Main m, MatrixX ma, int xPos, int yPos, int w, int h, int s) {
 
@@ -104,7 +104,9 @@ public abstract class Physics {
         pBottom.bottom = pBottom.top + 1;
 
     }
-
+    public void setBulletSpeed(int percent) {
+        if (this.weapon != null) this.weapon.setBulletSpeed(percent);
+    }
     public Rect getHitBox() {
         return this.hitBox;
     }
@@ -157,7 +159,7 @@ public abstract class Physics {
         this.weapon = w;
     }
 
-    public synchronized Weapon getWeapon() {
+    public Weapon getWeapon() {
         return this.weapon;
     }
 
@@ -203,6 +205,7 @@ public abstract class Physics {
     }
     public void setOrientation(int orientation) {
         this.orientation = orientation;
+        if (weapon != null) this.weapon.setOrientation(orientation);
     }
     public int getOrientation() {
         return this.orientation;
@@ -214,30 +217,26 @@ public abstract class Physics {
         }
     }
 
-    public void setDirection() {
+    public void setDirection(String direction) {
         boolean done = false;
-        if (rLeft) {
+
+        //if (!rLeft && !rRight) {
+            //rLeft = true;
+            //rRight = false;
+            //if (this.weapon != null) this.weapon.setDirection("left");
+            //done = true;
+        //}
+        if (direction.equals("left")) {
             rLeft = false;
             rRight = true;
+            if (this.weapon != null) this.weapon.setDirection("right");
             done = true;
-            if (this.weapon != null) {
-                this.weapon.getRect().left = this.weapon.getRect().left - (matrixX.getSize()/3)*2;
-                this.weapon.getRect().right = this.weapon.getRect().right - (matrixX.getSize()/3)*2;
-                this.weapon.setSprite("left");
-            }
-        }
 
-        if (rRight && !done) {
+        }
+        if (direction.equals("right")) {
             rRight = false;
             rLeft = true;
-            if (this.weapon != null) {
-                this.weapon.getRect().left = this.weapon.getRect().left + (matrixX.getSize() / 3) * 2;
-                this.weapon.getRect().right = this.weapon.getRect().right + (matrixX.getSize() / 3) * 2;
-                this.weapon.setSprite("right");
-            }
-        }
-        if (!rLeft && !rRight) {
-            rLeft = true;
+            if (this.weapon != null) this.weapon.setDirection("left");
         }
     }
 
@@ -309,7 +308,8 @@ public abstract class Physics {
                         if (!matrixX.weaponList.get(l).getType().equals(this.weaponType)) {
                             this.setWeapon(matrixX.weaponList.get(l));
 
-                            this.weapon.setPenguin(this.r, this.rLeft, this.rRight);
+                            this.weapon.setPenguin(this.r, this.rLeft, this.rRight, this.orientation);
+                            System.out.println(this.orientation);
                             if (rLeft) {
                                 this.weapon.setSprite("right");
                             }
@@ -334,21 +334,21 @@ public abstract class Physics {
 
         if (shooting && shootingCount > shootingRandomCount) {
             if (this.weapon != null) {
-                //System.out.println(this.weapon.getType());
+
                 if (this.weapon.getWeaponType().equals("chicken")) {//chicken
-                    ChickenBullet bullet = new ChickenBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
+                    ChickenBullet bullet = new ChickenBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.weapon.getOrientation(),this.weapon.getBulletSpeed());
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                     shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 15);//fireRate
                 }
                 if (this.weapon.getWeaponType().equals("ferret")) {//ferret
-                    FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
+                    FerretBullet bullet = new FerretBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.weapon.getOrientation(),this.weapon.getBulletSpeed());
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                     shootingRandomCount = (int) Math.floor(Math.random() * (12 - 7) + 50);//fireRate
                 }
                 if (this.weapon.getWeaponType().equals("unicorn")) {//unicorn
-                    UnicornBullet bullet = new UnicornBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.orientation);
+                    UnicornBullet bullet = new UnicornBullet(main,matrixX,this.r, this.rLeft, this.rRight, this.weapon.getOrientation(),this.weapon.getBulletSpeed());
                     bullet.setPenguin();
                     matrixX.generateBullet(bullet);
                     shootingRandomCount = 1;//fireRate
@@ -440,28 +440,10 @@ public abstract class Physics {
     }
     public synchronized void checkColission() {
 
-        //##############################################################################
         checkWeaponColission();
         checkPhysicColission();
-        //##############################################################################
 
     }
-
-    //############################################################### GRASS Move
-    /*
-      if (Rect.intersects(pBottom.get(x),matrixX.matrix.get(xM).get(yM).getRect())) {
-        if (matrixX.matrix.get(xM).get(yM).getType().equals("grass")) {
-
-            if (x > 0 && rLeft || x < 4 && rRight) {//animation start
-                matrixX.matrix.get(xM).get(yM).setSprite(0);
-            }
-            if (x == 0 && rLeft || x == 4 && rRight) {//animation stop
-                matrixX.matrix.get(xM).get(yM).setSprite(1);
-            }
-        }
-    }
-    */
-    //###############################################################
 
     public void printPenguinGrid(Canvas c) {//debugger
 

@@ -1,5 +1,6 @@
 package correcorre.background;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 
@@ -13,7 +14,8 @@ public class Background {
 
     private ArrayList<BackgroundObject> background = new ArrayList<BackgroundObject>();
     private static MatrixX matrix;
-    private static Penguin penguin;
+    @SuppressLint("StaticFieldLeak")
+    private volatile static Penguin penguin;
     private static Main main;
 
     public Background(Context c,Main m, MatrixX ma) {
