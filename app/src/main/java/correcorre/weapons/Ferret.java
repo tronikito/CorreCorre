@@ -71,7 +71,7 @@ public class Ferret implements Weapon {
     public int[] getBulletSpeed() { return this.speedBullet; }
     public int getOrientation() { return this.orientation; }
 
-    public void setSprite(String direction) {// THIS NEED A BIG FIX
+    public synchronized void setSprite(String direction) {// THIS NEED A BIG FIX
         if (direction.equals("left")) {
             this.rLeft = false;
             this.rRight = true;

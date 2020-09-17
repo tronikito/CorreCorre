@@ -53,6 +53,7 @@ public abstract class Physics {
     private int shootingCount = 0;
     private int shootingRandomCount = 10;
     private int orientation = 0;
+    protected Boolean immunity = false;
 
     public Physics(Main m, MatrixX ma, int xPos, int yPos, int w, int h, int s) {
 
@@ -217,26 +218,24 @@ public abstract class Physics {
         }
     }
 
-    public void setDirection(String direction) {
-        boolean done = false;
+    public synchronized Boolean getImmunity() { return this.immunity; }
 
-        //if (!rLeft && !rRight) {
-            //rLeft = true;
-            //rRight = false;
-            //if (this.weapon != null) this.weapon.setDirection("left");
-            //done = true;
-        //}
+    public void setDirection(String direction) {
+
         if (direction.equals("left")) {
             rLeft = false;
             rRight = true;
-            if (this.weapon != null) this.weapon.setDirection("right");
-            done = true;
+            if (!getImmunity()) {
+                if (this.weapon != null) this.weapon.setDirection("right");
+            }
 
         }
         if (direction.equals("right")) {
             rRight = false;
             rLeft = true;
-            if (this.weapon != null) this.weapon.setDirection("left");
+            if (!getImmunity()) {
+                if (this.weapon != null) this.weapon.setDirection("left");
+            }
         }
     }
 

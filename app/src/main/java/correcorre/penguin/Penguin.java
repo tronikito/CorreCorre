@@ -41,7 +41,7 @@ public class Penguin extends Physics {
 
     private int speedCount = 0;
     private int actualPos;
-    private Boolean immunity = false;
+
     private int immunityCount = 0;
     private boolean immunitySpriteShow = false;
     private int sparkCount = 0;
@@ -91,17 +91,16 @@ public class Penguin extends Physics {
             sparkCount = 0;
             immunitySpriteShow = false;
             immunityCount = 0;
-            if (weapon != null) {
-                if (rRight) this.weapon.setSprite("left");
-                if (rLeft) this.weapon.setSprite("right");
-            }
+            //if (weapon != null) {
+                //if (rRight) this.weapon.setSprite("left");
+                //if (rLeft) this.weapon.setSprite("right");
+            //}
         }
 
         if (immunity) immunityCount++;
         if (immunity && immunityCount > 7) {//random counter spark
             immunityCount = 0;
-            if (immunitySpriteShow) immunitySpriteShow = false;
-            else immunitySpriteShow = true;
+            immunitySpriteShow = !immunitySpriteShow;
         }
         if (immunity && !immunitySpriteShow) {
             sparkCount++;
@@ -115,7 +114,7 @@ public class Penguin extends Physics {
 
             //weapon sprite
 
-            if (immunity && immunitySpriteShow && weapon != null) {
+            if (immunity && weapon != null) {
                 if (rRight) {
                     this.weapon.setSprite("left");
                 }
@@ -278,7 +277,7 @@ public class Penguin extends Physics {
         }
     }
 
-    public synchronized Boolean getImmunity() { return this.immunity; }
+
     public synchronized  void setImmunity(Boolean i) { this.immunity = i; }
 
 }

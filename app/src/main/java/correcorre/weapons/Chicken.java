@@ -74,7 +74,7 @@ public class Chicken implements Weapon {
     public int getOrientation() { return this.orientation; }
     public int[] getBulletSpeed() { return this.speedBullet; }
 
-    public void setSprite(String direction) {// THIS NEED A BIG FIX
+    public synchronized void setSprite(String direction) {// THIS NEED A BIG FIX
         if (direction.equals("left")) {
             this.rLeft = false;
             this.rRight = true;
