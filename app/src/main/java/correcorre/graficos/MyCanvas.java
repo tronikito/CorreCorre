@@ -15,6 +15,7 @@ import correcorre.R;
 import correcorre.background.Background;
 import correcorre.penguin.Penguin;
 
+@SuppressLint("ViewConstructor")
 public class MyCanvas extends View {
 
     private PointF point1;
@@ -77,6 +78,7 @@ public class MyCanvas extends View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public synchronized boolean onTouchEvent(@NonNull MotionEvent event) {
 
@@ -178,7 +180,7 @@ public class MyCanvas extends View {
         }
     }
 }
-/** SVG *****************************************************************************************
+/* SVG *****************************************************************************************
 
         public void vectorial(Canvas canvas,int xSprite,int ySprite, int wSprite,int hSprite,int sprite) {
         int width = xSprite + wSprite;
@@ -189,7 +191,7 @@ public class MyCanvas extends View {
         drawable.draw(canvas);
     }*/
 
-/** PNG *****************************************************************************************
+/* PNG *****************************************************************************************
 
     public void drawPenguin(Bitmap penguin, Canvas canvas) {//cambiar sprite
         int f = 5;//factor size
@@ -209,7 +211,7 @@ public class MyCanvas extends View {
         //System.out.println(penguin);
     }*/
 
-/** PNG *****************************************************************************************
+/* PNG *****************************************************************************************
 
     public void importar(Canvas canvas) {//importar PNG
         AssetManager manager = getContext().getAssets();

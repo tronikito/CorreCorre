@@ -7,7 +7,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import correcorre.Main;
 import correcorre.R;
-import correcorre.graficos.LCanvas;
 
 public class Controls {
 
@@ -37,9 +36,10 @@ public class Controls {
         Rect cRect = new Rect();
         cRect.left = cWidth-500;
         cRect.right = cWidth-50; //width 150px;
-        cRect.top = (int) cHeight/2+50;
+        cRect.top = cHeight /2+50;
         cRect.bottom = cHeight-50;//height 400px;
         this.cJump = VectorDrawableCompat.create(main.getResources(), R.drawable.b_empty,null);
+        assert this.cJump != null;
         this.cJump.setBounds(cRect);
         this.bJump = cRect;
         //left
@@ -49,6 +49,7 @@ public class Controls {
         cRect.top = 0;
         cRect.bottom = cHeight;//height 400px;
         this.cLeft = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
+        assert this.cLeft != null;
         this.cLeft.setBounds(cRect);
         this.bLeft = cRect;
         //shoot
@@ -58,6 +59,7 @@ public class Controls {
         cRect.top = (int) (cHeight/1.5);
         cRect.bottom = (int) (cHeight/1.5+cHeight/6);
         this.cShoot = VectorDrawableCompat.create(main.getResources(),R.drawable.ic_007,null);
+        assert this.cShoot != null;
         this.cShoot.setBounds(cRect);
         this.bShoot = cRect;
         //right
@@ -67,6 +69,7 @@ public class Controls {
         cRect.top = 0;
         cRect.bottom = cHeight;
         this.cRight = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
+        assert this.cRight != null;
         this.cRight.setBounds(cRect);
         this.bRight = cRect;
         //shootDirection
@@ -76,6 +79,7 @@ public class Controls {
         cRect.top = 0;
         cRect.bottom = cHeight;
         this.cBar1 = VectorDrawableCompat.create(main.getResources(),R.drawable.c_empty,null);
+        assert this.cBar1 != null;
         this.cBar1.setBounds(cRect);
         this.bBar1 = cRect;
         load = true;

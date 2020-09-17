@@ -29,8 +29,6 @@ public class UnicornBullet implements Bullet {
     private boolean enemy = false;
     private Drawable d;
     private Rect r = new Rect();
-    private int width;
-    private int height;
     protected int[] speed = new int[] {0,0};
     protected int[] actualSpeed = new int[] {0,0};
     private static MatrixX matrixX;
@@ -43,8 +41,8 @@ public class UnicornBullet implements Bullet {
 
         matrixX = ma;
 
-        this.width = ma.getSize();
-        this.height = ma.getSize()/2;
+        int width = ma.getSize();
+        int height = ma.getSize() / 2;
 
         this.pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow1,null);
         this.pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.b_rainbow2,null);
@@ -98,7 +96,7 @@ public class UnicornBullet implements Bullet {
             this.r.right = pen.left;
             this.r.left = this.r.right - width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
-            this.r.bottom = this.r.top + this.height;
+            this.r.bottom = this.r.top + height;
             this.speed[0] = speed[0];
             //if (orientation == 1) {
                 this.speed[1] = speed[1];
@@ -108,7 +106,7 @@ public class UnicornBullet implements Bullet {
             this.r.left = pen.right;
             this.r.right = this.r.left + width;
             this.r.top = pen.top + ma.getSize() + ma.getSize()/3;
-            this.r.bottom = this.r.top + this.height;
+            this.r.bottom = this.r.top + height;
             this.speed[0] = speed[0]*-1;
             //if (orientation == 1) {
                 this.speed[1] = speed[1];

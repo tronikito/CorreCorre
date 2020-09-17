@@ -29,7 +29,7 @@ public class Explosion {
         this.r.bottom = enemy.bottom;
         this.r.left = enemy.left;
         this.r.right = enemy.right;
-        this.ma = ma;
+        Explosion.ma = ma;
 
         this.pos1 = VectorDrawableCompat.create(m.getResources(), R.drawable.explosion1,null);
         this.pos2 = VectorDrawableCompat.create(m.getResources(), R.drawable.explosion2,null);

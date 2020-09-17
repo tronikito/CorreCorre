@@ -47,7 +47,6 @@ public class MatrixX {
     private int relativeOffsetX = 0;
     private int relativeOffsetY = 0;//-5
     private static Main main;
-    private static Scenario scenario;
     private static MyCanvas myCanvas;
     @SuppressLint("StaticFieldLeak")
     private volatile static Penguin penguin;
@@ -62,9 +61,8 @@ public class MatrixX {
 
         this.context = context;
         main = m;
-        scenario = s;
-        this.matrixScenario = scenario.scenario;
-        this.scenarioStart = scenario.start;
+        this.matrixScenario = s.scenario;
+        this.scenarioStart = s.start;
 
         this.cW = c.width;
         this.cH = c.height;
@@ -107,7 +105,7 @@ public class MatrixX {
 
     public synchronized void generateNewMatrix() {
 
-        this.matrix = new ArrayList<ArrayList<Block>>();
+        this.matrix = new ArrayList<>();
         ArrayList<Block> column;
 
         for (int x = 0; x < blocksWidth; x++) {
@@ -413,7 +411,7 @@ public class MatrixX {
                 foundL = x;
                 lower = b.getRect().left;
             }
-            if (b.getRect().left < 0 - this.offsetX2) {
+            if (b.getRect().left < -this.offsetX2) {
                 left = true;
             }
         }
@@ -424,7 +422,7 @@ public class MatrixX {
                 foundT = y;
                 lower = b.getRect().top;
             }
-            if(b.getRect().top < (0 - this.offsetY2)) {
+            if(b.getRect().top < (-this.offsetY2)) {
                 top = true;
             }
         }

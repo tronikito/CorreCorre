@@ -150,8 +150,8 @@ public class Main extends SurfaceView implements Runnable {
                 penguinY = false;
             }
 
-            penguin.checkColission();
-            penguin.calcAceleration();
+            penguin.checkCollision();
+            penguin.calcAcceleration();
             penguin.movePenguinSprite(speed);
             penguin.movePenguinPos(speed);
             penguin.shooting();

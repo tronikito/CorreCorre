@@ -1,7 +1,6 @@
 package correcorre.penguin;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorre.Main;
@@ -9,8 +8,6 @@ import correcorre.R;
 import correcorre.graficos.MatrixX;
 
 public class Penguin extends Physics {
-
-    private Context c;
 
     private Drawable empty;
     private Drawable lPos0;
@@ -50,8 +47,8 @@ public class Penguin extends Physics {
 
         super(m,ma,x,y,w,h,s);
 
-        this.c = m.getContext();
-        this.main = m;
+        Context c = m.getContext();
+        main = m;
 
         empty = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty,null);
         lPos0 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin0,null);
@@ -91,10 +88,10 @@ public class Penguin extends Physics {
             sparkCount = 0;
             immunitySpriteShow = false;
             immunityCount = 0;
-            //if (weapon != null) {
-                //if (rRight) this.weapon.setSprite("left");
-                //if (rLeft) this.weapon.setSprite("right");
-            //}
+            if (weapon != null) {
+                if (rRight) this.weapon.setSprite("left");
+                if (rLeft) this.weapon.setSprite("right");
+            }
         }
 
         if (immunity) immunityCount++;
@@ -172,7 +169,7 @@ public class Penguin extends Physics {
                     }
                 }
             }
-            if (rLeft && paddingSpeedAplication) {
+            if (rLeft && paddingSpeedApplication) {
 
                 if (weapon != null) {
                     this.weapon.setSprite("right");
@@ -181,7 +178,7 @@ public class Penguin extends Physics {
                     this.d = lPos0;
                 }
             }
-            if (rRight && paddingSpeedAplication) {
+            if (rRight && paddingSpeedApplication) {
 
                 if (weapon != null) {
                     this.weapon.setSprite("left");

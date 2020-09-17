@@ -121,7 +121,7 @@ public class Block {
     public String getType() {
         return this.type;
     }
-    public String getBlockType() { return this.blockType; }
+    //public String getBlockType() { return this.blockType; }
     public String getWeaponType() { return this.weaponType; }
     public String getEnemyType() {
         return this.enemyType;
@@ -203,5 +203,6 @@ public class Block {
         if (blockType.equals("empty")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_empty, null);
         }
+        this.drawable = sprite1;
     }
 }

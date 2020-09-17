@@ -8,10 +8,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorre.Main;
 import correcorre.R;
 import correcorre.graficos.MatrixX;
-import correcorre.weapons.Bullet;
 import correcorre.weapons.FerretBullet;
 import correcorre.weapons.ChickenBullet;
-import correcorre.weapons.Unicorn;
 import correcorre.weapons.UnicornBullet;
 import correcorre.weapons.Weapon;
 
@@ -43,10 +41,10 @@ public abstract class Physics {
     public int paddingSpeed;
     protected int paddingSpeedXRight;
     protected int paddingSpeedXLeft;
-    protected Boolean paddingSpeedAplication = false;
-    protected Boolean paddingSpeedXRightAplication = false;
-    protected Boolean paddingSpeedXLeftAplication = false;
-    protected Boolean paddingSpeedAplicationTop = false;
+    protected Boolean paddingSpeedApplication = false;
+    protected Boolean paddingSpeedXRightApplication = false;
+    protected Boolean paddingSpeedXLeftApplication = false;
+    protected Boolean paddingSpeedApplicationTop = false;
     protected boolean foundX = false;
     private String weaponType;
     private boolean shooting;
@@ -108,9 +106,9 @@ public abstract class Physics {
     public void setBulletSpeed(int percent) {
         if (this.weapon != null) this.weapon.setBulletSpeed(percent);
     }
-    public Rect getHitBox() {
+    /*public Rect getHitBox() {
         return this.hitBox;
-    }
+    }*/
 
     public boolean getrLeft() {
         return rLeft;
@@ -136,9 +134,9 @@ public abstract class Physics {
     public boolean getGravity() {
         return this.gravityAceleration;
     }
-    public boolean paddingSpeedAplication() {
+    /*public boolean paddingSpeedAplication() {
         return paddingSpeedAplication;
-    }
+    }*/
 
     public synchronized void movePenguinPos(int[] speed) {
 
@@ -204,15 +202,15 @@ public abstract class Physics {
     public void setPressJump(boolean j) {
         this.pressJump = j;
     }
-    public void setOrientation(int orientation) {
+    /*public void setOrientation(int orientation) {
         this.orientation = orientation;
         if (weapon != null) this.weapon.setOrientation(orientation);
     }
     public int getOrientation() {
         return this.orientation;
-    }
+    }*/
     public void jump() {
-        if (!jumping && !paddingSpeedAplication) {
+        if (!jumping && !paddingSpeedApplication) {
             this.speed[1] = -500;
             jumping = true;
         }
@@ -243,10 +241,10 @@ public abstract class Physics {
         return this.speed;
     }
 
-    public synchronized void calcAceleration() {//aceleration penguin
+    public synchronized void calcAcceleration() {//aceleration penguin
 
 
-        if (paddingSpeedAplication && !gravityAceleration) {
+        if (paddingSpeedApplication && !gravityAceleration) {
             int[] fixMatrix = new int[]{0, paddingSpeed};
             movePenguinPos(fixMatrix);
             matrixX.moveMatrix(fixMatrix);
@@ -254,7 +252,7 @@ public abstract class Physics {
         }
 
 
-        if (paddingSpeedXLeftAplication) {
+        if (paddingSpeedXLeftApplication) {
             int[] fixMatrix = new int[]{paddingSpeedXLeft*-1, 0};
             movePenguinPos(fixMatrix);
             matrixX.moveMatrix(fixMatrix);
@@ -262,7 +260,7 @@ public abstract class Physics {
             paddingSpeed = 0;
         }
 
-        if (paddingSpeedXRightAplication) {
+        if (paddingSpeedXRightApplication) {
             int[] fixMatrix = new int[]{paddingSpeedXRight, 0};
             movePenguinPos(fixMatrix);
             matrixX.moveMatrix(fixMatrix);
@@ -270,14 +268,14 @@ public abstract class Physics {
             paddingSpeed = 0;
         }
 
-        if (paddingSpeedAplicationTop) {
+        if (paddingSpeedApplicationTop) {
             int[] fixMatrix = new int[]{0, paddingSpeed * -1};
             movePenguinPos(fixMatrix);
             matrixX.moveMatrix(fixMatrix);
             paddingSpeed = 0;
         }
 
-        if (gravityAceleration && !paddingSpeedAplication) {
+        if (gravityAceleration && !paddingSpeedApplication) {
             if (!this.pressJump && speed[1] < 1000) {
                 speed[1] += 35;
             } else {
@@ -298,7 +296,7 @@ public abstract class Physics {
         }
     }
 
-    public synchronized void checkWeaponColission() {//use PenguinSprite Rect
+    public synchronized void checkWeaponCollision() {//use PenguinSprite Rect
 
         if (matrixX.weaponList != null) {
             for (int l = 0; l < matrixX.weaponList.size(); l++) {
@@ -361,7 +359,7 @@ public abstract class Physics {
         this.shooting = shoot;
     }
 
-    public synchronized void checkPhysicColission() {
+    public synchronized void checkPhysicCollision() {
 
         boolean foundX = false;
         boolean found = false;
@@ -376,10 +374,10 @@ public abstract class Physics {
                         if (pLeft.left - matrixX.matrix.get(xM).get(yM).getRect().right < -1) {
                             paddingSpeedXLeft = pLeft.left + 1 - matrixX.matrix.get(xM).get(yM).getRect().right;
                             speed[0] = 0;
-                            paddingSpeedXLeftAplication = true;
+                            paddingSpeedXLeftApplication = true;
 
                         } else {
-                            paddingSpeedXLeftAplication = false;
+                            paddingSpeedXLeftApplication = false;
                         }
                     }
                     if (Rect.intersects(pRight, matrixX.matrix.get(xM).get(yM).getRect())) {
@@ -389,10 +387,10 @@ public abstract class Physics {
                         if (matrixX.matrix.get(xM).get(yM).getRect().left - pRight.right < -1) {
                             paddingSpeedXRight = matrixX.matrix.get(xM).get(yM).getRect().left - pRight.right + 1;
                             speed[0] = 0;
-                            paddingSpeedXRightAplication = true;
+                            paddingSpeedXRightApplication = true;
 
                         } else {
-                            paddingSpeedXRightAplication = false;
+                            paddingSpeedXRightApplication = false;
                         }
                     }
                     if (Rect.intersects(pTop, matrixX.matrix.get(xM).get(yM).getRect())) {
@@ -402,7 +400,7 @@ public abstract class Physics {
                         if (pTop.top + 1 - matrixX.matrix.get(xM).get(yM).getRect().bottom < -1) {
                             paddingSpeed = pTop.top + 1 - matrixX.matrix.get(xM).get(yM).getRect().bottom;
                             speed[1] = 0;
-                            paddingSpeedAplicationTop = true;
+                            paddingSpeedApplicationTop = true;
                         }
                     }
 
@@ -417,10 +415,10 @@ public abstract class Physics {
                             speed[1] = 0;
                             jumping = false;
                             counterPressed = 0;
-                            paddingSpeedAplication = true;
+                            paddingSpeedApplication = true;
 
                         } else {
-                            paddingSpeedAplication = false;
+                            paddingSpeedApplication = false;
                         }
                     }
                 }
@@ -429,22 +427,22 @@ public abstract class Physics {
 
         if (!found) {
             gravityAceleration = true;
-            paddingSpeedAplication = false;
-            paddingSpeedAplicationTop = false;
+            paddingSpeedApplication = false;
+            paddingSpeedApplicationTop = false;
         }
         if (!foundX) {
-            paddingSpeedXLeftAplication = false;
-            paddingSpeedXRightAplication = false;
+            paddingSpeedXLeftApplication = false;
+            paddingSpeedXRightApplication = false;
         }
     }
-    public synchronized void checkColission() {
+    public synchronized void checkCollision() {
 
-        checkWeaponColission();
-        checkPhysicColission();
+        checkWeaponCollision();
+        checkPhysicCollision();
 
     }
 
-    public void printPenguinGrid(Canvas c) {//debugger
+    /*public void printPenguinGrid(Canvas c) {//debugger
 
             this.d.setBounds(pLeft);
             this.d.draw(c);
@@ -461,5 +459,5 @@ public abstract class Physics {
             this.d.setBounds(hitBox);
             this.d.draw(c);
 
-    }
+    }*/
 }
