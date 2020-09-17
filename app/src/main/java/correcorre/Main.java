@@ -156,11 +156,14 @@ public class Main extends SurfaceView implements Runnable {
             penguin.movePenguinPos(speed);
             penguin.shooting();
 
+            penguin.sendDR();//Calls for Drawable/Rectangle of penguin to send to matrixX
+
             matrixX.calcBulletMove();
             matrixX.calcEnemyMove();
             matrixX.calcExplosionSprite();
 
             matrixX.moveMatrix(speed);
+
 
             background.moveBackground(speed);
             myCanvas.checkControls();

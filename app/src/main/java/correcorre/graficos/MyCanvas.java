@@ -63,13 +63,9 @@ public class MyCanvas extends View {
     protected synchronized void onDraw(Canvas c) {
 
         background.printBackground(c);
-        matrixX.printMatrixBack(c);
-        penguin.printPenguin(c);
-        matrixX.printWeapons(c);
-        matrixX.printEnemys(c);
-        matrixX.printBullets(c);
-        matrixX.printMatrixFront(c);
-        matrixX.printExplosions(c);
+
+        matrixX.printThings(c);
+
         controls.printControls(c);
         scoreboard.printScoreBoard(c);
 

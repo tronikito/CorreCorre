@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 import correcorre.Main;
@@ -54,6 +55,8 @@ public class MatrixX {
     private Context context;
     private int[] scenarioStart;//debe ser el offset
     private int tempo;
+    private Rect penR = new Rect();
+    private Drawable penD;
 
     public MatrixX(Context context, LCanvas c, Main m, Scenario s) {
 
@@ -218,6 +221,32 @@ public class MatrixX {
             Plant plant = new Plant(main, this, old.getRect().top - (this.size), old.getRect().left - (this.size / 2 + this.size), this.size * 2, this.size*3);
             this.enemyList.add(plant);
         }
+    }
+
+    public synchronized void setPenguinDR(Drawable d, Rect r) {
+        this.penD = d;
+        this.penR = r;
+    }
+
+    public synchronized void printPenguin(Canvas c) {//print penguin here to synchronize correctly
+        if (this.penD != null && this.penR != null) {
+            this.penD.setBounds(this.penR);
+            this.penD.draw(c);
+        }
+    }
+
+    public synchronized void printThings(Canvas c) {
+        printMatrixBack(c);
+
+        //to print penguin, have to get the drawable and rectangle before from penguin to matrixX,
+        //MAIN give order to save in matrixX before to calls for invalidate Canvas
+        printPenguin(c);
+
+        printWeapons(c);
+        printEnemys(c);
+        printBullets(c);
+        printMatrixFront(c);
+        printExplosions(c);
     }
 
     public synchronized boolean getPenguinImmunity() { return penguin.getImmunity(); }

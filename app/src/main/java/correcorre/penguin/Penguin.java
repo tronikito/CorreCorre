@@ -1,7 +1,7 @@
 package correcorre.penguin;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorre.Main;
@@ -63,7 +63,7 @@ public class Penguin extends Physics {
         lPos2 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin2,null);
         lPos2weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin2weapon,null);
         lPos3 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin3,null);
-        //lPos3weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin3weapon,null);
+
         lPos4 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin4,null);
         lPos4weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin4weapon,null);
         lPos5 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_lpenguin5,null);
@@ -73,7 +73,7 @@ public class Penguin extends Physics {
         rPos2 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin2,null);
         rPos2weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin2weapon,null);
         rPos3 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin3,null);
-        //rPos3weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin3weapon,null);
+
         rPos4 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin4,null);
         rPos4weapon = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin4weapon,null);
         rPos5 = VectorDrawableCompat.create(c.getResources(), R.drawable.p_rpenguin5,null);
@@ -82,10 +82,7 @@ public class Penguin extends Physics {
 
     }
 
-    public synchronized Drawable getDrawable() {
-        this.d.setBounds(this.r);
-        return this.d;
-    }
+    public synchronized void sendDR() { matrixX.setPenguinDR(this.d,this.r); }
 
     public synchronized void movePenguinSprite(int[] speed) {//recibe real fps
 
@@ -283,9 +280,5 @@ public class Penguin extends Physics {
 
     public synchronized Boolean getImmunity() { return this.immunity; }
     public synchronized  void setImmunity(Boolean i) { this.immunity = i; }
-
-    public synchronized void printPenguin(Canvas c) {
-        this.getDrawable().draw(c);
-    }
 
 }
