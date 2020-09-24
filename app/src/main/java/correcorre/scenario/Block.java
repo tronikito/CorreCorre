@@ -172,6 +172,18 @@ public class Block {
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone2, null);
             sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone3, null);
         }
+        if (blockType.equals("stoneAngle")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone4, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone5, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone6, null);
+            sprite4 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_stone7, null);
+        }
+        if (blockType.equals("dirtAngle")) {
+            sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt4, null);
+            sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt5, null);
+            sprite3 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt6, null);
+            sprite4 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_dirt7, null);
+        }
         if (blockType.equals("grass")) {
             sprite1 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass1, null);
             sprite2 = VectorDrawableCompat.create(c.getResources(), R.drawable.c_newgrass2, null);
