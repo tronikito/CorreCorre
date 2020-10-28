@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import correcorre.Main;
 import correcorre.R;
 import correcorre.background.Background;
+import correcorre.background.Frontground;
 import correcorre.penguin.Penguin;
 
 @SuppressLint("ViewConstructor")
@@ -24,6 +25,7 @@ public class MyCanvas extends View {
     private static MatrixX matrixX;
     private static Controls controls;
     private static Background background;
+    private static Frontground frontground;
     @SuppressLint("StaticFieldLeak")
     private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
@@ -40,12 +42,13 @@ public class MyCanvas extends View {
     boolean rtouch1bShoot = false;
     private boolean rtouch2bShoot = false;
 
-    public MyCanvas(Main m, MatrixX ma, Controls con, Background b, Penguin p, Scoreboard s) {
+    public MyCanvas(Main m, MatrixX ma, Controls con, Background b, Frontground f, Penguin p, Scoreboard s) {
         super(m.getContext());
 
         matrixX = ma;
         controls = con;
         background = b;
+        frontground = f;
         penguin = p;
         scoreboard = s;
 
@@ -67,8 +70,12 @@ public class MyCanvas extends View {
 
         matrixX.printThings(c);
 
+        frontground.printBackground(c);
+
         controls.printControls(c);
         scoreboard.printScoreBoard(c);
+
+
 
         if (point1 != null) {
             c.drawCircle(point1.x, point1.y, 25, paint);

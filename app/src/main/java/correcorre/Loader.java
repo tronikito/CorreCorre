@@ -6,6 +6,7 @@ import android.view.SurfaceView;
 import org.json.JSONException;
 
 import correcorre.background.Background;
+import correcorre.background.Frontground;
 import correcorre.graficos.Controls;
 import correcorre.graficos.LCanvas;
 import correcorre.graficos.MatrixX;
@@ -22,6 +23,7 @@ public class Loader extends SurfaceView implements Runnable {
     private static LCanvas canvas;
     private static Scenario scenario;
     private static Background background;
+    private static Frontground frontground;
     @SuppressLint("StaticFieldLeak")
     private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
@@ -85,6 +87,7 @@ public class Loader extends SurfaceView implements Runnable {
             matrixX = new MatrixX(this.getContext(),canvas, main, scenario);
             matrixX.generateNewMatrix();
             background = new Background(getContext(),main,matrixX);
+            frontground = new Frontground(getContext(),main,matrixX);
 
             if (matrixX.generateMatrix &&
                     controls.load &&
@@ -96,6 +99,7 @@ public class Loader extends SurfaceView implements Runnable {
                 scoreboard = new Scoreboard(main,matrixX);
 
                 background.setPenguin(penguin);
+                frontground.setPenguin(penguin);
                 matrixX.setPenguin(penguin);
                 matrixX.setScoreboard(scoreboard);
 
@@ -103,6 +107,7 @@ public class Loader extends SurfaceView implements Runnable {
                 main.setMatrixX(matrixX);
                 main.setScenario(scenario);
                 main.setBackground(background);
+                main.setFrontground(frontground);
                 main.setPenguin(penguin);
                 main.setScoreboard(scoreboard);
 

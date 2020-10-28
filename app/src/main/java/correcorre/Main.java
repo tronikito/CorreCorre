@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
 import correcorre.background.Background;
+import correcorre.background.Frontground;
 import correcorre.graficos.Controls;
 import correcorre.graficos.MatrixX;
 import correcorre.graficos.MyCanvas;
@@ -26,6 +27,7 @@ public class Main extends SurfaceView implements Runnable {
     private static Scenario scenario = null;
     private static Main main;
     private static Background background;
+    public static Frontground frontground;
     @SuppressLint("StaticFieldLeak")
     private volatile static Penguin penguin;
     private static Scoreboard scoreboard;
@@ -164,8 +166,8 @@ public class Main extends SurfaceView implements Runnable {
 
             matrixX.moveMatrix(speed);
 
-
             background.moveBackground(speed);
+            //frontground.moveBackground(speed); //call from matrixX
             myCanvas.checkControls();
 
         }
@@ -175,7 +177,7 @@ public class Main extends SurfaceView implements Runnable {
 
     public void iniciar(MainActivity mainActivity) {
         working = true;
-        myCanvas = new MyCanvas(main, matrixX, controls, background, penguin, scoreboard);
+        myCanvas = new MyCanvas(main, matrixX, controls, background, frontground , penguin, scoreboard);
         Handler mainThread = new Handler(Looper.getMainLooper());
         mainThread.post(new setView(main, mainActivity, myCanvas) {
         });
@@ -202,6 +204,7 @@ public class Main extends SurfaceView implements Runnable {
     }
     public void setScenario(Scenario s) { scenario = s; };
     public void setBackground(Background b) { background = b; }
+    public void setFrontground(Frontground f) { frontground = f; }
     public void setPenguin(Penguin p) { penguin = p; }
     public Penguin getPenguin() {
         return penguin;

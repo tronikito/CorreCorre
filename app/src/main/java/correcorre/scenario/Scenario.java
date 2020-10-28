@@ -16,7 +16,7 @@ public class Scenario {
     private static Main main;
     private String path;
     public volatile ArrayList<ArrayList<ArrayList>> scenario = new ArrayList<>();
-    public volatile int[] start = {0,0};
+    public volatile int[] start = {-15,-15};//nofuca
 
     public Scenario(Main m,String path) {
         this.path = path;

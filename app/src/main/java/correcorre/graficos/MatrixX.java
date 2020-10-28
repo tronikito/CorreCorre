@@ -44,8 +44,8 @@ public class MatrixX {
     final private int offsetnH;
     final private int offsetY;
     final private int offsetY2;
-    private int relativeOffsetX = 0;
-    private int relativeOffsetY = 0;//-5
+    private int relativeOffsetX = -5;
+    private int relativeOffsetY = -10;//-5
     private static Main main;
     private static MyCanvas myCanvas;
     @SuppressLint("StaticFieldLeak")
@@ -141,13 +141,13 @@ public class MatrixX {
                 int sprite = (int) this.matrixScenario.get(x).get(y).get(5);
                 String blockType = (String) this.matrixScenario.get(x).get(y).get(6);
 
+                old.setSprite(sprite);
+                old.setSolid(solid);
+                old.setPosition(position);
+
                 if (enemyType != null) old.setType(type,enemyType);
                 if (weaponType != null) old.setType(type,weaponType);
                 if (blockType != null) old.setType(type,blockType);
-                old.setPosition(position);
-                old.setSolid(solid);
-                old.setSprite(sprite);
-
 
                 if (type.equals("enemy")) {
 
@@ -173,10 +173,12 @@ public class MatrixX {
             }
         }
         if (!newType) {
-            old.setType("block","dirt");//if null block
-            old.setSprite(1);
+
+            old.setSprite(5);
             old.setSolid(0);
             old.setPosition(0);
+
+            old.setType("block","dirt");//if null block
         }
     }
 
@@ -341,6 +343,7 @@ public class MatrixX {
                     }
                 }
             }
+            main.frontground.moveBackground(speed);
             //move enemY
             if (this.enemyList != null) {
                 for (int x = 0; x < this.enemyList.size(); x++) {
@@ -551,7 +554,9 @@ public class MatrixX {
                         if (b.getSprite() == 0) {
                             b.animatedSprite(tempo);
                         }
-                        b.getDrawable().draw(canvas);
+                        if (b.getDrawable() != null) {
+                            b.getDrawable().draw(canvas);
+                        }
                     }
                 }
             }
@@ -566,7 +571,9 @@ public class MatrixX {
                         if (b.getSprite() == 0) {
                             b.animatedSprite(tempo);
                         }
-                        b.getDrawable().draw(canvas);
+                        if (b.getDrawable() != null) {
+                            b.getDrawable().draw(canvas);
+                        }
                     }
                 }
             }
