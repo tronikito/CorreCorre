@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             myCanvas = new MyCanvas();
             background = new Background();
             frontground = new Frontground();
-            scoreboard = new Scoreboard();
             matrixX = new MatrixX();
+            scoreboard = new Scoreboard();
             penguin = new Penguin();
 
         }
