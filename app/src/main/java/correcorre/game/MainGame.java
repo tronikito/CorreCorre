@@ -61,7 +61,7 @@ public class MainGame implements Runnable {
                     actualFpsRefX = 1;
                     actualFpsRefY = 1;
 
-                    scoreboard.scoreFps(fps); //usar scoreboard fpsMonitor
+                    //scoreboard.scoreFps(fps); //usar scoreboard fpsMonitor
                     fps = 0;
                     refFpsCount = System.nanoTime();
                 }
