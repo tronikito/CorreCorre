@@ -1,23 +1,26 @@
 package correcorre;
 
-import android.view.SurfaceView;
+import correcorre.R;
 
-import correcorre.graficos.LCanvas;
-import correcorre.graficos.MyCanvas;
+import static correcorre.ResourcesClass.*;
 
-public class setView implements Runnable {
+public class SetView implements Runnable {
+    private int option;
 
-    private MainActivity ma;
-    private Main m;
-    private MyCanvas c;
-
-    public setView(Main m, MainActivity ma, MyCanvas c) {
-        this.m = m;
-        this.ma = ma;
-        this.c = c;
+    public SetView(int option) {
+        this.option = option;
     }
 
     public void run() {
-        ma.setView(this.c);
+        /*
+        if (option == 0) {
+            mactivity.setView(0);
+        }
+        if (option == 1) {
+            mactivity.setView(1);
+        }*/
+        if (option == 0) mactivity.setContentView(myCanvas);
+        if (option == 1) mactivity.setContentView(R.layout.activity_main);
+        if (option == 2) mactivity.setContentView(mapCanvas);
     }
 }

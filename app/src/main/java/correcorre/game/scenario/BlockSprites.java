@@ -1,0 +1,148 @@
+package correcorre.game.scenario;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
+import correcorre.R;
+
+import static correcorre.ResourcesClass.*;
+
+public class BlockSprites {
+
+    protected static Drawable sprite1;
+    protected static Drawable sprite2;
+    protected static Drawable sprite3;
+    protected static Drawable sprite4;
+    protected static Drawable sprite5;
+    protected static Drawable sprite6;
+    protected static Drawable sprite7;
+    protected static Drawable sprite8;
+    protected static Drawable sprite9;
+    protected static Drawable sprite10;
+    protected static Drawable sprite11;
+    protected static Drawable sprite12;
+    protected static Drawable sprite13;
+    protected static Drawable sprite14;
+    protected static Drawable sprite15;
+    protected static Drawable sprite16;
+    protected static Drawable sprite17;
+    protected static Drawable sprite18;
+    protected static Drawable sprite19;
+    protected static Drawable sprite20;
+    protected static Drawable sprite21;
+    protected static Drawable sprite22;
+    protected static Drawable sprite23;
+    protected static Drawable sprite24;
+    protected static Drawable sprite25;
+    protected static Drawable sprite26;
+    protected static Drawable sprite27;
+    protected static Drawable sprite28;
+    protected static Drawable sprite29;
+    protected static Drawable sprite30;
+    protected static Drawable sprite31;
+    protected static Drawable sprite32;
+    protected static Drawable sprite33;
+    protected static Drawable sprite34;
+    protected static Drawable sprite35;
+    protected static Drawable sprite36;
+    protected static Drawable sprite37;
+    protected static Drawable sprite38;
+    protected static Drawable sprite39;
+    protected static Drawable sprite40;
+    protected static Drawable sprite41;
+    protected static Drawable sprite42;
+    protected static Drawable sprite43;
+    protected static Drawable sprite44;
+    protected static Drawable sprite45;
+    protected static Drawable sprite46;
+    protected static Drawable sprite47;
+    protected static Drawable sprite48;
+    protected static Drawable sprite49;
+    protected static Drawable sprite50;
+    protected static Drawable sprite51;
+    protected static Drawable sprite52;
+    protected static Drawable sprite53;
+    protected static Drawable sprite54;
+    protected static Drawable sprite55;
+    protected static Drawable sprite56;
+    protected static Drawable sprite57;
+    protected static Drawable sprite58;
+    protected static Drawable sprite59;
+    protected static Drawable sprite60;
+    protected static Drawable sprite61;
+    protected static Drawable sprite62;
+    protected static Drawable sprite63;
+    protected static Drawable sprite64;
+    protected static Drawable sprite65;
+    protected static Drawable sprite66;
+
+    public BlockSprites(Context c) {
+
+        sprite1 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_fence, null);;
+
+        sprite5 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_voidstone1, null);
+        sprite6 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_voidstone2, null);
+        sprite7 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_voidstone3, null);
+        sprite8 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_voidstone4, null);
+        sprite9 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_voidstone5, null);
+        sprite10 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone1, null);
+        sprite11 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone2, null);
+        sprite12 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone3, null);
+        sprite13 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone4, null);
+        sprite14 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone5, null);
+        sprite15 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone6, null);
+        sprite16 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone7, null);
+        sprite17 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone8, null);
+        sprite18 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone9, null);
+        sprite19 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone10, null);
+        sprite20 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone11, null);
+        sprite21 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone12, null);
+        sprite22 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone13, null);
+        sprite23 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone14, null);
+        sprite24 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone15, null);
+        sprite25 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_newgrass1, null);
+        sprite26 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_newgrass2, null);
+        sprite27 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_newgrass3, null);
+        sprite28 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_newgrass5, null);
+        sprite29 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_newgrass6, null);
+        sprite30 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_red, null);
+        sprite31 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_blue, null);
+        sprite32 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_sapphire1, null);
+        sprite33 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_sapphire2, null);
+        sprite34 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_sapphire3, null);;
+        sprite35 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_gold1, null);;
+        sprite36 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_gold2, null);;
+        sprite37 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_gold3, null);;
+        sprite38 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_redstone1, null);;
+        sprite39 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_redstone2, null);;
+        sprite40 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_redstone3, null);;
+        sprite41 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_empty, null);
+        sprite42 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt1, null);
+        sprite43 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt2, null);
+        sprite44 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt3, null);
+        sprite45 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt4, null);
+        sprite46 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt5, null);
+        sprite47 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt6, null);
+        sprite48 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt7, null);
+        sprite49 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt8, null);
+        sprite50 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt9, null);
+        sprite51 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt10, null);
+        sprite52 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt11, null);
+        sprite53 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt12, null);
+        sprite54 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt13, null);
+        sprite55 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt14, null);
+        sprite56 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt15, null);
+        sprite57 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt16, null);
+        sprite58 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt17, null);
+        sprite59 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt18, null);
+        sprite60 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone16, null);
+        sprite61 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone17, null);
+        sprite62 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone18, null);
+        sprite63 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone19, null);
+        sprite64 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt19, null);
+        sprite65 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_dirt20, null);
+        sprite66 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_stone20, null);
+    }
+}

@@ -1,158 +1,172 @@
 package correcorre;
 
-        import android.annotation.SuppressLint;
-        import androidx.appcompat.app.ActionBar;
-        import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-        import android.graphics.Color;
-        import android.os.Bundle;
-        import android.os.Handler;
-        import android.view.MotionEvent;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.RelativeLayout;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import correcorre.graficos.LCanvas;
+import correcorre.game.MainGame;
+import correcorre.selectmap.MapCanvas;
+import correcorre.selectmap.MapMatrixX;
+import correcorre.selectmap.SelectMap;
+import correcorre.game.background.Background;
+import correcorre.game.background.Frontground;
+import correcorre.game.graficos.Controls;
+import correcorre.game.graficos.MatrixX;
+import correcorre.game.graficos.MyCanvas;
+import correcorre.game.graficos.Scoreboard;
+import correcorre.game.penguin.Penguin;
+import correcorre.game.scenario.Scenario;
+import correcorre.R;
+
+import static correcorre.ResourcesClass.*;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final boolean AUTO_HIDE = true;
-
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    private static final int UI_ANIMATION_DELAY = 300;
-
-    private final Handler mHideHandler = new Handler();
-
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
-
-    //############################################################################
-
-    Main main;
-    Thread loader;
-    LCanvas canvas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        /**
-        //hideUI();
-        //setContentView(R.layout.activity_main);
-        //myCanvas = new MyCanvas(this);
-        canvas = new LCanvas(this);
-        //myCanvas.setBackgroundColor(Color.RED);//test
-        canvas.setBackgroundColor(Color.RED);//test
-        setContentView(canvas);
-        //myCanvas.invalidate();
-        //RelativeLayout main = findViewById(R.id.main);
-        this.main = new Main(this.getApplicationContext());
-        this.loader = new Thread(new Loader(main, this.loader, canvas, this), "Loader");
-        this.loader.start();
-*/
+        setContentView(R.layout.activity_main);
+
+        //reset for preview game reset
+        reset();
+
+        gameStopped = true;//stop looper runnable
+        selectMapStopped = true;//stop looper runnable
+
+        //start calling things
+        mactivity = this;
+        HideBar.toggleHideyBar(mactivity);
+
+        ImageView logo = findViewById(R.id.logo);
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSelectMap();
+            }
+        });
+    }
+
+    private void startSelectMap() {
+
+        LinearLayout mainLayout = findViewById(R.id.mainLayout); //take size screen
+        widthScreen = mainLayout.getMeasuredWidth();
+        heightScreen = mainLayout.getMeasuredHeight();
+
+        selectMapStopped = false;
+
+        mapMatrixX = new MapMatrixX();
+        mapCanvas = new MapCanvas();
+        startSelectMapThread();
+    }
+
+    public void startGame() {
+
+        gameStopped = false;
+        scenario = new Scenario("ScenarioGenerado.json");
+
+        if (matrixScenario != null) {
+
+            controls = new Controls();
+            myCanvas = new MyCanvas();
+            background = new Background();
+            frontground = new Frontground();
+            scoreboard = new Scoreboard();
+            matrixX = new MatrixX();
+            penguin = new Penguin();
+
+        }
+        startMainGameThread();
+        stopSelectMapThread();
+    }
+
+    private void startMainGameThread() {
+
+        GameMainThread = new Thread(new MainGame(), "GameMain");
+        GameMainThread.start();
+        looperSetView(0);
+    }
+
+    private void startSelectMapThread() {
+
+        selectMapThread = new Thread(new SelectMap(), "MapCanvas");
+        selectMapThread.start();
+        looperSetView(2);
 
     }
-    public void stopLoader() {
+
+    public void stopSelectMapThread() {
         try {
-            this.loader.join();
+            selectMapStopped = true;
+            selectMapThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    public void setView(View o) {
-        setContentView(o);
+/*
+    public void startGameNo() {
+
+        gameStopped = false;
+
+        scenario = new Scenario("ScenarioGenerado.json");
+
+        do {
+            if (matrixScenario != null) {
+                controls = new Controls();
+                myCanvas = new MyCanvas();
+                background = new Background();
+                frontground = new Frontground();
+                scoreboard = new Scoreboard();
+                matrixX = new MatrixX();
+                penguin = new Penguin();
+            }
+        } while (matrixScenario != null);
+
+        startMainGameThread();
     }
 
-    //############################################################################
-    public void hideUI() {
-        this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        mVisible = false;
+    private void startMainGameThread() {
+        gameStopped = false;
+        GameMainThread = new Thread(new MainGame(), "GameMain");
+        GameMainThread.start();
+        looperSetView(0);
+        stopSelectMapThread();
     }
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        delayedHide(100);
-        //hideUI();
-        //setContentView(R.layout.activity_main);
-        //myCanvas = new MyCanvas(this);
-        canvas = new LCanvas(this);
-        //myCanvas.setBackgroundColor(Color.RED);//test
-        canvas.setBackgroundColor(Color.BLACK);//test
-        setContentView(canvas);
-        //myCanvas.invalidate();
-        //RelativeLayout main = findViewById(R.id.main);
-        this.main = new Main(this.getApplicationContext());
-        this.loader = new Thread(new Loader(main, this.loader, canvas, this), "Loader");
-        this.loader.start();
-    }
-    //FUNCIONA
-    @Override
-    protected void onUserLeaveHint()
-    {
-        // When user presses home page
-        this.main.detener();
-        super.onUserLeaveHint();
-    }
-    //DETIENE APLICACION AL MINIMIZAR
-    private void hide() {
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
+    private void startSelectMap() {
+        LinearLayout mainLayout = findViewById(R.id.mainLayout); //take size screen
+        widthScreen = mainLayout.getMeasuredWidth();
+        heightScreen = mainLayout.getMeasuredHeight();
+        mapCanvas = new MapCanvas();
+        startSelectMapThread();
+    }
+
+    private void startSelectMapThread() {
+        selectMapStopped = false;
+        selectMapThread = new Thread(new SelectMap(), "MapCanvas");
+        selectMapThread.start();
+        looperSetView(2);
+    }
+
+    public void stopSelectMapThread() {
+        try {
+        selectMapStopped = true;
+        selectMapThread.join();
+        } catch (InterruptedException e) {
+        e.printStackTrace();
         }
-        mVisible = false;
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        hideUI();
+    }*/
+
+    private void looperSetView(int option) {
+        Handler mThread = new Handler(Looper.getMainLooper());
+        mThread.post(new SetView(option) {
+        });
     }
 
-    @SuppressLint("InlinedApi")
-    private void show() {
-        RelativeLayout main = findViewById(R.id.main);
-        main.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-        hideUI();
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }
 
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-        hideUI();
-    }
 }
