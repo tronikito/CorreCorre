@@ -14,5 +14,3 @@ y activar estas opciones "Opciones de desarrollador", "Depuración USB" e "Insta
     
 2. In game screenshoot:</br></br>
     <img src="https://github.com/tronikito/CorreCorre/raw/master/app/Documentacion/Mockup2.png" alt="Mockup" width="600"/>
-    
-# Juego desarrollado en Java, en 2D
