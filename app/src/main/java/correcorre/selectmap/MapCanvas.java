@@ -13,6 +13,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
+import java.util.ArrayList;
+
 import correcorre.R;
 
 import static correcorre.ResourcesClass.*;
@@ -27,18 +29,38 @@ public class MapCanvas extends View {
     boolean rtouch1bShoot = false;
     private boolean rtouch2bShoot = false;
     public Rect map1 = new Rect();
-    public Drawable map = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.b_cloud10, null);
+    public Drawable map = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.stagebutton1, null);
+    private ArrayList<Rect> stageButtons = new ArrayList<Rect>();
 
     public MapCanvas() {
         super(mactivity);
         //setBackgroundResource(R.drawable.background1);//BACKGROUND!!
         paint.setColor(Color.RED);
+        int stageButtonWidth = widthScreen / 7;
+        int widthScreenBorder = stageButtonWidth;
 
+
+        for (int u = 0; u < 2; u++) {
+
+            for (int i = 0; i < 5; i++) {
+
+                Rect newRect = new Rect();
+
+                newRect.left = stageButtonWidth + (stageButtonWidth * i);
+                newRect.right = (stageButtonWidth * 2) + (stageButtonWidth * i);
+                newRect.top = ((heightScreen/2) - stageButtonWidth) + (stageButtonWidth * u);
+                newRect.bottom = newRect.top + (stageButtonWidth);
+
+                stageButtons.add(newRect);
+            }
+
+        }
+        /*
         map1.left = 100;// widthScreen / 3;
-        map1.right = 200; //widthScreen - widthScreen / 3;
+        map1.right = 400; //widthScreen - widthScreen / 3;
         map1.top = 200; //heightScreen / 3;
-        map1.bottom = 400; //heightScreen - heightScreen / 3;
-
+        map1.bottom = 500; //heightScreen - heightScreen / 3;
+        */
     }
 
     @Override
@@ -46,17 +68,22 @@ public class MapCanvas extends View {
 
         //setBackgroundResource(R.color.black_overlay);//BACKGROUND!!
         //c.drawCircle(widthScreen / 2, heightScreen / 2, 25, paint);
-        map.setBounds(map1);
-        map.draw(c);
 
-        mapMatrixX.printSelectMapFrame(c);
+        for (int x = 0; x < stageButtons.size(); x++) {
+            map.setBounds(stageButtons.get(x));
 
-        if (point1 != null) {
-            c.drawCircle(point1.x, point1.y, 25, paint);
+
+            if (point1 != null) {
+                c.drawCircle(point1.x, point1.y, 25, paint);
+            }
+            if (point2 != null) {
+                c.drawCircle(point2.x, point2.y, 25, paint);
+            }
+
+            map.draw(c);
         }
-        if (point2 != null) {
-            c.drawCircle(point2.x, point2.y, 25, paint);
-        }
+
+        //mapMatrixX.printSelectMapFrame(c);
 
     }
 
@@ -96,12 +123,15 @@ public class MapCanvas extends View {
         }
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-            rtouch1bShoot = Rect.intersects(this.rtouch1, this.map1);
-            rtouch2bShoot = Rect.intersects(this.rtouch2, this.map1);
+            for (int x = 0; x < stageButtons.size(); x++) {
+                rtouch1bShoot = Rect.intersects(this.rtouch1, stageButtons.get(x));
+                rtouch2bShoot = Rect.intersects(this.rtouch2, stageButtons.get(x));
 
-            if (rtouch1bShoot || rtouch2bShoot) {
-                mactivity.startGame();
+                if (rtouch1bShoot || rtouch2bShoot) {
+                    mactivity.startGame();
+                }
             }
+
         }
 
         if (rtouch1.left == 0) point1 = null;
