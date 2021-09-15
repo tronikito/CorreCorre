@@ -1,3 +1,4 @@
+
 package correcorrerework.game.scenario;
 
 import android.content.res.AssetManager;
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static correcorrerework.ResourcesClass.*;
+
 
 public class Scenario {
 

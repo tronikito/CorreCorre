@@ -1,14 +1,15 @@
 package correcorrerework.game.enemy;
 
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-
 import correcorrerework.R;
 
 import static correcorrerework.ResourcesClass.*;
+
 
 public class PlantPhysics {
 

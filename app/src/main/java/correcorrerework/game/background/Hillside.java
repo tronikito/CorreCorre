@@ -1,8 +1,10 @@
+
 package correcorrerework.game.background;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import correcorrerework.R;
+import correcorrerework.game.background.BackgroundObject;
 
 import static correcorrerework.ResourcesClass.*;
 

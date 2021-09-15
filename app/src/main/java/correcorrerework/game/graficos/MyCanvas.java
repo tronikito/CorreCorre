@@ -1,5 +1,6 @@
 package correcorrerework.game.graficos;
 
+
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,8 +10,10 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
+
 import correcorrerework.R;
 import static correcorrerework.ResourcesClass.*;
+
 
 public class MyCanvas extends View {
 
@@ -55,6 +58,7 @@ public class MyCanvas extends View {
 
             controls.printControls(c);
 
+
             scoreboard.printScoreBoard(c);
 
         if (point1 != null) {
@@ -63,6 +67,8 @@ public class MyCanvas extends View {
         if (point2 != null) {
             c.drawCircle(point2.x, point2.y, 25, paint);
         }
+
+
     }
 
     @SuppressLint("ClickableViewAccessibility")

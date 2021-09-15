@@ -4,6 +4,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorrerework.R;
 import static correcorrerework.ResourcesClass.*;
 
+
 public class Mountain extends BackgroundObject {
 
     private int width;

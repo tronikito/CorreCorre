@@ -1,9 +1,11 @@
 package correcorrerework.game.weapons;
 
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import correcorrerework.game.enemy.Enemy;
+
 
 public interface Weapon {
     void moveX(long speed);

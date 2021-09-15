@@ -3,7 +3,10 @@ package correcorrerework.game.background;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import correcorrerework.R;
+
 import static correcorrerework.ResourcesClass.*;
+
+
 
 public class Cloud extends BackgroundObject {
 

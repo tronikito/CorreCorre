@@ -1,5 +1,6 @@
 package correcorrerework.game.enemy;
 
+
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
@@ -8,6 +9,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorrerework.R;
 
 import static correcorrerework.ResourcesClass.mactivity;
+
 
 public class Plant extends PlantPhysics implements Enemy {
     private Drawable d;
