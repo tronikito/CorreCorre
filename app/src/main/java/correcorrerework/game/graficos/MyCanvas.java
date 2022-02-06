@@ -58,7 +58,6 @@ public class MyCanvas extends View {
 
             controls.printControls(c);
 
-
             scoreboard.printScoreBoard(c);
 
         if (point1 != null) {

@@ -9,6 +9,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import correcorrerework.R;
 
 import static correcorrerework.ResourcesClass.*;
+import static correcorrerework.game.scenario.BlockSprites.*;
 
 
 public class Block extends BlockSprites {
@@ -30,7 +31,6 @@ public class Block extends BlockSprites {
     private String blockType = null;
 
     public Block(String t, int s, int p, String blockType) {
-        super(mactivity);
         this.type = t;
         this.sprite = s;
         this.position = p;

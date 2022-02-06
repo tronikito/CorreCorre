@@ -1,2 +1,4 @@
-package correcorrerework.game.enemy;public class EnemyPhysic {
+package correcorrerework.game.enemy;
+
+public class EnemyPhysic {
 }

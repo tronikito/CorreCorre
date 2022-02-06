@@ -18,7 +18,7 @@ public class MainGame implements Runnable {
     public synchronized void run() {
 
         final int ns_s = 1000000000;
-        final byte fps_objective = 60;
+        final int fps_objective = 60;
         final double ns_fps = ns_s / fps_objective;
         long refFps = System.nanoTime();
         long refFpsCount = System.nanoTime();
@@ -27,19 +27,19 @@ public class MainGame implements Runnable {
 
         int actualFpsRefX = 1;
         int actualFpsRefY = 1;
-
+        int count = 0;
         while (!gameStopped) {
             final long initWhile = System.nanoTime();
             timeTrans = initWhile - refFps;
             refFps = initWhile;
             delta += timeTrans / ns_fps;
 
+
             while (delta >= 1) {
 
                 double realFps = fps_objective - 1 / delta;
 
                 int[] newSpeed = calcRealSpeed(penguinSpeed, realFps, fps_objective, actualFpsRefX, actualFpsRefY);
-
                 if (enemyList != null) {
                     for (int x = 0; x < enemyList.size(); x++) {
                         enemyList.get(x).setActualSpeed(calcRealSpeed(enemyList.get(x).getSpeed(), realFps, fps_objective, actualFpsRefX, actualFpsRefY));
@@ -51,9 +51,9 @@ public class MainGame implements Runnable {
                     }
                 }
                 update(newSpeed, realFps);//every fps
+
+
                 fps++;
-
-
                 delta--;
 
                 if (System.nanoTime() - refFpsCount > ns_s) {//every 60fps
@@ -64,12 +64,13 @@ public class MainGame implements Runnable {
                     scoreboard.scoreFps(fps); //usar scoreboard fpsMonitor
                     fps = 0;
                     refFpsCount = System.nanoTime();
+
                 }
             }
         }
     }
 
-    private synchronized int[] calcRealSpeed(int[] speed, double realFps, byte fps_objective, int actualFpsRefX, int actualFpsRefY) {
+    private synchronized int[] calcRealSpeed(int[] speed, double realFps, int fps_objective, int actualFpsRefX, int actualFpsRefY) {
         int speedX = 0;
         int speedY = 0;
 
@@ -113,7 +114,6 @@ public class MainGame implements Runnable {
 
         if (outRangeBottom && speed[1] > 0) penguinY = false;
         if (outRangeTop && speed[1] < 0) penguinY = false;
-
 
         penguin.checkCollision();
         penguin.calcAcceleration();

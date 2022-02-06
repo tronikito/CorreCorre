@@ -8,6 +8,7 @@ import correcorrerework.game.enemy.Plant;
 import correcorrerework.game.enemy.Spider;
 import correcorrerework.game.enemy.Enemy;
 import correcorrerework.game.scenario.Block;
+import correcorrerework.game.scenario.BlockSprites;
 import correcorrerework.game.weapons.Bullet;
 import correcorrerework.game.weapons.Chicken;
 import correcorrerework.game.weapons.Explosion;
@@ -322,6 +323,8 @@ public class MatrixX extends MatrixXMovePrint {
     }
 
     private synchronized void RepositionRect(Block b, int padding, int pos) {
+
+        padding--; //fixbugs
 
         if (pos == 0) {
             b.getRect().left = (widthScreen + offsetnW) + padding;

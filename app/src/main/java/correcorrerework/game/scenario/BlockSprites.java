@@ -1,6 +1,5 @@
 package correcorrerework.game.scenario;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -78,7 +77,7 @@ public class BlockSprites {
     protected static Drawable sprite65;
     protected static Drawable sprite66;
 
-    public BlockSprites(Context c) {
+    public BlockSprites() {
 
         sprite1 = VectorDrawableCompat.create(mactivity.getResources(), R.drawable.c_fence, null);;
 
