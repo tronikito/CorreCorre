@@ -2,6 +2,8 @@ package correcorrerework.game.graficos;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import correcorrerework.game.scenario.Block;
 import static correcorrerework.ResourcesClass.*;
 
@@ -84,8 +86,8 @@ public class MatrixXMovePrint {
                         }
                         if (b.getDrawable() != null) {
 
-                            //int color = Color.parseColor("#AE6118"); //The color u want
-                            //b.getDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                            int color = Color.parseColor("#AE6118"); //The color u want
+                            b.getDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                             b.getDrawable().draw(canvas);
                         }
                     }

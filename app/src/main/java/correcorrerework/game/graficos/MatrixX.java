@@ -30,7 +30,7 @@ public class MatrixX extends MatrixXMovePrint {
         sizeDot = (int) size;
 
         int nW = blocksWidth * sizeDot;
-        this.offsetnW = (nW - widthScreen) / 2;//where start block at spawn
+        this.offsetnW = ((nW - widthScreen) / 2);//where start block at spawn
         this.offsetX = this.offsetnW + sizeDot;//where to spawn block
         blocksWidth += 2;//make margin for hidden move of blocks
         this.offsetX2 = this.offsetnW + sizeDot * 2; //new offset to check out of map block.
